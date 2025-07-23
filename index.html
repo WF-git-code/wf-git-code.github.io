@@ -406,34 +406,18 @@
                 <main class="main index-page">
             
         <article class="index-post">
-            <a class="abstract-title" href="/2025/07/23/test/">
-                <span class="abstract-title-text">test</span>
+            <a class="abstract-title" href="/2025/07/23/%E2%80%98c%E8%AF%AD%E8%A8%80%E6%8C%87%E9%92%88%E2%80%99/">
+                <span class="abstract-title-text">‘c语言指针’</span>
             </a>
             <div class="abstract-content">
-                Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub.
+                1.什么是指针指针也就是内存地址，指针变量是用来存放地址的变量,必须在使用之前对其声明。
+其格式：*&#x3D;&#x3D;type  *var_name;&#x3D;&#x3D;
+1int* pi=&amp;a;
 
-            </div>
-            <!-- read more -->
-            <div class="abstract-post-meta">
-                <!-- date -->
-                <div class="abstract-date" title="Last updated: 2025/07/23">
-                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2025/07/23</span>
-                </div>
-                <!-- tags -->
-            </div>
-        </article>
-        <div class="index-post-divider"></div>
-            
-        <article class="index-post">
-            <a class="abstract-title" href="/2025/07/23/hello-world/">
-                <span class="abstract-title-text">Hello World</span>
-            </a>
-            <div class="abstract-content">
-                Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub.
-Quick StartCreate a new post1$ hexo new &quot;My New Post&quot;
+其中type必须是一个有效的数据类型。
 
-More info: Writing
-Run server1$ hexo ...
+在多级指针中也一样，q保存的是a的地址，其中&#x3D;&#x3D;&#x3D;&#x3D;是解引用的意思，对q保存的a的地址解引用就得到了10。对于w而言至右像左&#x3D;&#x3D;&#x3D;&#x3D;对w解引用得到q的值即a的地址，再对a的地址解引用得到10。其中e也同理，属于无限套娃。
+&#x3D;&#x3D;多级指针...
             </div>
             <!-- read more -->
             <div class="abstract-post-meta">
@@ -505,10 +489,9 @@ Run server1$ hexo ...
         <div class="sidebar-panel-archives">
     <!-- 在 ejs 中将 archive 按照时间排序 -->
         
-        
     <div class="total-and-search">
         <div class="total-archive">
-        Total : 2
+        Total : 1
         </div>
         <!-- search  -->
     </div>
@@ -517,14 +500,7 @@ Run server1$ hexo ...
             <ul class="year-list">
         <li class="archive-post-item">
             <span class="archive-post-date">07/23</span>
-            <a class="archive-post-title" href="/2025/07/23/test/">test</a>
-        </li>
-                </ul>
-            <div class="archive-year"> Invalid date </div>
-            <ul class="year-list">
-        <li class="archive-post-item">
-            <span class="archive-post-date">Invalid date</span>
-            <a class="archive-post-title" href="/2025/07/23/hello-world/">Hello World</a>
+            <a class="archive-post-title" href="/2025/07/23/%E2%80%98c%E8%AF%AD%E8%A8%80%E6%8C%87%E9%92%88%E2%80%99/">‘c语言指针’</a>
         </li>
             </ul>
     </div>
