@@ -1,13 +1,13 @@
-<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>‘c语言指针’ | WF的知识空间</title><meta name="author" content="WF"><meta name="copyright" content="WF"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="1.什么是指针指针也就是内存地址，指针变量是用来存放地址的**变量,**必须在使用之前对其声明。 指针大小只与平台有关32位（x86系统）只有4B，64位（x64系统）8B,指针大小与指针类型，指针级数无关 指针指向哪里都可以（可以保存任何地址），但是若指针所指的空间不是有效空间程序会崩溃 零号空间~128m字节空间是禁止访问区** 1int *p&#x3D;(int*)0  &#x2F;&#x2F;会崩溃  eg：①随机地址">
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>‘c语言指针’ | WF的知识空间</title><meta name="author" content="WF"><meta name="copyright" content="WF"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="1.什么是指针指针也就是内存地址，指针变量是用来存放地址的**变量,**必须在使用之前对其声明。 指针大小只与平台有关32位（x86系统）只有4B，64位（x64系统）8B,指针大小与指针类型，指针级数无关 指针指向哪里都可以（可以保存任何地址），但是若指针所指的空间不是有效空间程序会崩溃 零号空间~128m字节空间是禁止访问区 1int *p&#x3D;(int*)0  &#x2F;&#x2F;会崩溃  eg：①随机地址（野">
 <meta property="og:type" content="article">
 <meta property="og:title" content="‘c语言指针’">
 <meta property="og:url" content="http://example.com/2025/07/23/%E2%80%98c%E8%AF%AD%E8%A8%80%E6%8C%87%E9%92%88%E2%80%99/index.html">
 <meta property="og:site_name" content="WF的知识空间">
-<meta property="og:description" content="1.什么是指针指针也就是内存地址，指针变量是用来存放地址的**变量,**必须在使用之前对其声明。 指针大小只与平台有关32位（x86系统）只有4B，64位（x64系统）8B,指针大小与指针类型，指针级数无关 指针指向哪里都可以（可以保存任何地址），但是若指针所指的空间不是有效空间程序会崩溃 零号空间~128m字节空间是禁止访问区** 1int *p&#x3D;(int*)0  &#x2F;&#x2F;会崩溃  eg：①随机地址">
+<meta property="og:description" content="1.什么是指针指针也就是内存地址，指针变量是用来存放地址的**变量,**必须在使用之前对其声明。 指针大小只与平台有关32位（x86系统）只有4B，64位（x64系统）8B,指针大小与指针类型，指针级数无关 指针指向哪里都可以（可以保存任何地址），但是若指针所指的空间不是有效空间程序会崩溃 零号空间~128m字节空间是禁止访问区 1int *p&#x3D;(int*)0  &#x2F;&#x2F;会崩溃  eg：①随机地址（野">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://example.com/img/WF.png">
 <meta property="article:published_time" content="2025-07-23T09:17:21.528Z">
-<meta property="article:modified_time" content="2025-07-26T16:17:07.007Z">
+<meta property="article:modified_time" content="2025-07-28T00:37:17.815Z">
 <meta property="article:author" content="WF">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="http://example.com/img/WF.png"><script type="application/ld+json">{
@@ -17,7 +17,7 @@
   "url": "http://example.com/2025/07/23/%E2%80%98c%E8%AF%AD%E8%A8%80%E6%8C%87%E9%92%88%E2%80%99/",
   "image": "http://example.com/img/WF.png",
   "datePublished": "2025-07-23T09:17:21.528Z",
-  "dateModified": "2025-07-26T16:17:07.007Z",
+  "dateModified": "2025-07-28T00:37:17.815Z",
   "author": [
     {
       "@type": "Person",
@@ -158,10 +158,10 @@
   isHighlightShrink: false,
   isToc: true,
   pageType: 'post'
-}</script><meta name="generator" content="Hexo 7.3.0"></head><body><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(/img/index-bg.jpg);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">WF的知识空间</span></a><a class="nav-page-title" href="/"><span class="site-name">‘c语言指针’</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"></div></nav><div id="post-info"><h1 class="post-title">‘c语言指针’</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2025-07-23T09:17:21.528Z" title="发表于 2025-07-23 17:17:21">2025-07-23</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-07-26T16:17:07.007Z" title="更新于 2025-07-27 00:17:07">2025-07-27</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h3 id="1-什么是指针"><a href="#1-什么是指针" class="headerlink" title="1.什么是指针"></a>1.什么是指针</h3><p><strong>指针</strong>也就是<strong>内存地址</strong>，指针变量是用来存放地址的**变量,**必须在使用之前对其声明。</p>
+}</script><meta name="generator" content="Hexo 7.3.0"></head><body><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(/img/index-bg.jpg);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">WF的知识空间</span></a><a class="nav-page-title" href="/"><span class="site-name">‘c语言指针’</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"></div></nav><div id="post-info"><h1 class="post-title">‘c语言指针’</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2025-07-23T09:17:21.528Z" title="发表于 2025-07-23 17:17:21">2025-07-23</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-07-28T00:37:17.815Z" title="更新于 2025-07-28 08:37:17">2025-07-28</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h3 id="1-什么是指针"><a href="#1-什么是指针" class="headerlink" title="1.什么是指针"></a>1.什么是指针</h3><p><strong>指针</strong>也就是<strong>内存地址</strong>，指针变量是用来存放地址的**变量,**必须在使用之前对其声明。</p>
 <p>指针大小只与平台有关32位（x86系统）只有4B，64位（x64系统）8B,指针大小与指针类型，指针级数无关</p>
 <p><strong>指针指向哪里都可以（可以保存任何地址），但是若指针所指的空间不是有效空间程序会崩溃</strong></p>
-<p><strong>零号空间~128m字节空间是禁止访问区</strong>**</p>
+<p><strong>零号空间~128m字节空间是禁止访问区</strong></p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> *p=(<span class="type">int</span>*)<span class="number">0</span>  <span class="comment">//会崩溃</span></span><br></pre></td></tr></table></figure>
 
 <p>eg：①随机地址（野指针，悬挂指针）</p>
@@ -174,7 +174,7 @@
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span>* pi=&amp;a;</span><br></pre></td></tr></table></figure>
 
 <p>其中type必须是一个有效的数据类型。*p解释的是从0x1地址开始到0x1+sizeof（type）的所对应字节的内容</p>
-<img src="‘c语言指针’.assets/image-20250723175857470.png" alt="image-20250723175857470" style="zoom:25%;" />
+<img src="https://cdn.jsdelivr.net/gh/wf-git-code/wf-git-code.github.io@main/images//images/image-20250723175857470.png" alt="image-20250723175857470" style="zoom:25%;">
 
 
 
@@ -185,12 +185,12 @@
 <h3 id="2-c语言中-const-是一个类型限定符，用来修饰变量，表明该变量的值不能被修改"><a href="#2-c语言中-const-是一个类型限定符，用来修饰变量，表明该变量的值不能被修改" class="headerlink" title="2.c语言中&#x3D;&#x3D;const&#x3D;&#x3D; 是一个类型限定符，用来修饰变量，表明该变量的值不能被修改"></a>2.c语言中&#x3D;&#x3D;const&#x3D;&#x3D; 是一个<strong>类型限定符</strong>，用来修饰变量，表明该变量的值<strong>不能被修改</strong></h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">const</span> <span class="type">int</span> p = <span class="number">1</span>;</span><br></pre></td></tr></table></figure>
 
 <p>指针设计与指针用途有关</p>
-<img src="‘c语言指针’.assets/0d088778737432b38752ad6b5cf6c441.png" alt="0d088778737432b38752ad6b5cf6c441" style="zoom:50%;" />
+<img src="https://cdn.jsdelivr.net/gh/wf-git-code/wf-git-code.github.io@main/images//images/0d088778737432b38752ad6b5cf6c441.png" alt="0d088778737432b38752ad6b5cf6c441" style="zoom:50%;">
 
 <p>实际应用①</p>
-<img src="‘c语言指针’.assets/屏幕截图 2025-07-26 104404.png" alt="屏幕截图 2025-07-26 104404" style="zoom: 50%;" />
+<img src="https://cdn.jsdelivr.net/gh/wf-git-code/wf-git-code.github.io@main/images//images/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202025-07-26%20104404.png" alt="屏幕截图 2025-07-26 104404" style="zoom: 50%;">
 
-<p><strong>②<img src="‘c语言指针’.assets/image-20250726105427073.png" style="zoom: 50%;" /></strong></p>
+<p><strong>②<img src="https://cdn.jsdelivr.net/gh/wf-git-code/wf-git-code.github.io@main/images//images/image-20250726105427073.png" style="zoom: 50%;"></strong></p>
 <p>用法如以下代码所示</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">const</span> <span class="type">int</span> p = <span class="number">1</span>;</span><br><span class="line"><span class="type">const</span> <span class="type">int</span>* q = &amp;p;</span><br><span class="line"><span class="type">int</span> w=<span class="number">3</span>；</span><br><span class="line">q = &amp;w；</span><br></pre></td></tr></table></figure>
 
@@ -202,9 +202,9 @@
 
 <p>在此段代码中：&#x3D;&#x3D;int b&#x3D;&#x3D;的范围与&#x3D;&#x3D;const<em>int t&#x3D;&#x3D;的范围相同，b所对应的值0不能被改变，*<em>t所包含的b的地址不能被改变</em></em>,此时变量b的值可以改变。</p>
 <p>但在&#x3D;&#x3D;const int<em>const v&#x3D;&#x3D;中由于a被const修饰限定，那么指向a的指针t也应该被const修饰即</em><em>&#x3D;&#x3D;const&#x3D;&#x3D; int</em>const v*<em>第一个const，而const int</em>&#x3D;&#x3D;const&#x3D;&#x3D; v中这个const是重新对v施加的限定，使得v只能保存a的地址。与此同时&#x3D;&#x3D;const int const v &#x3D; &b;&#x3D;&#x3D;也可以保存被const修饰的变量b的地址。</p>
-<img src="‘c语言指针’.assets/image-20250723190405980.png" alt="image-20250723190405980" style="zoom:25%;" />
+<img src="https://cdn.jsdelivr.net/gh/wf-git-code/wf-git-code.github.io@main/images//images/image-20250723190405980.png" alt="image-20250723190405980" style="zoom:25%;">
 
-<img src="‘c语言指针’.assets/87cd8399f5f11da97e407e31ee141caf.jpg" alt="87cd8399f5f11da97e407e31ee141caf" style="zoom: 25%;" />
+<img src="https://cdn.jsdelivr.net/gh/wf-git-code/wf-git-code.github.io@main/images//images/87cd8399f5f11da97e407e31ee141caf.jpg" alt="87cd8399f5f11da97e407e31ee141caf" style="zoom: 25%;">
 
 <p>在&#x3D;&#x3D;多级被const所修饰的指针&#x3D;&#x3D;中</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">const</span> <span class="type">int</span> a = <span class="number">10</span>;</span><br><span class="line"><span class="type">const</span> intconst* q = &amp;a;</span><br><span class="line"><span class="type">const</span> <span class="type">int</span>** w = &amp;q;</span><br><span class="line"><span class="type">const</span> <span class="type">int</span>*** e = &amp;w;</span><br></pre></td></tr></table></figure>
@@ -222,9 +222,9 @@
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> arr[<span class="number">5</span>] = &#123; <span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span> &#125;;</span><br><span class="line"><span class="type">int</span>* p = arr;</span><br></pre></td></tr></table></figure>
 
 <p>数组名为数组<strong>第一个元素</strong>的&#x3D;&#x3D;首地址&#x3D;&#x3D;如图</p>
-<img src="‘c语言指针’.assets/efd9b7b737ecf435aa8628cffe294b47.jpg" alt="efd9b7b737ecf435aa8628cffe294b47" style="zoom:50%;" />
+<img src="https://cdn.jsdelivr.net/gh/wf-git-code/wf-git-code.github.io@main/images//images/efd9b7b737ecf435aa8628cffe294b47.jpg" alt="efd9b7b737ecf435aa8628cffe294b47" style="zoom:50%;">
 
-<p><img src="/%E2%80%98c%E8%AF%AD%E8%A8%80%E6%8C%87%E9%92%88%E2%80%99.assets/image-20250723202948395.png" alt="image-20250723202948395"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/wf-git-code/wf-git-code.github.io@main/images//images/image-20250723202948395.png" alt="image-20250723202948395"></p>
 <p>若要实现用数组表示数组中的元素&#x3D;&#x3D;arr[i]&#x3D;&#x3D;用指针表示&#x3D;&#x3D;<em>（p+i）&#x3D;&#x3D;而在数组中加&#x3D;&#x3D;i&#x3D;&#x3D;相当于</em><em>&#x3D;&#x3D;当前地址&#x3D;首地址+i</em>sizeof（数组类型）&#x3D;&#x3D;**</p>
 <p>这也衍生出了一个问题，如果我要使得指针+1一次跨过三个元素那么可以定义一个新的指针</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span>(*s)[<span class="number">3</span>] =(<span class="type">int</span>(*)[<span class="number">3</span>])arr;</span><br></pre></td></tr></table></figure>
@@ -233,7 +233,7 @@
 <p>&#x3D;&#x3D;<em>（s+i）&#x3D;&#x3D;s前进i位在内存上前进&#x3D;&#x3D;3</em>sizeof（int）个B&#x3D;&#x3D;，而等号右边的&#x3D;&#x3D;（int（*）[3])&#x3D;&#x3D;则是为了保证等号左右两边为同一类型。</p>
 <p>使用场景</p>
 <p>①</p>
-<p><img src="/%E2%80%98c%E8%AF%AD%E8%A8%80%E6%8C%87%E9%92%88%E2%80%99.assets/image-20250726115742912.png" alt="image-20250726115742912"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/wf-git-code/wf-git-code.github.io@main/images//images/image-20250726115742912.png" alt="image-20250726115742912"></p>
 <p>数组指针常用于多维数组用来进行&#x3D;&#x3D;行&#x3D;&#x3D;的切换</p>
 <p><strong>二维数组在逻辑关系上是一个表格</strong>，但数组的存储在物理上是连续的为一位数组，因此使用二级指针来进行行的切换。</p>
 <h3 id="4-指针数组"><a href="#4-指针数组" class="headerlink" title="4.指针数组"></a>4.指针数组</h3><p>指针数组本质上是一个存放指针的数组，其&#x3D;&#x3D;本质是数组&#x3D;&#x3D;，其里面内容存放的是指针。</p>
@@ -245,7 +245,7 @@
 <h3 id="6-数组在存储中是由低地址向高地址存储的"><a href="#6-数组在存储中是由低地址向高地址存储的" class="headerlink" title="6.数组在存储中是由低地址向高地址存储的"></a>6.数组在存储中是由低地址向高地址存储的</h3><p><strong>指针相加减</strong></p>
 <p>一般在数组中指针相加没意义，指针相减高地址减低地址等于两个地址间所有的元素个数</p>
 <h3 id="7-指针-p-和-p-的区别"><a href="#7-指针-p-和-p-的区别" class="headerlink" title="7.指针&#x3D;&#x3D;*p++&#x3D;&#x3D;和&#x3D;&#x3D;++*p&#x3D;&#x3D;的区别"></a>7.指针&#x3D;&#x3D;*p++&#x3D;&#x3D;和&#x3D;&#x3D;++*p&#x3D;&#x3D;的区别</h3><p><strong>&#x3D;&#x3D;“*”&#x3D;&#x3D;与&#x3D;&#x3D;“+”  “-”&#x3D;&#x3D;优先级相同，结合方向至右向左</strong></p>
-<img src="‘c语言指针’.assets/779722e115b0546e819b821d73256ebd.jpg" alt="779722e115b0546e819b821d73256ebd" style="zoom:50%;" />
+<img src="https://cdn.jsdelivr.net/gh/wf-git-code/wf-git-code.github.io@main/images//images/779722e115b0546e819b821d73256ebd.jpg" alt="779722e115b0546e819b821d73256ebd" style="zoom:50%;">
 
 
 
