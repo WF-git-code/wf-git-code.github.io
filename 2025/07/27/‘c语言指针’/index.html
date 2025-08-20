@@ -7,7 +7,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://example.com/img/WF.png">
 <meta property="article:published_time" content="2025-07-27T00:52:57.000Z">
-<meta property="article:modified_time" content="2025-08-20T02:57:15.993Z">
+<meta property="article:modified_time" content="2025-08-20T08:58:54.519Z">
 <meta property="article:author" content="WF">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="http://example.com/img/WF.png"><script type="application/ld+json">{
@@ -17,7 +17,7 @@
   "url": "http://example.com/2025/07/27/%E2%80%98c%E8%AF%AD%E8%A8%80%E6%8C%87%E9%92%88%E2%80%99/",
   "image": "http://example.com/img/WF.png",
   "datePublished": "2025-07-27T00:52:57.000Z",
-  "dateModified": "2025-08-20T02:57:15.993Z",
+  "dateModified": "2025-08-20T08:58:54.519Z",
   "author": [
     {
       "@type": "Person",
@@ -158,7 +158,7 @@
   isHighlightShrink: false,
   isToc: true,
   pageType: 'post'
-}</script><meta name="generator" content="Hexo 7.3.0"></head><body><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(/img/index-bg.jpg);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">WF的知识空间</span></a><a class="nav-page-title" href="/"><span class="site-name">C语言</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"></div></nav><div id="post-info"><h1 class="post-title">C语言</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2025-07-27T00:52:57.000Z" title="发表于 2025-07-27 08:52:57">2025-07-27</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-08-20T02:57:15.993Z" title="更新于 2025-08-20 10:57:15">2025-08-20</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h3 id="1-什么是指针">1.什么是指针</h3>
+}</script><meta name="generator" content="Hexo 7.3.0"></head><body><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(/img/index-bg.jpg);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">WF的知识空间</span></a><a class="nav-page-title" href="/"><span class="site-name">C语言</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"></div></nav><div id="post-info"><h1 class="post-title">C语言</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2025-07-27T00:52:57.000Z" title="发表于 2025-07-27 08:52:57">2025-07-27</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-08-20T08:58:54.519Z" title="更新于 2025-08-20 16:58:54">2025-08-20</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h3 id="1-什么是指针">1.什么是指针</h3>
 <p><strong>指针</strong>也就是<strong>内存地址</strong>，指针变量是用来存放地址的**变量,**必须在使用之前对其声明。</p>
 <p>指针大小只与平台有关32位（x86系统）只有4B，64位（x64系统）8B,指针大小与指针类型，指针级数无关</p>
 <p><strong>指针指向哪里都可以（可以保存任何地址），但是若指针所指的空间不是有效空间程序会崩溃</strong></p>
@@ -367,6 +367,41 @@ const  在  *  右侧 → 限制“指针变量本身”：-</li>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">（*syu1).stus[i];</span><br></pre></td></tr></table></figure>
 <p>②通过结构体指针专门运算符访问		<strong>-&gt;</strong></p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">syu1-&gt;stus[size].daaress1.province</span><br></pre></td></tr></table></figure>
+<p>8.内存对齐		<strong>面试题</strong></p>
+<p>①为什么要内存对齐？</p>
+<p>内存对齐是数据起始地址在计算机按照一定规则进行排列</p>
+<p>优势：提高cpu效率</p>
+<p>内存划分的基本单位是字节，cpu读取内存时并不是按照逐字节读取，一般会以2B，4B，8B的倍数来读取内存块。</p>
+<p>数据存储遵循内存读取方式，一次cpu读取周期可完整获取数据；若存储不遵循，则多次cpu读取周期读取字节快拼凑完整数据，读取效率不高。</p>
+<p><strong>windows默认对齐方式8B，LInux默认对其方式4B</strong></p>
+<p><strong>#pragma pack() 指定对齐方式起始结构体设计此处</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">pragma</span> pack(2)<span class="comment">//指定对齐方式起始结构体设计此处</span></span></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">Student</span>&#123;</span></span><br><span class="line">	<span class="type">char</span> name[<span class="number">20</span>];</span><br><span class="line">    <span class="type">int</span> age;</span><br><span class="line">&#125;；</span><br><span class="line"><span class="meta">#<span class="keyword">pragma</span> pack() <span class="comment">//上述对齐方式结束位置以下结构体设计恢复默认对齐方式</span></span></span><br></pre></td></tr></table></figure>
+<p>9.结构体求大小</p>
+<p>当前成员变量的起始位置的偏移量，必须是MIN{当前成员变量类型，对齐方式}的整数倍<br>
+计算出上述偏移量总字节数，必须是MIN{当前成员最大基本数据类型，对齐方式}的整数倍</p>
+<p>解决结构体嵌套：结构体变量的首地址，必须是MIN{该结构体变量中最大基本数据类型，对齐方式}的整数倍</p>
+<p>10.位段（位域）</p>
+<p>位段通过在结构体成员后添加 <code>: 位数</code> 来指定该成员占用的二进制位数，语法如下：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> 结构体名 &#123;</span></span><br><span class="line">    类型 成员名<span class="number">1</span>: 位数<span class="number">1</span>;</span><br><span class="line">    类型 成员名<span class="number">2</span>: 位数<span class="number">2</span>;</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>通过限制成员的位数，减少内存占用。</p>
+<p>示例；</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 定义一个位段结构体，存储用户状态信息</span></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">UserStatus</span> &#123;</span></span><br><span class="line">    <span class="type">unsigned</span> <span class="type">int</span> is_vip: <span class="number">1</span>;    <span class="comment">// 是否VIP（0/1），占1位</span></span><br><span class="line">    <span class="type">unsigned</span> <span class="type">int</span> level: <span class="number">3</span>;     <span class="comment">// 等级（0-7），占3位（2³=8足够）</span></span><br><span class="line">    <span class="type">unsigned</span> <span class="type">int</span> login: <span class="number">1</span>;     <span class="comment">// 是否登录（0/1），占1位</span></span><br><span class="line">    <span class="comment">// 总位数：1+3+1=5位，可存储在1个字节（8位）中</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">UserStatus</span> <span class="title">user</span>;</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 赋值（不能超过位数限制，否则会截断）</span></span><br><span class="line">    user.is_vip = <span class="number">1</span>;    <span class="comment">// 合法（1位最大为1）</span></span><br><span class="line">    user.level = <span class="number">5</span>;     <span class="comment">// 合法（3位最大为7）</span></span><br><span class="line">    user.login = <span class="number">1</span>;     <span class="comment">// 合法</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 输出结构体大小（通常为1字节，因5位 ≤8位）</span></span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;UserStatus大小：%zu 字节\n&quot;</span>, <span class="keyword">sizeof</span>(user));  <span class="comment">// 输出：1</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 输出成员值</span></span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;VIP: %d, 等级: %d, 登录状态: %d\n&quot;</span>, </span><br><span class="line">           user.is_vip, user.level, user.login);  <span class="comment">// 输出：1,5,1</span></span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>内存分配规则：</p>
+<ol>
+<li><strong>同类型成员打包</strong>：同一类型的位段成员通常从同一个字节开始存储，若当前字节剩余位数足够，就紧凑存储；若不足，则使用下一个新字节。<br>
+例：<code>unsigned int a:4; unsigned int b:4;</code> 通常共占 1 字节（4+4=8 位）。</li>
+<li><strong>不同类型成员</strong>：不同类型的位段成员可能从新的字节开始存储（编译器差异较大）。</li>
+<li><strong>总大小对齐</strong>：整个位段结构体的总大小需满足其最大成员类型的对齐要求（例如，若成员类型为 <code>int</code>，则总大小是 <code>int</code> 大小的整数倍）。</li>
+<li><strong>零长度位段</strong>：可以用 <code>unsigned int :0;</code> 强制下一个位段从新的字节开始存储，用于手动分隔字节。</li>
+</ol>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">Demo</span> &#123;</span></span><br><span class="line">    <span class="type">unsigned</span> <span class="type">int</span> a:<span class="number">4</span>;</span><br><span class="line">    <span class="type">unsigned</span> <span class="type">int</span> :<span class="number">0</span>;  <span class="comment">// 强制下一个成员从新字节开始</span></span><br><span class="line">    <span class="type">unsigned</span> <span class="type">int</span> b:<span class="number">4</span>;  <span class="comment">// 存储在新字节中</span></span><br><span class="line">&#125;;</span><br><span class="line"><span class="comment">// 总大小通常为2字节（a占前4位，b占后4位，中间因0长度位段分隔）</span></span><br></pre></td></tr></table></figure>
+<p>注意事项：</p>
+<ul>
+<li><strong>不能取地址</strong>：位段成员可能没有对齐到字节边界，因此不能使用 <code>&amp;</code> 运算符获取其地址（编译报错）。</li>
+<li><strong>位数限制</strong>：赋值时若超过位段的最大范围，会自动截断（只保留低位）。例如 <code>unsigned int a:2; a=5;</code> 实际存储 <code>5 &amp; 0b11 = 1</code>。</li>
+<li><strong>符号问题</strong>：若位段类型为 <code>signed int</code>，最高位会被视为符号位，实际表示范围会缩小。例如 <code>signed int a:3;</code> 范围是 <code>-4 ~ 3</code>（而非 <code>0~7</code>）。</li>
+<li><strong>编译器差异</strong>：位段的内存布局（如是否跨字节存储、不同类型成员的分配方式）在不同编译器中可能不同，导致移植性较差。</li>
+</ul>
 <h3 id="13-与字符串有关的函数">13.与字符串有关的函数</h3>
 <ol>
 <li>
@@ -789,7 +824,10 @@ const  在  *  右侧 → 限制“指针变量本身”：-</li>
 <p>②简单交换两数</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> a=<span class="number">10</span>,b=<span class="number">20</span>;</span><br><span class="line">a=a+b;</span><br><span class="line">b=a-b;</span><br><span class="line">a=a-b;</span><br></pre></td></tr></table></figure>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//位运算异或</span></span><br><span class="line">a=a^b;</span><br><span class="line">b=a^b;</span><br><span class="line">a=a^b;</span><br></pre></td></tr></table></figure>
-<p>7.递归函数</p>
+<p>7.传递参数</p>
+<p>指针传递：指针只占4B，形参占空间小且需要判空（如果函数功能只便利则加const限定）</p>
+<p>值传递：形参复制实参</p>
+<p>8.递归函数</p>
 <p>①存在自己调用自己</p>
 <p>②问题规模不断缩小</p>
 <p>③函数必须有退出条件</p>
