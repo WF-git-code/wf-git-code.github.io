@@ -7,7 +7,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://example.com/img/WF.png">
 <meta property="article:published_time" content="2025-07-27T00:52:57.000Z">
-<meta property="article:modified_time" content="2025-08-20T02:31:53.022Z">
+<meta property="article:modified_time" content="2025-08-20T02:57:15.993Z">
 <meta property="article:author" content="WF">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="http://example.com/img/WF.png"><script type="application/ld+json">{
@@ -17,7 +17,7 @@
   "url": "http://example.com/2025/07/27/%E2%80%98c%E8%AF%AD%E8%A8%80%E6%8C%87%E9%92%88%E2%80%99/",
   "image": "http://example.com/img/WF.png",
   "datePublished": "2025-07-27T00:52:57.000Z",
-  "dateModified": "2025-08-20T02:31:53.022Z",
+  "dateModified": "2025-08-20T02:57:15.993Z",
   "author": [
     {
       "@type": "Person",
@@ -158,7 +158,7 @@
   isHighlightShrink: false,
   isToc: true,
   pageType: 'post'
-}</script><meta name="generator" content="Hexo 7.3.0"></head><body><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(/img/index-bg.jpg);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">WF的知识空间</span></a><a class="nav-page-title" href="/"><span class="site-name">C语言</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"></div></nav><div id="post-info"><h1 class="post-title">C语言</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2025-07-27T00:52:57.000Z" title="发表于 2025-07-27 08:52:57">2025-07-27</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-08-20T02:31:53.022Z" title="更新于 2025-08-20 10:31:53">2025-08-20</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h3 id="1-什么是指针">1.什么是指针</h3>
+}</script><meta name="generator" content="Hexo 7.3.0"></head><body><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(/img/index-bg.jpg);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">WF的知识空间</span></a><a class="nav-page-title" href="/"><span class="site-name">C语言</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"></div></nav><div id="post-info"><h1 class="post-title">C语言</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2025-07-27T00:52:57.000Z" title="发表于 2025-07-27 08:52:57">2025-07-27</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-08-20T02:57:15.993Z" title="更新于 2025-08-20 10:57:15">2025-08-20</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h3 id="1-什么是指针">1.什么是指针</h3>
 <p><strong>指针</strong>也就是<strong>内存地址</strong>，指针变量是用来存放地址的**变量,**必须在使用之前对其声明。</p>
 <p>指针大小只与平台有关32位（x86系统）只有4B，64位（x64系统）8B,指针大小与指针类型，指针级数无关</p>
 <p><strong>指针指向哪里都可以（可以保存任何地址），但是若指针所指的空间不是有效空间程序会崩溃</strong></p>
@@ -630,6 +630,131 @@ const  在  *  右侧 → 限制“指针变量本身”：-</li>
 <td>只读数据区</td>
 <td>无（固定值）</td>
 <td>否（只读）</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">类型名称</th>
+<th style="text-align:center">位数（典型）</th>
+<th style="text-align:center">有符号（signed）范围</th>
+<th style="text-align:center">无符号（unsigned）范围</th>
+<th style="text-align:center">范围说明（数学表达式）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center"><strong>字符型</strong></td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td style="text-align:center"><code>char</code>（符号性依赖编译器）</td>
+<td style="text-align:center">8</td>
+<td style="text-align:center">通常同<code>signed char</code></td>
+<td style="text-align:center">若为无符号则同<code>unsigned char</code></td>
+<td style="text-align:center">取决于编译器（多数为 - 2⁷～2⁷-1 或 0～2⁸-1）</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>signed char</code></td>
+<td style="text-align:center">8</td>
+<td style="text-align:center">-128 ～ 127</td>
+<td style="text-align:center">-</td>
+<td style="text-align:center">-2⁷ ～ 2⁷-1（补码表示）</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>unsigned char</code></td>
+<td style="text-align:center">8</td>
+<td style="text-align:center">-</td>
+<td style="text-align:center">0 ～ 255</td>
+<td style="text-align:center">0 ～ 2⁸-1</td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>短整型</strong></td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td style="text-align:center"><code>short</code> / <code>signed short</code></td>
+<td style="text-align:center">16</td>
+<td style="text-align:center">-32768 ～ 32767</td>
+<td style="text-align:center">-</td>
+<td style="text-align:center">-2¹⁵ ～ 2¹⁵-1</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>unsigned short</code></td>
+<td style="text-align:center">16</td>
+<td style="text-align:center">-</td>
+<td style="text-align:center">0 ～ 65535</td>
+<td style="text-align:center">0 ～ 2¹⁶-1</td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>基本整型</strong></td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td style="text-align:center"><code>int</code> / <code>signed int</code></td>
+<td style="text-align:center">32</td>
+<td style="text-align:center">-2147483648 ～ 2147483647</td>
+<td style="text-align:center">-</td>
+<td style="text-align:center">-2³¹ ～ 2³¹-1</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>unsigned int</code></td>
+<td style="text-align:center">32</td>
+<td style="text-align:center">-</td>
+<td style="text-align:center">0 ～ 4294967295</td>
+<td style="text-align:center">0 ～ 2³²-1</td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>长整型</strong></td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td style="text-align:center"><code>long</code> / <code>signed long</code></td>
+<td style="text-align:center">32（32 位系统）/ 64（64 位系统）</td>
+<td style="text-align:center">-2147483648 ～ 2147483647（32 位） -9223372036854775808 ～ 9223372036854775807（64 位）</td>
+<td style="text-align:center">-</td>
+<td style="text-align:center">32 位：-2³¹ ～ 2³¹-1 64 位：-2⁶³ ～ 2⁶³-1</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>unsigned long</code></td>
+<td style="text-align:center">32（32 位系统）/ 64（64 位系统）</td>
+<td style="text-align:center">-</td>
+<td style="text-align:center">0 ～ 4294967295（32 位） 0 ～ 18446744073709551615（64 位）</td>
+<td style="text-align:center">32 位：0 ～ 2³²-1 64 位：0 ～ 2⁶⁴-1</td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>长长整型</strong></td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td style="text-align:center"><code>long long</code> / <code>signed long long</code></td>
+<td style="text-align:center">64</td>
+<td style="text-align:center">-9223372036854775808 ～ 9223372036854775807</td>
+<td style="text-align:center">-</td>
+<td style="text-align:center">-2⁶³ ～ 2⁶³-1</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>unsigned long long</code></td>
+<td style="text-align:center">64</td>
+<td style="text-align:center">-</td>
+<td style="text-align:center">0 ～ 18446744073709551615</td>
+<td style="text-align:center">0 ～ 2⁶⁴-1</td>
 </tr>
 </tbody>
 </table>
