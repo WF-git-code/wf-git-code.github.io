@@ -7,7 +7,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://example.com/img/WF.png">
 <meta property="article:published_time" content="2025-07-27T00:52:57.000Z">
-<meta property="article:modified_time" content="2025-10-27T13:40:31.938Z">
+<meta property="article:modified_time" content="2025-10-28T13:26:03.502Z">
 <meta property="article:author" content="WF">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="http://example.com/img/WF.png"><script type="application/ld+json">{
@@ -17,7 +17,7 @@
   "url": "http://example.com/2025/07/27/linux-%E7%B3%BB%E7%BB%9F/",
   "image": "http://example.com/img/WF.png",
   "datePublished": "2025-07-27T00:52:57.000Z",
-  "dateModified": "2025-10-27T13:40:31.938Z",
+  "dateModified": "2025-10-28T13:26:03.502Z",
   "author": [
     {
       "@type": "Person",
@@ -158,7 +158,7 @@
   isHighlightShrink: false,
   isToc: true,
   pageType: 'post'
-}</script><meta name="generator" content="Hexo 7.3.0"></head><body><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(/img/index-bg.jpg);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">WF的知识空间</span></a><a class="nav-page-title" href="/"><span class="site-name">linux 系统</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"></div></nav><div id="post-info"><h1 class="post-title">linux 系统</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2025-07-27T00:52:57.000Z" title="发表于 2025-07-27 08:52:57">2025-07-27</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-10-27T13:40:31.938Z" title="更新于 2025-10-27 21:40:31">2025-10-27</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h2 id="1-Linux系统基础文件">1.Linux系统基础文件</h2>
+}</script><meta name="generator" content="Hexo 7.3.0"></head><body><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(/img/index-bg.jpg);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">WF的知识空间</span></a><a class="nav-page-title" href="/"><span class="site-name">linux 系统</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"></div></nav><div id="post-info"><h1 class="post-title">linux 系统</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2025-07-27T00:52:57.000Z" title="发表于 2025-07-27 08:52:57">2025-07-27</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-10-28T13:26:03.502Z" title="更新于 2025-10-28 21:26:03">2025-10-28</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h2 id="1-Linux系统基础文件">1.Linux系统基础文件</h2>
 <p><strong>倒状的树</strong></p>
 <p><strong>1./bin:基础用户命令目录(二进制可执行文件)存放普通用户以及管理员可执行的基本命令.</strong></p>
 <p><strong>2./sbin:系统管理命令(超级用户二进制文件)</strong><br>
@@ -186,8 +186,13 @@
 <p><strong>12./tmp 临时数据文件</strong><br>
 <strong>运行系统或者程序的时候会产生临时文件，存放于该目录下</strong></p>
 <h2 id="2-Linux系统基础命令">2.Linux系统基础命令</h2>
+<p>$(…….)      命令替换 <code>$(...)</code> 会先执行括号内的命令，再将其输出作为字符串替换到当前命令中。</p>
+<p>eg:编译所有.c后缀的文件</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//gcc -o main $(ls | grep .c)   等价于     gcc -o main *.c</span></span><br></pre></td></tr></table></figure>
 <h4 id="1。放大界面：ctrl-shift-“-”缩小界面：ctrl-”-“">1。放大界面：ctrl+shift+“+”			缩小界面：ctrl+”-“</h4>
 <p><strong>ctrl+c	结束前台正在运行的程序</strong>  		  <strong>~相当于家目录</strong>		<strong>…   上一级目录</strong>       <strong>/   根目录</strong></p>
+<p>CTRL+alt+t打开终端</p>
+<p>PID：进程的唯一标识符，用来区分唯一的进程        UID：用户唯一标识符</p>
 <h4 id="2-第一个字符：">2.第一个字符：</h4>
 <p>d开头：代表目录 	-开头：代表文件	l开头：代表链接文件相当于windows下的快捷方式</p>
 <h4 id="3-分为三组：创建者权限组员权限其他人权限rwx可读可写可执行-777">3.分为三组：创建者权限	组员权限	其他人权限	rwx可读可写可执行   777</h4>
@@ -462,7 +467,9 @@ chmod --reference=参考文件 目标文件</p>
 <li><strong>汇编</strong>：<code>hello.s</code> → <code>hello.o</code>（汇编指令→二进制目标文件，含符号表）；不能运行因为没加系统库调运不了</li>
 <li><strong>链接</strong>：<code>hello.o</code> + 系统库 → <code>hello</code>（合并目标文件→解析符号→重定位→可执行文件）。</li>
 </ol>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//预编译    gcc -E main.c -o main.i</span></span><br><span class="line"><span class="comment">//编译      gcc -S main.i -o main.s</span></span><br><span class="line"><span class="comment">//汇编      gcc -C main.s -o main.o</span></span><br><span class="line"><span class="comment">//链接      gcc -O  main.o -0 main</span></span><br><span class="line"><span class="comment">//四部结合   gcc </span></span><br></pre></td></tr></table></figure>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//预编译    gcc -E main.c -o main.i</span></span><br><span class="line"><span class="comment">//编译      gcc -S main.i -o main.s</span></span><br><span class="line"><span class="comment">//汇编      gcc -C main.s -o main.o</span></span><br><span class="line"><span class="comment">//链接      gcc -O  main.o -0 main</span></span><br><span class="line"><span class="comment">//四部结合   gcc -o main main.c    此时为relses版本</span></span><br><span class="line"><span class="comment">//gcc -o main main.c -g   debug版本</span></span><br></pre></td></tr></table></figure>
+<p><strong>多个文件的编译     可以先用gcc   -c  对函数实现文件进行语法检查</strong></p>
+<p>Debug和relese版本的区别，Debug版本相较于relese多了需要调试的信息</p>
 <h3 id="15-make命令以及makefile文件">15.make命令以及makefile文件</h3>
 <p>当项目包含多个源代码文件时，手动执行 <code>gcc</code> 等编译命令会非常繁琐（例如 <code>gcc a.c b.c c.c -o app</code>），且每次修改文件后需要重新输入完整命令。</p>
 <p><strong>1.<code>make</code> 命令的核心价值在于：</strong></p>
@@ -471,8 +478,62 @@ chmod --reference=参考文件 目标文件</p>
 <li><strong>增量编译</strong>：仅重新编译<strong>被修改过的文件</strong>（通过对比文件修改时间判断），避免全量编译，节省时间。</li>
 <li><strong>灵活扩展</strong>：支持复杂逻辑（如条件编译、多目标输出、跨平台适配等）。</li>
 </ol>
-<p><strong>2.<code>make</code> 命令的基本用法</strong></p>
+<p><strong>2.<code>make</code> 命令的基本用法</strong>     一般只有一个makefile文件</p>
+<p>make编译makefile文件      make+makefile中的方法—clean或者其他有意义的文件否则直接执行make会输出all中包含 的main文件按照依赖关系执行命令</p>
+<p>如果makefile文件和make不在同一目录下则需要加相对路径</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//有三个.c文件    add.c  max.c  main.c</span></span><br><span class="line"><span class="comment">//makefile文件</span></span><br><span class="line"><span class="comment">//完整版</span></span><br><span class="line">all : main</span><br><span class="line"></span><br><span class="line">main : main.o add.o max.o</span><br><span class="line">    gcc -o main main.o add.o max.o</span><br><span class="line">main.o : main.c</span><br><span class="line">    gcc -c add.c</span><br><span class="line">max.o : max.c</span><br><span class="line">    gcc -c max.c</span><br><span class="line">clean:</span><br><span class="line">	rm -rf *.o main</span><br><span class="line"><span class="comment">//简化版    </span></span><br><span class="line">all: main</span><br><span class="line">main : add.c main.c max.c</span><br><span class="line">    gcc -o main add.c main.c max.c</span><br><span class="line">clean:</span><br><span class="line">	rm -rf *.o main    </span><br></pre></td></tr></table></figure>
+<p>主函数有三个参数</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">int</span> argc,<span class="type">char</span>* argv,<span class="type">char</span>* envp)</span>&#123;</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;%d\n&quot;</span>,argc);</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">0</span>;i&lt;argc;i++)&#123;</span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">&quot;argv[%d]=%s&quot;</span>,i,argv[i]);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">0</span>;envp[i]!=<span class="literal">NULL</span>;i++)&#123;</span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">&quot;envp[%d]=%s&quot;</span>,i,envp[i]);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>linux有   1.2.3，windows只有1.2</p>
+<p>1.参数个数  int  argc    argc最小为1   自己的函数名</p>
+<p>2.参数名称   char* argv         参数argv[0]=（Linux）当前函数名称  argv[1]传给主函数第一个参数， argv[2]传给主函数第二个参数</p>
+<p>​							  windows（函数的路径）</p>
+<p>3.环境变量    char* envp[]     envp最后一个元素是空指针</p>
 <h3 id="16-gdb调试">16.gdb调试</h3>
+<p>调试的对象是main/main.exe</p>
+<p>stdin  stdio stderr  标准输入输出文件从电脑启动已经打开并运行  三个已经打开的文件指针</p>
+<p><strong>gcc -o main main.c -g   debug版本</strong></p>
+<ol>
+<li>
+<p>gdb  函数可执行文件</p>
+</li>
+<li>
+<p>b n/函数名   第n行加断点/函数开头加断点</p>
+</li>
+<li>
+<p>info break 打印所有断电信息</p>
+</li>
+<li>
+<p>delete n  删除第n行断电</p>
+</li>
+<li>
+<p>r      运行程序</p>
+</li>
+<li>
+<p>n   执行下一行代码</p>
+</li>
+<li>
+<p>p  参数   打印此时参数值</p>
+</li>
+<li>
+<p>c   continue  执行直到下个断点</p>
+</li>
+<li>
+<p>q  退出</p>
+</li>
+<li>
+<p>l n   显示第n行代码</p>
+</li>
+<li>
+<p>s  函数名    进入该函数       finish跳出函数</p>
+</li>
+<li>
+<p>bt  显示当前函数的位置，现在再哪个函数的那个函数中   if   A-&gt;B-&gt;C</p>
+<p>C</p>
+<p>B</p>
+<p>A</p>
+</li>
+</ol>
 <h3 id="17-静态库与动态库">17.静态库与动态库</h3>
 <p>printf实现在哪里?	stdio.h只是声明有这样一个函数	但实现是在库里面C标准库</p>
 <p><strong>1.库文件</strong>	(静态库 共享库(windows叫动态库)）</p>
