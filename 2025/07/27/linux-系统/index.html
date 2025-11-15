@@ -7,7 +7,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://example.com/img/WF.png">
 <meta property="article:published_time" content="2025-07-27T00:52:57.000Z">
-<meta property="article:modified_time" content="2025-11-15T02:59:25.098Z">
+<meta property="article:modified_time" content="2025-11-15T09:03:52.718Z">
 <meta property="article:author" content="WF">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="http://example.com/img/WF.png"><script type="application/ld+json">{
@@ -17,7 +17,7 @@
   "url": "http://example.com/2025/07/27/linux-%E7%B3%BB%E7%BB%9F/",
   "image": "http://example.com/img/WF.png",
   "datePublished": "2025-07-27T00:52:57.000Z",
-  "dateModified": "2025-11-15T02:59:25.098Z",
+  "dateModified": "2025-11-15T09:03:52.718Z",
   "author": [
     {
       "@type": "Person",
@@ -158,7 +158,7 @@
   isHighlightShrink: false,
   isToc: true,
   pageType: 'post'
-}</script><meta name="generator" content="Hexo 7.3.0"></head><body><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(/img/index-bg.jpg);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">WF的知识空间</span></a><a class="nav-page-title" href="/"><span class="site-name">linux 系统</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"></div></nav><div id="post-info"><h1 class="post-title">linux 系统</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2025-07-27T00:52:57.000Z" title="发表于 2025-07-27 08:52:57">2025-07-27</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-11-15T02:59:25.098Z" title="更新于 2025-11-15 10:59:25">2025-11-15</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h2 id="1-Linux系统基础文件">1.Linux系统基础文件</h2>
+}</script><meta name="generator" content="Hexo 7.3.0"></head><body><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(/img/index-bg.jpg);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">WF的知识空间</span></a><a class="nav-page-title" href="/"><span class="site-name">linux 系统</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"></div></nav><div id="post-info"><h1 class="post-title">linux 系统</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2025-07-27T00:52:57.000Z" title="发表于 2025-07-27 08:52:57">2025-07-27</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-11-15T09:03:52.718Z" title="更新于 2025-11-15 17:03:52">2025-11-15</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h2 id="1-Linux系统基础文件">1.Linux系统基础文件</h2>
 <p><strong>倒状的树</strong></p>
 <p><strong>1./bin:基础用户命令目录(二进制可执行文件)存放普通用户以及管理员可执行的基本命令.</strong></p>
 <p><strong>2./sbin:系统管理命令(超级用户二进制文件)</strong><br>
@@ -640,6 +640,29 @@ export:临时设置环境变量(当前终端有效)</p>
 </tr>
 </tbody>
 </table>
+<p>①对于每个进程来说，其逻辑地址大小都为0-4gb且分为数据区，代码区，堆区，栈区，在每个进程中内核通常都会占用一部分逻辑地址，这部分逻辑地址不能被使用，windows2gb  linux1gb，对于物理内存，操作系统会将物理内存分位内存页，通常大小4kb（与硬件有关），操作系统将内存抽象为逻辑地址，其在每个进程的PCB控制块中包含着逻辑地址映射物理地址的页表，每个进程里其逻辑地址可能相同但映射关系完全不同，逻辑地址转物理地址由cpu中的MMU来实现，虽然说物理地址可能相同，但在物理内存上使用区域是完全独立的，给程序员的感觉就好像每个进程都独立使用0-4gb的空间。</p>
+<p>②真实内存小于逻辑地址时：<strong>虚拟内存 （逻辑地址）+ 交换分区（Swap）</strong> 机制解决，核心是 “用磁盘空间模拟内存，实现逻辑地址的‘按需映射’”。但速度会变慢。</p>
+<p>③真实内存大于逻辑地址时：此时的核心问题是：<strong>32 位逻辑地址无法寻址超过 4GB 的物理内存</strong>，需通过硬件和内核机制突破这一限制。</p>
+<p>④逻辑地址不足时：在32位操作系统大量使用虚拟内存，或者内存碎片太多，无大且连续的地址空间，会导致malloc  realloc返回错误，解决优化程序或者升级64位系统</p>
+<p>内存碎片的产生：内存碎片是内存管理中 “效率与连续性” 矛盾的产物：</p>
+<ul>
+<li>内部碎片因 “内存对齐要求” 和 “固定分配单元” 产生，表现为已分配内存中的空闲空间；</li>
+<li>外部碎片因 “频繁malloc分配释放free” 和 “分配策略” 产生，表现为分散的空闲块无法合并。<strong>malloc和realloc会分配连续的逻辑地址</strong></li>
+</ul>
+<p>现代操作系统通过分页、虚拟内存、伙伴系统等机制，在一定程度上平衡了碎片问题，但无法完全消除（通常以允许少量内部碎片为代价，换取外部碎片的减少）。</p>
+<p>⑤物理内存不足时：多进程同时存在，或者单进程占用大量内存，轻度不足，操作系统回收空闲内存页不会杀死进程，重度不足，<strong>计算 OOM 评分</strong>（进程占用空间大小，优先级，重要程度），<strong>选择并杀死目标进程</strong>，<strong>系统恢复</strong>：释放的物理内存分配给急需内存的进程，避免系统崩溃。解决：增加物理内存，扩大 Swap 分区，限制进程内存使用，优化应用程序。</p>
+<p>⑥对于进程复制，fork在执行的时候会将父进程的资源完全复制一份给子进程，包括PCB中的页表和文件结构体struct file ，但是由于这样效率低空间大，于是出现了写时拷贝，即谁改变复制谁，不改变的部分共享同一片物理空间，要改变的部分重新分配物理内存，即改变子进程页表中的映射关系。给程序员的感觉就是完全复制了一份。对于文件来说在struct file结构体中有一个引用计数器，记录了有几个进程在使用这个文件，当这个计数器为0时文件才会被关闭。因此在子进程即使被替换在不需要这个文件时也需要调用close关闭一次时引用计数器减一，父进程也需要关闭。文件表下标从3开始，并且父子进程共享已打开文件的文件偏移量。</p>
+<p>⑦fork复制进程，在父进程会返回子进程的PID，在子进程中会返回0，因此可以根据这一特性使父子进程完成不同的功能，或者调用execlp来替换进程，在父进程先结束后，操作系统会自动将孤儿进程分配给一个系统进程，这个系统进程一定会调用wait接受子进程退出码，在子进程先结束后，由于父进程没有调用wait因此子进程会变为僵死进程，直到父进程结束系统重新分配父进程结束僵死进程，解决方法目前在父进程中调用wait，但因为需要子进程先结束因此会阻塞父进程。   linux会用四个字节来表示进程的结束，第一个字节表示系统是否正常退出，第二个字节表示退出码 。wait（）将4个字节的值提取出来，WIFEXITED(val)提取第一个字节表示是否正常，WEXITSTATUS(val)提取第二个字节并打印出退出码。</p>
+<p>⑧<strong>用户态切换内核态</strong></p>
+<p>每一个系统调用都有编号，当代码执行到需要内核函数时<strong>会产生中断</strong>0x80，用户程序将系统调用号存入Eax寄存器，执行 <code>int 0x80</code> 或者调用指令 syscall后，CPU 跳转到内核的中断处理程序，完成从用户态（特权级 3）到内核态（特权级 0）的切换。通过根据系统调用号从内核函数表中，找到内核中被调用函数，执行完被调用函数后，其返回值被Eax寄存器返回到应用程序中，继续执行后续代码</p>
+<p>⑨<strong>系统调用与库函数的区别</strong> ？   <strong>产生中断陷入内核</strong></p>
+<p>库函数实现在c库中，系统调用在内核中，实现一个printf函数会有一个用户态到内核态的切换</p>
+<ul>
+<li><strong>系统调用</strong>是内核提供的 “原子操作”，负责与硬件和内核资源交互，特点是底层、高效（单次调用开销固定）、但易用性差、跨平台性差。</li>
+<li><strong>库函数</strong>是对系统调用的封装，提供更友好的接口、优化（如缓冲）和跨平台支持，降低开发难度，同时通过减少系统调用次数提升性能。</li>
+</ul>
+<p>⑩<strong>既然使用库函数和系统调用都有系统调用的开销为什么推荐使用库函数？</strong>  库函数是 “性价比最高的选择”</p>
+<p>库函数虽然最终可能调用系统调用（因此包含系统调用的基础开销），但通过<strong>减少系统调用次数、提供抽象接口、跨平台兼容和算法优化</strong>，显著降低了开发成本并提升了程序效率。对于绝大多数应用场景，使用库函数的 “收益”（开发效率、性能优化）远大于其引入的 “额外开销”（封装层的少量指令）</p>
 <h3 id="20-复制进程-fork">20.复制进程   fork</h3>
 <p>返回值为PID参数为NULL</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">pid_t</span> pid=fork();</span><br></pre></td></tr></table></figure>
@@ -726,7 +749,7 @@ export:临时设置环境变量(当前终端有效)</p>
 <p><strong>跨平台兼容性</strong>：库函数（如 C 标准库）屏蔽了不同操作系统的系统调用差异，相同代码可在 Linux、Windows 等系统上运行。</p>
 <p><strong>更高的易用性</strong>，功能拓展</p>
 <p><strong>用户态切换内核态</strong></p>
-<p>每一个系统调用都有编号，当代码执行到需要内核函数时<strong>会产生中断</strong>，返回中断号，根据中断号判断是何种中断，早期有一个特权级的切换，如果是系统调用则通过Eax寄存器根据系统调用号从内核函数表中，找到内核中被调用函数，执行完被调用函数后，其返回值被Eax寄存器返回到应用程序中，继续执行后续代码</p>
+<p>每一个系统调用都有编号，当代码执行到需要内核函数时<strong>会产生中断</strong>，用户程序将系统调用号存入Eax寄存器，执行 <code>int 0x80</code> 或者调用指令 syscall后，CPU 跳转到内核的中断处理程序，完成从用户态（特权级 3）到内核态（特权级 0）的切换。通过根据系统调用号从内核函数表中，找到内核中被调用函数，执行完被调用函数后，其返回值被Eax寄存器返回到应用程序中，继续执行后续代码</p>
 <p><strong>一、系统调用的触发机制</strong></p>
 <p>用户程序通过<strong>系统调用接口</strong>（如 C 标准库的 <code>open</code>、<code>read</code> 等封装函数）发起请求，底层通过<strong>硬件指令</strong>触发特权级切换：</p>
 <ul>
