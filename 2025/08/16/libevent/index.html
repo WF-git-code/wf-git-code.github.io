@@ -1,13 +1,13 @@
-<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Libevent源码剖析 | WF的知识空间</title><meta name="author" content="WF"><meta name="copyright" content="WF"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="一.I&#x2F;O框架 I&#x2F;O框架以库函数的形式，封装了较为底层的系统调用。这些库函数经过时间与压力的考验，更加合理与高效，通常是Reactor和Proactor模式，而Libevent就是一种基于Reaclor模式实现的轻量级I&#x2F;O库。 先简单介绍Proactor与reactor模式 Proactor模式（主动器模型） windows系统使用主动器模型，异步I&#x2F;O Proactor 模式是异步 I&#x2F;O">
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Libevent源码剖析 | WF的知识空间</title><meta name="author" content="WF"><meta name="copyright" content="WF"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="一.I&#x2F;O框架 I&#x2F;O框架以库函数的形式，封装了较为底层的系统调用。这些库函数经过时间与压力的考验，更加合理与高效，通常是Reactor和Proactor模式，而Libevent就是一种基于Reaclor模式实现的轻量级I&#x2F;O库。 先简单介绍Proactor与Reactor模式 Proactor模式（主动器模型） windows系统使用主动器模型，异步I&#x2F;O Proactor 模式是异步 I&#x2F;O">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Libevent源码剖析">
 <meta property="og:url" content="http://example.com/2025/08/16/libevent/index.html">
 <meta property="og:site_name" content="WF的知识空间">
-<meta property="og:description" content="一.I&#x2F;O框架 I&#x2F;O框架以库函数的形式，封装了较为底层的系统调用。这些库函数经过时间与压力的考验，更加合理与高效，通常是Reactor和Proactor模式，而Libevent就是一种基于Reaclor模式实现的轻量级I&#x2F;O库。 先简单介绍Proactor与reactor模式 Proactor模式（主动器模型） windows系统使用主动器模型，异步I&#x2F;O Proactor 模式是异步 I&#x2F;O">
+<meta property="og:description" content="一.I&#x2F;O框架 I&#x2F;O框架以库函数的形式，封装了较为底层的系统调用。这些库函数经过时间与压力的考验，更加合理与高效，通常是Reactor和Proactor模式，而Libevent就是一种基于Reaclor模式实现的轻量级I&#x2F;O库。 先简单介绍Proactor与Reactor模式 Proactor模式（主动器模型） windows系统使用主动器模型，异步I&#x2F;O Proactor 模式是异步 I&#x2F;O">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://example.com/img/WF.png">
 <meta property="article:published_time" content="2025-08-16T00:02:00.000Z">
-<meta property="article:modified_time" content="2026-02-23T12:35:34.379Z">
+<meta property="article:modified_time" content="2026-03-01T10:44:45.060Z">
 <meta property="article:author" content="WF">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="http://example.com/img/WF.png"><script type="application/ld+json">{
@@ -17,7 +17,7 @@
   "url": "http://example.com/2025/08/16/libevent/",
   "image": "http://example.com/img/WF.png",
   "datePublished": "2025-08-16T00:02:00.000Z",
-  "dateModified": "2026-02-23T12:35:34.379Z",
+  "dateModified": "2026-03-01T10:44:45.060Z",
   "author": [
     {
       "@type": "Person",
@@ -158,9 +158,9 @@
   isHighlightShrink: false,
   isToc: true,
   pageType: 'post'
-}</script><meta name="generator" content="Hexo 7.3.0"></head><body><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(/img/index-bg.jpg);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">WF的知识空间</span></a><a class="nav-page-title" href="/"><span class="site-name">Libevent源码剖析</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"></div></nav><div id="post-info"><h1 class="post-title">Libevent源码剖析</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2025-08-16T00:02:00.000Z" title="发表于 2025-08-16 08:02:00">2025-08-16</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-02-23T12:35:34.379Z" title="更新于 2026-02-23 20:35:34">2026-02-23</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h1>一.I/O框架</h1>
+}</script><meta name="generator" content="Hexo 7.3.0"></head><body><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(/img/index-bg.jpg);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">WF的知识空间</span></a><a class="nav-page-title" href="/"><span class="site-name">Libevent源码剖析</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"></div></nav><div id="post-info"><h1 class="post-title">Libevent源码剖析</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2025-08-16T00:02:00.000Z" title="发表于 2025-08-16 08:02:00">2025-08-16</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-03-01T10:44:45.060Z" title="更新于 2026-03-01 18:44:45">2026-03-01</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h1>一.I/O框架</h1>
 <p>I/O框架以库函数的形式，封装了较为底层的系统调用。这些库函数经过时间与压力的考验，更加合理与高效，通常是Reactor和Proactor模式，而Libevent就是一种基于Reaclor模式实现的轻量级I/O库。</p>
-<h2 id="先简单介绍Proactor与reactor模式">先简单介绍Proactor与reactor模式</h2>
+<h2 id="先简单介绍Proactor与Reactor模式">先简单介绍Proactor与Reactor模式</h2>
 <h4 id="Proactor模式（主动器模型）">Proactor模式（主动器模型）</h4>
 <p>windows系统使用主动器模型，异步I/O</p>
 <p>Proactor 模式是<strong>异步 I/O 的设计模式</strong>，可以把它理解为 “主动型的 I/O 管理者”：</p>
@@ -213,7 +213,7 @@
 <p>Proactor 模型的 “终极实现”：IOCP 完美契合 Proactor 的核心逻辑 —— 应用提交异步 I/O 请求，内核执行全流程，完成后将结果放入 IOCP，应用仅处理结果。</p>
 <p><strong>内核做的事</strong>：仅负责 I/O 操作本身（等待设备就绪 → 拷贝数据到应用缓冲区），最终给应用返回 “原料”（比如读取到的文件内容、客户端发来的网络数据、写入成功的状态）；</p>
 <p><strong>应用做的事</strong>：拿到这些 “原料” 后，执行所有业务逻辑（比如解析数据、计算、生成响应、调用数据库、写日志等），内核完全不参与。</p>
-<p><strong>windows系统下优先采用Proactor（主动器）模型</strong></p>
+<p><strong>windows系统下优先采用IOCP（Proactor（主动器））模型</strong></p>
 <p>windows的核心异步I/O接口IOCP是天生的Proactor接口</p>
 <ul>
 <li><strong>接口逻辑</strong>：应用只需调用<code>ReadFile</code>/<code>WriteFile</code>（带<code>FILE_FLAG_OVERLAPPED</code>标记）向内核提交 “异步 I/O 请求”，无需关注 “是否就绪”；</li>
@@ -230,7 +230,11 @@
 <li><strong>应用行为</strong>：应用必须在收到 “就绪通知” 后，自己调用<code>recv</code>/<code>send</code>/<code>read</code>等函数执行 I/O 操作，否则拿不到数据。</li>
 </ul>
 <p>更关键的是：Linux 早期的异步 I/O 接口（libaio）存在严重缺陷 —— 仅支持<code>O_DIRECT</code>（绕开文件缓存），不支持普通文件的异步读写，易用性和兼容性极差，开发者根本没法基于它构建稳定的 Proactor 模型，只能选择 epoll+Reactor</p>
+<h4 id="macos">macos</h4>
+<p>在 macOS 上，libevent 会优先使用 <strong>kqueue</strong> 作为 I/O 多路复用的后端机制（kqueue 是 macOS/BSD 系统特有的高效事件通知接口）</p>
+<p>kqueue可以理解为更加强大的epoll，其支持的事件类型更多更丰富，具体请看I/O多路复用部分。</p>
 <h4 id="总结">总结</h4>
+<p><strong>无论后端I/O复用用的是什么模型，libevent库始终是基于Reactor模型实现的</strong></p>
 <p>Windows 选择 Proactor：牺牲一点控制粒度，换 “更少的内核 / 用户态切换”，适配 IOCP 的高并发优势；</p>
 <p>Linux 选择 Reactor：牺牲一点切换次数，换 “全场景适配 + 精细控制”，利用 epoll 的极致性能。</p>
 <p><strong>底层接口决定模型</strong>：Windows IOCP 是 Proactor 式接口，天然适配 Proactor 模型；Linux epoll 是 Reactor 式接口，天然适配 Reactor 模型；</p>
@@ -238,6 +242,8 @@
 <p><strong>性能适配权衡</strong>：Windows 优先 “少切换、高并发”，Linux 优先 “全兼容、细控制”；</p>
 <p><strong>LInux也有Proactor模式</strong></p>
 <h2 id="Reactor模式">Reactor模式</h2>
+<p>Reactor属于一个典型的事件驱动该模型，程序执行流程由**事件（IO就绪、定时器超时、信号触发）**驱动，而非顺序执行。</p>
+<p>其事件驱动模型的核心流程，程序初始化进入事件循环，阻塞事件循环，事件就绪后调用回调函数进行处理，处理完成进入事件循环持续等待。</p>
 <p>基于Reactor模式的I/O框架包含如下组件：</p>
 <h3 id="事件源（句柄）">事件源（句柄）</h3>
 <p>Linux 上是文件描述符，Windows上就是Socket或者Handle 了，这里统一称为“句柄 集”。</p>
@@ -276,5 +282,1306 @@
 <p>编程相对简单：可以最大程度的避免复杂的多线程及同步问题，避免线程和进程之间的切换开销</p>
 <p>可扩展性：可以方便的通过增加Rector的实例来充分利用cpu资源</p>
 <p>可复用性：Rector框架本身与具体的处理逻辑无关，具有高复用性</p>
+<h2 id="I-O多路复用">I/O多路复用</h2>
+<p>IO多路复用是**用一个系统调用监听多个文件描述符（fd）**的技术，任意fd就绪时系统调用返回，程序再遍历就绪列表处理事件。</p>
+<p><strong>libevent支持的IO多路复用模型（Linux下默认epoll）</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>模型</th>
+<th>支持系统</th>
+<th>核心特点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>epoll</td>
+<td>Linux 2.6+</td>
+<td>性能最高，支持边缘触发，fd数量无上限，时间复杂度O(1)</td>
+</tr>
+<tr>
+<td>kqueue</td>
+<td>FreeBSD/macOS</td>
+<td>高性能，支持文件、信号等多种事件</td>
+</tr>
+<tr>
+<td>select</td>
+<td>全平台通用</td>
+<td>跨平台兼容性好，但性能低，fd上限默认1024，时间复杂度O(n)</td>
+</tr>
+<tr>
+<td>poll</td>
+<td>全平台通用</td>
+<td>无fd上限，但性能仍低于epoll</td>
+</tr>
+<tr>
+<td>iocp</td>
+<td>Windows</td>
+<td>异步IO（Proactor模式）</td>
+</tr>
+</tbody>
+</table>
+<p><strong>epoll比select性能更高的核心原因</strong>：</p>
+<ol>
+<li>
+<p>事件表机制：通过epoll_ctl预先将fd加入内核事件表，无需每次调用都传递全量fd；</p>
+</li>
+<li>
+<p>就绪列表：内核维护就绪列表，epoll_wait直接返回就绪fd，无需遍历全量fd；</p>
+</li>
+<li>
+<p>内存共享：内核与用户空间共享内存，避免就绪列表的拷贝开销。</p>
+</li>
+</ol>
+<h3 id="kueue（了解）">kueue（了解）</h3>
+<p>kqueue 是 <strong>FreeBSD/macOS/iOS 等 BSD 系操作系统</strong>上的 <strong>IO 多路复用与事件通知机制</strong>，定位完全对应 Linux 上的 epoll，但设计理念更通用、更强大 —— 它不仅能监听 socket IO 事件，还能监听文件、信号、定时器、进程状态变化等<strong>多种事件类型</strong>。</p>
+<p><strong>通用事件模型</strong>：不局限于 socket IO，支持 <code>EVFILT_READ</code>（读）、<code>EVFILT_WRITE</code>（写）、<code>EVFILT_SIGNAL</code>（信号）、<code>EVFILT_TIMER</code>（定时器）、<code>EVFILT_PROC</code>（进程）等多种过滤器；</p>
+<p><strong>一次性注册，多次触发</strong>：类似 epoll 的 <code>ET</code>（边缘触发），但更灵活；</p>
+<p><strong>用户态与内核态交互高效</strong>：通过 <code>kevent()</code> 一个系统调用完成「注册事件 + 等待事件 + 获取就绪事件」，减少系统调用次数；</p>
+<p><strong>无 fd 数量上限</strong>：仅受系统内存限制，类似 epoll。</p>
+<table>
+<thead>
+<tr>
+<th>维度</th>
+<th>epoll（Linux）</th>
+<th>kqueue（BSD/macOS）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>事件类型</strong></td>
+<td>仅支持 socket IO 事件（可读 / 可写 / 出错）</td>
+<td>通用事件模型，支持 IO、信号、定时器、进程、文件等多种事件</td>
+</tr>
+<tr>
+<td><strong>系统调用次数</strong></td>
+<td>需 3 个系统调用：<code>epoll_create()</code>（创建）、<code>epoll_ctl()</code>（注册）、<code>epoll_wait()</code>（等待）</td>
+<td>仅需 2 个系统调用：<code>kqueue()</code>（创建）、<code>kevent()</code>（注册 + 等待二合一）</td>
+</tr>
+<tr>
+<td><strong>定时器实现</strong></td>
+<td>无原生定时器，需结合时间堆（如 libevent 那样）</td>
+<td>原生支持 <code>EVFILT_TIMER</code> 过滤器，内核直接管理定时器，无需用户态时间堆</td>
+</tr>
+<tr>
+<td><strong>使用复杂度</strong></td>
+<td>相对简单，专注于 IO 多路复用</td>
+<td>更灵活，但 API 稍复杂，支持多种事件类型</td>
+</tr>
+<tr>
+<td><strong>跨平台</strong></td>
+<td>仅 Linux</td>
+<td>仅 BSD 系（FreeBSD/macOS/iOS）</td>
+</tr>
+</tbody>
+</table>
 <h1>二.一个简单的事件循环</h1>
-</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="http://example.com">WF</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="http://example.com/2025/08/16/libevent/">http://example.com/2025/08/16/libevent/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="http://example.com" target="_blank">WF的知识空间</a>！</span></div></div><div class="tag_share"><div class="post-share"><div class="social-share" data-image="/img/WF.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2025/08/16/%E7%AE%97%E6%B3%95/" title="数据结构与算法"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">数据结构与算法</div></div><div class="info-2"><div class="info-item-1">数据结构：让数据可以以一种手段或者一种规则组成起来的集合	方便管理和应用 集合结构：将一堆元素集合起来	数组 顺序结构：①唯一的头	②唯一的尾	③除了首节点，都有直接前驱节点	④除了尾节点，都有直接后继节点 树形结构： 图形结构： 对于算法来说：一般用最差情况下的时间复杂度O(n) 稳定性判断的方法：看起排序是否存在跳跃交换 一.线性表（顺序表+链表） 线性表概念：有且仅有一个开始节点和结束节点，并且除了开始（结束）节点之外，剩余所有节点都有前驱（后继）。 ①唯一的头	②唯一的尾	③除了首节点，都有直接前驱节点	④除了尾节点，都有直接尾驱节点 顺序表：物理地址连续的线性结构（数组 != 顺序表）	（物理连续） 线性表： 物理地址不连续，但通过保存下一个节点的地址，可以访问，形成了一个逻辑上面的连续，又符合线性结构的特征 （逻辑连续） 一个最基础的顺序表由 ① arr顺序表保存数据的空间主体 ② size记录顺序表中的元素的个数，为了更好的管理元素 ③ capacity记录顺序表中最大容量 123int arr[10];//保存数据的空间int size;//统计顺序表中的个数in...</div></div></div></a><a class="pagination-related" href="/2025/07/27/linux-%E7%B3%BB%E7%BB%9F/" title="linux 系统"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">linux 系统</div></div><div class="info-2"><div class="info-item-1">1.Linux系统基础文件 倒状的树 1./bin:基础用户命令目录(二进制可执行文件)存放普通用户以及管理员可执行的基本命令. 2./sbin:系统管理命令(超级用户二进制文件) 仅存放root用户的可执行命令 3./usr:用户共享资源 是系统中最大的目录之一，相当于windows中C盘中的&quot;C:\Program Files (x86) 4/etc:系统配置文件 存放的是系统和应用程序的配置文件,包含网络配置，用户配置，服务配置，系统启动 'etc/network 网络配置 5./dev 设备文件目录 块设备(读写，硬盘)，字符设备(键盘鼠标)，虚拟设备: 6.proc:进程与系统信息文件目录 存放虚拟目录，不占用磁盘空间，反映内核，进程，硬件的状态: 7.home 家目录 存放普通用户下的所有文件信息 '8./root 超级用户目录 ，存放超级用户下的所有文件信息 '9./boot系统启动相关文件 启动Lin脑ux系统必备文件 :10./lib /lib64 共享库文件 /lib存放共享库 /lib/libc.so,6C标准库 /linb64 64位系统库 '11...</div></div></div></a></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/WF.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">WF</div><div class="author-info-description"></div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">5</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">0</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/WF-git-code"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="//github.com/WF-git-code" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="/18628492787@163.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">一.I&#x2F;O框架</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%88%E7%AE%80%E5%8D%95%E4%BB%8B%E7%BB%8DProactor%E4%B8%8Ereactor%E6%A8%A1%E5%BC%8F"><span class="toc-number">1.1.</span> <span class="toc-text">先简单介绍Proactor与reactor模式</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Proactor%E6%A8%A1%E5%BC%8F%EF%BC%88%E4%B8%BB%E5%8A%A8%E5%99%A8%E6%A8%A1%E5%9E%8B%EF%BC%89"><span class="toc-number">1.1.0.1.</span> <span class="toc-text">Proactor模式（主动器模型）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Reactor%E6%A8%A1%E5%BC%8F%EF%BC%88%E5%8F%8D%E5%BA%94%E5%A0%86%E6%A8%A1%E5%9E%8B%EF%BC%89"><span class="toc-number">1.1.0.2.</span> <span class="toc-text">Reactor模式（反应堆模型）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%A0%B8%E5%BF%83%E5%8C%BA%E5%88%AB"><span class="toc-number">1.1.0.3.</span> <span class="toc-text">核心区别</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Libevent%E5%9C%A8windows%E5%92%8Clinux%E4%B8%8B%E7%9A%84%E5%B7%AE%E5%BC%82"><span class="toc-number">1.1.1.</span> <span class="toc-text">Libevent在windows和linux下的差异</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#windows"><span class="toc-number">1.1.1.1.</span> <span class="toc-text">windows</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#linux"><span class="toc-number">1.1.1.2.</span> <span class="toc-text">linux</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-number">1.1.1.3.</span> <span class="toc-text">总结</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Reactor%E6%A8%A1%E5%BC%8F"><span class="toc-number">1.2.</span> <span class="toc-text">Reactor模式</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%8B%E4%BB%B6%E6%BA%90%EF%BC%88%E5%8F%A5%E6%9F%84%EF%BC%89"><span class="toc-number">1.2.1.</span> <span class="toc-text">事件源（句柄）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%8B%E4%BB%B6%E5%A4%9A%E8%B7%AF%E5%88%86%E5%8F%91%E5%99%A8"><span class="toc-number">1.2.2.</span> <span class="toc-text">事件多路分发器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%8B%E4%BB%B6%E5%A4%84%E7%90%86%E5%99%A8%E5%92%8C%E5%85%B7%E4%BD%93%E4%BA%8B%E4%BB%B6%E5%A4%84%E7%90%86%E5%99%A8"><span class="toc-number">1.2.3.</span> <span class="toc-text">事件处理器和具体事件处理器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Reactor"><span class="toc-number">1.2.4.</span> <span class="toc-text">Reactor</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Rector%E6%A8%A1%E5%BC%8F%E7%9A%84%E4%BC%98%E7%82%B9"><span class="toc-number">1.3.</span> <span class="toc-text">Rector模式的优点</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">2.</span> <span class="toc-text">二.一个简单的事件循环</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/12/14/c++/" title="C++">C++</a><time datetime="2025-12-14T00:52:50.000Z" title="发表于 2025-12-14 08:52:50">2025-12-14</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/08/16/%E7%AE%97%E6%B3%95/" title="数据结构与算法">数据结构与算法</a><time datetime="2025-08-16T00:03:03.000Z" title="发表于 2025-08-16 08:03:03">2025-08-16</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/08/16/libevent/" title="Libevent源码剖析">Libevent源码剖析</a><time datetime="2025-08-16T00:02:00.000Z" title="发表于 2025-08-16 08:02:00">2025-08-16</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/07/27/%E2%80%98c%E8%AF%AD%E8%A8%80%E6%8C%87%E9%92%88%E2%80%99/" title="C语言">C语言</a><time datetime="2025-07-27T00:52:57.000Z" title="发表于 2025-07-27 08:52:57">2025-07-27</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/07/27/linux-%E7%B3%BB%E7%BB%9F/" title="linux 系统">linux 系统</a><time datetime="2025-07-27T00:52:57.000Z" title="发表于 2025-07-27 08:52:57">2025-07-27</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2025 - 2026 By WF</span><span class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.3.0</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.4.2</a></span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
+<h2 id="定时器事件流程示例">定时器事件流程示例</h2>
+<p>采用2个不同的定时器作为libevent的事件源，模拟一个简单的事件循环</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;event2/event.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;memory&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;string&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;functional&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;Logger.hpp&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;AsynLogging.hpp&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 全局智能指针，管理异步日志对象</span></span><br><span class="line">std::unique_ptr&lt;logfile::AsynLogging&gt; g_asyncLog;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 异步输出回调</span></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">asyncOutput</span><span class="params">(<span class="type">const</span> std::string &amp;msg)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (g_asyncLog)</span><br><span class="line">    &#123;</span><br><span class="line">        g_asyncLog-&gt;<span class="built_in">append</span>(msg);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 异步刷新回调</span></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">asyncFlush</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (g_asyncLog)</span><br><span class="line">    &#123;</span><br><span class="line">        g_asyncLog-&gt;<span class="built_in">flush</span>();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 封装回调参数结构体：传递event_base和两个定时器事件指针</span></span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">struct</span> &#123;</span><br><span class="line">    <span class="keyword">struct</span> <span class="title class_">event_base</span>* base;      <span class="comment">// 事件循环核心对象</span></span><br><span class="line">    <span class="keyword">struct</span> <span class="title class_">event</span>* timer_ev1;      <span class="comment">// 定时器1事件指针（用于删除/释放）</span></span><br><span class="line">    <span class="keyword">struct</span> <span class="title class_">event</span>* timer_ev2;      <span class="comment">// 定时器2事件指针（用于删除/释放）</span></span><br><span class="line">&#125; TimerArgs;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 定时器1回调函数（每2秒触发，触发8次退出循环）</span></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">timer_callback1</span><span class="params">(<span class="type">evutil_socket_t</span> fd, <span class="type">short</span> events, <span class="type">void</span> *arg)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    TimerArgs* args = (TimerArgs*)arg; <span class="comment">// 转换参数类型</span></span><br><span class="line">    <span class="type">static</span> <span class="type">int</span> counter1 = <span class="number">0</span>;</span><br><span class="line">    counter1++;</span><br><span class="line"></span><br><span class="line">    LOG_INFO &lt;&lt; <span class="string">&quot;[Libevent] 定时器1触发！这是第 &quot;</span> &lt;&lt; counter1 &lt;&lt; <span class="string">&quot; 次回调&quot;</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (counter1 == <span class="number">5</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        LOG_WARN &lt;&lt; <span class="string">&quot;[Libevent] 定时器1警告：已经触发 5 次了，还剩3次退出...&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (counter1 &gt;= <span class="number">8</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        LOG_INFO &lt;&lt; <span class="string">&quot;[Libevent] 定时器1触发8次，准备退出事件循环&quot;</span>;</span><br><span class="line">        <span class="built_in">event_base_loopbreak</span>(args-&gt;base); <span class="comment">// 退出事件循环</span></span><br><span class="line">    &#125;</span><br><span class="line">    LOG_INFO &lt;&lt; <span class="string">&quot;定时器1回调函数调用完毕，等待下一次触发（2秒），阻塞中&quot;</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 定时器2回调函数（每3秒触发，触发5次删除自身监听）</span></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">timer_callback2</span><span class="params">(<span class="type">evutil_socket_t</span> fd, <span class="type">short</span> events, <span class="type">void</span> *arg)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    TimerArgs* args = (TimerArgs*)arg; <span class="comment">// 转换参数类型</span></span><br><span class="line">    <span class="type">static</span> <span class="type">int</span> counter2 = <span class="number">0</span>;</span><br><span class="line">    counter2++;</span><br><span class="line"></span><br><span class="line">    LOG_INFO &lt;&lt; <span class="string">&quot;[Libevent] 定时器2触发！这是第 &quot;</span> &lt;&lt; counter2 &lt;&lt; <span class="string">&quot; 次回调&quot;</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (counter2 == <span class="number">5</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        LOG_WARN &lt;&lt; <span class="string">&quot;[Libevent] 定时器2警告：已触发5次，准备删除监听！&quot;</span>;</span><br><span class="line">        <span class="comment">// 核心：删除定时器2的监听</span></span><br><span class="line">        <span class="keyword">if</span> (args-&gt;timer_ev2) &#123;</span><br><span class="line">            <span class="built_in">event_del</span>(args-&gt;timer_ev2); <span class="comment">// 从事件循环移除监听</span></span><br><span class="line">            LOG_INFO &lt;&lt; <span class="string">&quot;[Libevent] 定时器2事件已删除，不再触发&quot;</span>;</span><br><span class="line">            <span class="built_in">event_free</span>(args-&gt;timer_ev2); <span class="comment">// 释放事件内存</span></span><br><span class="line">            args-&gt;timer_ev2 = <span class="literal">nullptr</span>;   <span class="comment">// 防止野指针</span></span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span>; <span class="comment">// 删除后直接返回，不再执行后续逻辑</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (counter2 &gt;= <span class="number">8</span>) <span class="comment">// 因为5次就删除了，这行不会执行</span></span><br><span class="line">    &#123;</span><br><span class="line">        LOG_INFO &lt;&lt; <span class="string">&quot;[Libevent] 定时器2触发8次，主动退出事件循环&quot;</span>;</span><br><span class="line">        <span class="built_in">event_base_loopbreak</span>(args-&gt;base);</span><br><span class="line">    &#125;</span><br><span class="line">    LOG_INFO &lt;&lt; <span class="string">&quot;定时器2回调函数调用完毕，等待下一次触发（3秒），阻塞中&quot;</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">// 1. 启动日志系统</span></span><br><span class="line">    g_asyncLog = std::<span class="built_in">make_unique</span>&lt;logfile::AsynLogging&gt;(<span class="string">&quot;libevent_study&quot;</span>, <span class="number">1024</span> * <span class="number">1024</span>);</span><br><span class="line">    logfile::Logger::<span class="built_in">setOutput</span>(asyncOutput);</span><br><span class="line">    logfile::Logger::<span class="built_in">setFlush</span>(asyncFlush);</span><br><span class="line">    logfile::Logger::<span class="built_in">setLogLevel</span>(logfile::LOG_LEVEL::TRACE);</span><br><span class="line">    g_asyncLog-&gt;<span class="built_in">start</span>();</span><br><span class="line"></span><br><span class="line">    LOG_INFO &lt;&lt; <span class="string">&quot;========== 程序启动 ==========&quot;</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 2. 创建 event_base</span></span><br><span class="line">    <span class="keyword">struct</span> <span class="title class_">event_base</span> *base = <span class="built_in">event_base_new</span>();</span><br><span class="line">    <span class="keyword">if</span> (!base)</span><br><span class="line">    &#123;</span><br><span class="line">        LOG_FATAL &lt;&lt; <span class="string">&quot;初始化 event_base 失败！&quot;</span>;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    LOG_INFO &lt;&lt; <span class="string">&quot;event_base 创建成功！使用的 IO 模型: &quot;</span> &lt;&lt; <span class="built_in">event_base_get_method</span>(base);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 3. 初始化参数结构体</span></span><br><span class="line">    TimerArgs args;</span><br><span class="line">    args.base = base;</span><br><span class="line">    args.timer_ev1 = <span class="literal">nullptr</span>;</span><br><span class="line">    args.timer_ev2 = <span class="literal">nullptr</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 4. 创建定时器1（每2秒触发）</span></span><br><span class="line">    <span class="keyword">struct</span> <span class="title class_">timeval</span> tv1 = &#123;<span class="number">2</span>, <span class="number">0</span>&#125;;</span><br><span class="line">    LOG_INFO &lt;&lt; <span class="string">&quot;绑定回调函数1与定时器1事件&quot;</span>;</span><br><span class="line">    args.timer_ev1 = <span class="built_in">event_new</span>(base, <span class="number">-1</span>, EV_PERSIST, timer_callback1, &amp;args);</span><br><span class="line">    <span class="keyword">if</span> (!args.timer_ev1) &#123;</span><br><span class="line">        LOG_ERROR &lt;&lt; <span class="string">&quot;创建定时器1事件失败！&quot;</span>;</span><br><span class="line">        <span class="built_in">event_base_free</span>(base);</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">event_add</span>(args.timer_ev1, &amp;tv1);</span><br><span class="line">    LOG_INFO &lt;&lt; <span class="string">&quot;定时器1已启动，每 2 秒触发一次&quot;</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 5. 创建定时器2（每3秒触发）</span></span><br><span class="line">    <span class="keyword">struct</span> <span class="title class_">timeval</span> tv2 = &#123;<span class="number">3</span>, <span class="number">0</span>&#125;;</span><br><span class="line">    LOG_INFO &lt;&lt; <span class="string">&quot;绑定回调函数2与定时器2事件&quot;</span>;</span><br><span class="line">    args.timer_ev2 = <span class="built_in">event_new</span>(base, <span class="number">-1</span>, EV_PERSIST, timer_callback2, &amp;args);</span><br><span class="line">    <span class="keyword">if</span> (!args.timer_ev2) &#123;</span><br><span class="line">        LOG_ERROR &lt;&lt; <span class="string">&quot;创建定时器2事件失败！&quot;</span>;</span><br><span class="line">        <span class="built_in">event_free</span>(args.timer_ev1);</span><br><span class="line">        <span class="built_in">event_base_free</span>(base);</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">event_add</span>(args.timer_ev2, &amp;tv2);</span><br><span class="line">    LOG_INFO &lt;&lt; <span class="string">&quot;定时器2已启动，每 3 秒触发一次&quot;</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 6. 进入事件循环</span></span><br><span class="line">    LOG_INFO &lt;&lt; <span class="string">&quot;进入 event_base_dispatch 主循环...&quot;</span>;</span><br><span class="line">    <span class="built_in">event_base_dispatch</span>(base);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 7. 清理资源（只清理未被删除的事件）</span></span><br><span class="line">    LOG_INFO &lt;&lt; <span class="string">&quot;主循环已退出，正在清理资源...&quot;</span>;</span><br><span class="line">    <span class="keyword">if</span> (args.timer_ev1) &#123;</span><br><span class="line">        <span class="built_in">event_free</span>(args.timer_ev1);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (args.timer_ev2) &#123; <span class="comment">// 定时器2如果没被删除（异常情况），则释放</span></span><br><span class="line">        <span class="built_in">event_free</span>(args.timer_ev2);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">event_base_free</span>(base);</span><br><span class="line"></span><br><span class="line">    LOG_INFO &lt;&lt; <span class="string">&quot;========== 程序结束 ==========&quot;</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 停止日志系统</span></span><br><span class="line">    <span class="keyword">if</span> (g_asyncLog)</span><br><span class="line">    &#123;</span><br><span class="line">        g_asyncLog-&gt;<span class="built_in">stop</span>();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><img src="https://gitee.com/WFWFWFWFG/image-bed/raw/master/img/20260224092520259.png" alt="image-20260224092520136"></p>
+<p>根据日志信息可知，先初始化事件，并绑定回调函数和关注的事件，注册事件循环，将事件源绑定到一个具体的事件循环，事件循环启动监听，当事件发生时自动调用回调函数进行处理，回调函数全权由开发者编写，该Reactor框架只负责监听。无限循环监听，除非开发者手动调用删除事件或者结束事件循环。</p>
+<p><strong>核心流程</strong>：<code>event_base_new()</code> → <code>event_new()</code> → <code>event_add()</code> → <code>event_base_dispatch()</code> → 释放资源；</p>
+<p><strong>新版规范</strong>：禁用 <code>event_init()</code>/ 栈上 <code>struct event</code>，改用 <code>event_base_new()</code>/<code>event_new()</code> 动态创建；</p>
+<p><strong>关键标志</strong>：<code>EV_PERSIST</code> 实现事件重复触发，<code>EV_ET</code> 用于边缘触发；</p>
+<p><strong>优雅退出</strong>：通过 <code>event_base_loopbreak()</code> 退出事件循环。</p>
+<h2 id="为什么要禁用栈上event">为什么要禁用栈上event?</h2>
+<p><img src="https://gitee.com/WFWFWFWFG/image-bed/raw/master/img/20260224094920484.png" alt="image-20260224094920416"></p>
+<p>为什么event是不透明类型？</p>
+<p><img src="https://gitee.com/WFWFWFWFG/image-bed/raw/master/img/20260224095118862.png" alt="image-20260224095118797"></p>
+<p><img src="https://gitee.com/WFWFWFWFG/image-bed/raw/master/img/20260224095141326.png" alt="image-20260224095141255"></p>
+<h2 id="配置事件循环">配置事件循环</h2>
+<p>一般情况下libevent提供的event_new()以及足够日常使用，但在一些特殊场景，需要自定义配置的时候可以根据需求配置事件循环</p>
+<p><img src="https://gitee.com/WFWFWFWFG/image-bed/raw/master/img/20260224095805318.png" alt="image-20260224095805258"></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;event2/event.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 1. 创建事件配置对象</span></span><br><span class="line">    <span class="keyword">struct</span> <span class="title class_">event_config</span> *cfg = <span class="built_in">event_config_new</span>();</span><br><span class="line">    <span class="keyword">if</span> (!cfg) &#123;</span><br><span class="line">        <span class="built_in">fprintf</span>(stderr, <span class="string">&quot; event_config 创建失败\n&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// --------------------------</span></span><br><span class="line">    <span class="comment">// 2. 设置自定义配置项</span></span><br><span class="line">    <span class="comment">// --------------------------</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 配置项 1：禁用低效的 select/poll 模型，强制使用高性能模型（如 epoll）</span></span><br><span class="line">    <span class="built_in">event_config_avoid_method</span>(cfg, <span class="string">&quot;select&quot;</span>);</span><br><span class="line">    <span class="built_in">event_config_avoid_method</span>(cfg, <span class="string">&quot;poll&quot;</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot; 已禁用 select/poll 模型\n&quot;</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 配置项 2：要求支持边缘触发（EV_FEATURE_ET）</span></span><br><span class="line">    <span class="keyword">if</span> (<span class="built_in">event_config_require_features</span>(cfg, EV_FEATURE_ET) != <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="built_in">fprintf</span>(stderr, <span class="string">&quot;  当前系统不支持边缘触发\n&quot;</span>);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot; 已要求支持边缘触发\n&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 配置项 3：设置 event_base 标志</span></span><br><span class="line">    <span class="comment">// EVENT_BASE_FLAG_NOLOCK：禁用线程安全锁（单线程场景提升性能）</span></span><br><span class="line">    <span class="comment">// EVENT_BASE_FLAG_EPOLL_USE_CHANGELIST：优化 epoll 行为（避免重复添加 fd）</span></span><br><span class="line">    <span class="built_in">event_config_set_flag</span>(cfg, EVENT_BASE_FLAG_NOLOCK);</span><br><span class="line">    <span class="built_in">event_config_set_flag</span>(cfg, EVENT_BASE_FLAG_EPOLL_USE_CHANGELIST);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot; 已设置 event_base 标志\n&quot;</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// --------------------------</span></span><br><span class="line">    <span class="comment">// 3. 根据配置创建 event_base</span></span><br><span class="line">    <span class="comment">// --------------------------</span></span><br><span class="line">    <span class="keyword">struct</span> <span class="title class_">event_base</span> *base = <span class="built_in">event_base_new_with_config</span>(cfg);</span><br><span class="line">    <span class="keyword">if</span> (!base) &#123;</span><br><span class="line">        <span class="built_in">fprintf</span>(stderr, <span class="string">&quot; event_base 创建失败（可能是配置要求无法满足）\n&quot;</span>);</span><br><span class="line">        <span class="built_in">event_config_free</span>(cfg);</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// --------------------------</span></span><br><span class="line">    <span class="comment">// 4. 释放配置对象（创建完 event_base 后即可释放）</span></span><br><span class="line">    <span class="comment">// --------------------------</span></span><br><span class="line">    <span class="built_in">event_config_free</span>(cfg);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot; 配置对象已释放\n&quot;</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// --------------------------</span></span><br><span class="line">    <span class="comment">// 5. 验证配置是否生效</span></span><br><span class="line">    <span class="comment">// --------------------------</span></span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;\n event_base 信息：\n&quot;</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;  - 使用的事件模型：%s\n&quot;</span>, <span class="built_in">event_base_get_method</span>(base));</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;  - 支持的特性掩码：0x%x\n&quot;</span>, <span class="built_in">event_base_get_features</span>(base));</span><br><span class="line"></span><br><span class="line">    <span class="comment">// --------------------------</span></span><br><span class="line">    <span class="comment">// 6.正常使用 event_base（创建事件、启动循环等）</span></span><br><span class="line">    <span class="comment">// --------------------------</span></span><br><span class="line">    <span class="comment">// ... 你的事件代码 ...</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 7. 释放资源</span></span><br><span class="line">    <span class="built_in">event_base_free</span>(base);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;\n event_base 已释放\n&quot;</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="支持的事件类型">支持的事件类型</h2>
+<table>
+<thead>
+<tr>
+<th>事件大类</th>
+<th>具体类型 / 标志</th>
+<th>含义</th>
+<th>适用场景</th>
+<th>核心参数</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>IO 事件</strong></td>
+<td><code>EV_READ</code></td>
+<td>文件描述符<strong>可读</strong></td>
+<td>Socket 接收数据、标准输入读取</td>
+<td><code>fd</code>：要监听的文件描述符</td>
+</tr>
+<tr>
+<td></td>
+<td><code>EV_WRITE</code></td>
+<td>文件描述符<strong>可写</strong></td>
+<td>Socket 发送数据、非阻塞写</td>
+<td></td>
+</tr>
+<tr>
+<td><strong>定时器事件</strong></td>
+<td><code>EV_TIMEOUT</code></td>
+<td><strong>超时事件</strong></td>
+<td>定时任务、心跳检测、IO 超时</td>
+<td><code>tv</code>：超时时长（<code>struct timeval</code>）</td>
+</tr>
+<tr>
+<td><strong>信号事件</strong></td>
+<td><code>EV_SIGNAL</code></td>
+<td><strong>系统信号事件</strong></td>
+<td>捕获 Ctrl+C（SIGINT）、优雅退出</td>
+<td><code>fd</code>：信号编号（如 <code>SIGINT</code>）</td>
+</tr>
+<tr>
+<td><strong>扩展行为标志</strong></td>
+<td><code>EV_PERSIST</code></td>
+<td><strong>持久化事件</strong></td>
+<td>事件触发后不自动删除（需手动 <code>event_del()</code>），用于重复触发</td>
+<td>与其他类型组合使用</td>
+</tr>
+<tr>
+<td></td>
+<td><code>EV_ET</code></td>
+<td><strong>边缘触发（Edge Triggered）</strong></td>
+<td>仅适用于支持 ET 的事件模型（如 epoll），高性能 IO 场景</td>
+<td>仅与 <code>EV_READ</code>/<code>EV_WRITE</code> 组合</td>
+</tr>
+</tbody>
+</table>
+<h2 id="事件处理流程">事件处理流程</h2>
+<p>当应用程序向libevent注册一个事件后，libevent处理流程</p>
+<p>①首先初始化event,设置事件类型和回调函数</p>
+<p>②向libevent中添加事件event，对于定时事件，libevent使用一个小根堆进行管理，key为超时时间，对于Sianal和I/O事件，libevent将其放入到等待链表（waitList）,这是一个双向链表结构。</p>
+<p>③程序调用event_base_dispatch()系列函数进入无限循环，等待事件，以select()函数为例；每次循环前libevent会检查定时事件的最小超时事件tv，根据tv设置select()的最大等待事件，以便后面及时处理超时事件，后检查I/O事件。</p>
+<p>Libevent将所有就绪事件，放到激活链表中，然后对激活链表中的事件，调用事件的回调函数执行事件处理。</p>
+<p><img src="https://gitee.com/WFWFWFWFG/image-bed/raw/master/img/20260224101538474.png" alt="image-20260224101538410"></p>
+<h1>三.核心API</h1>
+<h2 id="事件循环核心API">事件循环核心API</h2>
+<table>
+<thead>
+<tr>
+<th>API</th>
+<th>核心作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>struct event_base* event_base_new()</td>
+<td>创建并初始化事件循环对象，自动选择最优IO后端</td>
+</tr>
+<tr>
+<td>int event_base_dispatch(struct event_base *base)</td>
+<td>进入事件循环，阻塞直到loopbreak/loopexit被调用</td>
+</tr>
+<tr>
+<td>int event_base_loopbreak(struct event_base *base)</td>
+<td>立刻中断事件循环，不处理剩余就绪事件</td>
+</tr>
+<tr>
+<td>int event_base_loopexit(struct event_base *base, const struct timeval *tv)</td>
+<td>优雅退出，处理完当前就绪事件后退出，支持超时等待</td>
+</tr>
+<tr>
+<td>void event_base_free(struct event_base *base)</td>
+<td>释放事件循环对象内存</td>
+</tr>
+</tbody>
+</table>
+<h2 id="事件操作核心API">事件操作核心API</h2>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">struct</span> <span class="title class_">event</span>* <span class="built_in">event_new</span>(<span class="keyword">struct</span> event_base *base, <span class="type">evutil_socket_t</span> fd, <span class="type">short</span> events, event_callback_fn cb, <span class="type">void</span> *arg);</span><br></pre></td></tr></table></figure>
+<p>参数详解：</p>
+<ol>
+<li>
+<p>base：事件循环对象指针；</p>
+</li>
+<li>
+<p>fd：socket事件传文件描述符，定时器事件传-1，信号事件传信号编号；</p>
+</li>
+<li>
+<p>events：事件类型宏，常用组合：</p>
+<ul>
+<li>
+<p>EV_READ/EV_WRITE：监听fd可读/可写；</p>
+</li>
+<li>
+<p>EV_PERSIST：持续触发，不设置则触发一次后自动移除；</p>
+</li>
+<li>
+<p>EV_ET：边缘触发（仅epoll/kqueue支持）；</p>
+</li>
+<li>
+<p>EV_SIGNAL：标记为信号事件；</p>
+</li>
+</ul>
+</li>
+<li>
+<p>cb：事件就绪后的回调函数，原型为void (<em>cb)(evutil_socket_t, short, void</em>)；</p>
+</li>
+<li>
+<p>arg：传递给回调函数的用户自定义参数。</p>
+</li>
+</ol>
+<p>配套函数</p>
+<table>
+<thead>
+<tr>
+<th>API</th>
+<th>核心作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>int event_add(struct event *ev, const struct timeval *tv)</td>
+<td>将事件添加到事件循环，开始监听；tv为超时时间（定时器用）</td>
+</tr>
+<tr>
+<td>int event_del(struct event *ev)</td>
+<td>从事件循环移除事件，停止监听</td>
+</tr>
+<tr>
+<td>void event_free(struct event *ev)</td>
+<td>释放事件对象内存</td>
+</tr>
+</tbody>
+</table>
+<h2 id="bufferevent核心API">bufferevent核心API</h2>
+<table>
+<thead>
+<tr>
+<th>API</th>
+<th>核心作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>struct bufferevent* bufferevent_socket_new(struct event_base *base, evutil_socket_t fd, int options)</td>
+<td>创建带缓冲的socket事件对象</td>
+</tr>
+<tr>
+<td>void bufferevent_setcb(struct bufferevent *bufev, bufferevent_data_cb readcb, bufferevent_data_cb writecb, bufferevent_event_cb eventcb, void *cbarg)</td>
+<td>设置读、写、事件回调</td>
+</tr>
+<tr>
+<td>int bufferevent_enable(struct bufferevent *bufev, short events)</td>
+<td>启用读/写事件</td>
+</tr>
+<tr>
+<td>size_t bufferevent_read(struct bufferevent *bufev, void *data, size_t size)</td>
+<td>从输入缓冲区读取数据</td>
+</tr>
+<tr>
+<td>int bufferevent_write(struct bufferevent *bufev, const void *data, size_t size)</td>
+<td>向输出缓冲区写入数据</td>
+</tr>
+<tr>
+<td>void bufferevent_free(struct bufferevent *bufev)</td>
+<td>释放bufferevent对象</td>
+</tr>
+</tbody>
+</table>
+<h1>四.为什么需要缓冲事件（bufferevent）？</h1>
+<p><strong>bufferevent 主要为带缓冲的 socket fd 设计，但并非只服务于 socket fd</strong>，它是 libevent 中「带缓冲的通用 IO 事件封装」，只是 socket 是其最核心、最常用的场景。</p>
+<ol>
+<li>管道（pipe/socketpair）</li>
+</ol>
+<ul>
+<li>核心 API：<code>bufferevent_pair_new()</code>（创建一对关联的 bufferevent，基于 socketpair 管道）；</li>
+<li>典型场景：进程 / 线程间通信（比如 libevent 内部用它处理信号事件，把异步信号转为同步 IO）。</li>
+</ul>
+<ol start="2">
+<li>文件 fd（有限支持）</li>
+</ol>
+<ul>
+<li>对普通文件 fd，bufferevent 也能封装，但文件 IO 是「阻塞 / 非阻塞无意义」的（文件没有内核缓冲区满的情况），因此 bufferevent 的缓冲区优势体现不出来；</li>
+<li>典型场景：极少用，一般直接用 <code>read()</code>/<code>write()</code>，但 API 层面完全兼容。</li>
+</ul>
+<ol start="3">
+<li>过滤型 bufferevent（Filter bufferevent）</li>
+</ol>
+<ul>
+<li>这是「bufferevent 套 bufferevent」的模式，不直接绑定 fd，而是绑定另一个 bufferevent；</li>
+<li>典型场景：SSL/TLS 加密（<code>bufferevent_openssl_new()</code>）、数据编解码（比如 protobuf 序列化 / 反序列化）。</li>
+</ul>
+<h2 id="bufferevent">bufferevent</h2>
+<p>buffervent是libevent对socket事件的带缓冲封装，它在普通 <code>event</code> 的基础上，<strong>自动管理输入 / 输出双缓冲区、自动处理非阻塞 IO 的读写、自动触发回调</strong></p>
+<p>之前写的 Echo 服务器，用 <code>bufferevent_read()</code> 直接读完整数据，不用自己循环 <code>read()</code> 处理 EAGAIN，也不用自己拼包处理粘包，这就是 bufferevent 的价值。</p>
+<table>
+<thead>
+<tr>
+<th>裸用 event 的痛点</th>
+<th>bufferevent 的解决方案</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>1. 手动处理非阻塞 IO 的 EAGAIN 错误</strong>非阻塞 socket 读 / 写时，若缓冲区空 / 满，会返回 <code>EAGAIN</code>，需手动监听 <code>EV_READ</code>/<code>EV_WRITE</code> 重试</td>
+<td><strong>自动管理非阻塞 IO</strong>内部自动处理 <code>EAGAIN</code>，自动监听 / 取消监听读写事件，用户完全不用管</td>
+</tr>
+<tr>
+<td><strong>2. 手动处理粘包 / 拆包</strong>TCP 是流协议，一次 <code>read()</code> 可能读不完一个包，或读多个包，需手动维护缓冲区拼包</td>
+<td><strong>自动维护输入缓冲区</strong>数据自动写入输入缓冲区，用户回调时直接从缓冲区取完整数据（或按需取），简化粘包处理</td>
+</tr>
+<tr>
+<td><strong>3. 手动管理写缓冲区满的情况</strong>非阻塞 socket 写时，若内核发送缓冲区满，会返回 <code>EAGAIN</code>，需手动把剩余数据存起来，监听 <code>EV_WRITE</code> 再写</td>
+<td><strong>自动维护输出缓冲区</strong>用户调用 <code>bufferevent_write()</code> 时，数据自动写入输出缓冲区；若写满，自动监听 <code>EV_WRITE</code>，socket 可写时自动把剩余数据写入，用户完全不用管</td>
+</tr>
+</tbody>
+</table>
+<h2 id="bufferevent核心结构">bufferevent核心结构</h2>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">┌─────────────────────────────────────────────────────────┐</span><br><span class="line">│                   bufferevent 对象                       │</span><br><span class="line">├─────────────────────────────────────────────────────────┤</span><br><span class="line">│  <span class="number">1.</span> 底层 event 事件组                                     │</span><br><span class="line">│     - 读事件：监听 socket 可读                             │</span><br><span class="line">│     - 写事件：监听 socket 可写                             │</span><br><span class="line">├─────────────────────────────────────────────────────────┤</span><br><span class="line">│  <span class="number">2.</span> 双缓冲区（核心！）                                     │</span><br><span class="line">│     ┌──────────────────┐  ┌──────────────────┐          │</span><br><span class="line">│     │  输入缓冲区 (in)  │← │  socket 内核读缓冲区 │         │</span><br><span class="line">│     └──────────────────┘  └──────────────────┘          │</span><br><span class="line">│     ┌──────────────────┐  ┌──────────────────┐          │</span><br><span class="line">│     │  输出缓冲区 (out) │→ │  socket 内核写缓冲区 │         │</span><br><span class="line">│     └──────────────────┘  └──────────────────┘          │ </span><br><span class="line">├─────────────────────────────────────────────────────────┤</span><br><span class="line">│  <span class="number">3.</span> 用户回调函数组                                         │</span><br><span class="line">│     - 读回调：输入缓冲区有数据时触发                          │</span><br><span class="line">│     - 写回调：输出缓冲区数据写完时触发                        │</span><br><span class="line">│     - 事件回调：连接断开/出错/超时/连接成功时触发               │</span><br><span class="line">└─────────────────────────────────────────────────────────┘</span><br></pre></td></tr></table></figure>
+<h2 id="bufferevent的核心工作流程">bufferevent的核心工作流程</h2>
+<p>bufferevent 的 “底层” 就是<strong>普通 event + evbuffer + 系统调用</strong>，它把这些包起来，给你一个简单的接口。****</p>
+<ol>
+<li>
+<p><strong>读流程（socket 有数据 → 用户读回调）</strong>——————</p>
+</li>
+<li>
+<p><strong>socket 内核读缓冲区有数据</strong> → 触发底层读事件；</p>
+</li>
+<li>
+<p><strong>bufferevent 自动读数据</strong> → 从 socket 内核读缓冲区读入<strong>用户态输入缓冲区</strong>；</p>
+</li>
+<li>
+<p><strong>触发用户读回调</strong> → 调用你设置的 <code>read_cb</code>；</p>
+</li>
+<li>
+<p><strong>用户取数据</strong> → 在 <code>read_cb</code> 中调用 <code>bufferevent_read()</code> 从输入缓冲区取数据（Echo 服务器中直接回写）。</p>
+</li>
+<li>
+<p>**写流程（用户写数据 → socket 发送） **——————</p>
+</li>
+<li>
+<p><strong>用户调用 <code>bufferevent_write()</code></strong> → 数据写入<strong>用户态输出缓冲区</strong>；</p>
+</li>
+<li>
+<p><strong>bufferevent 自动监听写事件</strong> → 若输出缓冲区有数据，自动监听 socket 可写；</p>
+</li>
+<li>
+<p><strong>socket 可写时自动发送</strong> → 从输出缓冲区取数据写入 socket 内核写缓冲区；</p>
+</li>
+<li>
+<p><strong>（可选）触发写回调</strong> → 若输出缓冲区数据全部写完，触发你设置的 <code>write_cb</code>。</p>
+</li>
+</ol>
+<h3 id="核心API">核心API</h3>
+<table>
+<thead>
+<tr>
+<th>API</th>
+<th>核心作用</th>
+<th>Echo 服务器中的用法</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>bufferevent_socket_new(base, fd, options)</code></td>
+<td>创建带缓冲的 socket 事件<code>options</code> 常用 <code>BEV_OPT_CLOSE_ON_FREE</code>（释放时自动关闭 socket）</td>
+<td>新连接到来时，用客户端 fd 创建 bufferevent</td>
+</tr>
+<tr>
+<td><code>bufferevent_setcb(bev, read_cb, write_cb, event_cb, arg)</code></td>
+<td>设置读、写、事件回调</td>
+<td>设置 <code>read_cb</code>（读数据回写）、<code>event_cb</code>（处理断开）</td>
+</tr>
+<tr>
+<td><code>bufferevent_enable(bev, EV_READ)</code></td>
+<td>启用读 / 写事件</td>
+<td>创建后启用 <code>EV_READ</code>，开始监听客户端数据</td>
+</tr>
+<tr>
+<td><code>bufferevent_read(bev, data, size)</code></td>
+<td>从输入缓冲区读数据</td>
+<td><code>read_cb</code> 中读客户端发来的数据</td>
+</tr>
+<tr>
+<td><code>bufferevent_write(bev, data, size)</code></td>
+<td>向输出缓冲区写数据</td>
+<td><code>read_cb</code> 中把数据回写给客户端</td>
+</tr>
+</tbody>
+</table>
+<h2 id="核心问题：">核心问题：</h2>
+<h3 id="bufferevent和event的区别？">bufferevent和event的区别？</h3>
+<p><strong>定位不同</strong>：普通 event 是通用事件对象，可监听 IO、信号、定时器；bufferevent 是<strong>专门针对 socket 的带缓冲封装</strong>，仅用于 socket 网络 IO。</p>
+<p><strong>缓冲区不同</strong>：普通 event 无缓冲区，需用户手动维护；bufferevent 有<strong>输入 / 输出双缓冲区</strong>，自动管理数据读写。</p>
+<p><strong>复杂度不同</strong>：普通 event 需手动处理非阻塞 IO 的 EAGAIN、粘包、写缓冲区满；bufferevent 自动处理这些细节，API 更简单。</p>
+<p><strong>适用场景不同</strong>：普通 event 适合通用事件、简单 IO；bufferevent 适合网络编程，尤其是 TCP 流协议的通信。</p>
+<h3 id="bufferevent-如何处理粘包？">bufferevent 如何处理粘包？</h3>
+<p>bufferevent并<strong>不会自动解决粘包</strong>，但是<strong>提供了自动维护的输入缓冲区，简化了粘包处理</strong>。</p>
+<p>裸用 event 时，需自己维护一个用户态缓冲区，每次 <code>read()</code> 后拼包，判断是否有完整包；</p>
+<p>用 bufferevent 时，数据会自动写入输入缓冲区，你只需在 <code>read_cb</code> 中：</p>
+<ul>
+<li>调用 <code>bufferevent_read()</code> 读取输入缓冲区的数据；</li>
+<li>根据协议判断是否有完整包（比如先读 4 字节长度，再读对应长度的包体）；</li>
+<li>若有完整包，取出处理；若没有，留在输入缓冲区，等下次 <code>read_cb</code> 触发再处理。</li>
+</ul>
+<h3 id="bufferevent-的输出缓冲区满了怎么办？">bufferevent 的输出缓冲区满了怎么办？</h3>
+<ol>
+<li>当你调用 <code>bufferevent_write()</code> 时，若输出缓冲区未满，数据直接写入缓冲区，bufferevent 自动监听 socket 可写；</li>
+<li>若输出缓冲区满了，<code>bufferevent_write()</code> 仍会成功返回（不会报错），数据会被<strong>追加到输出缓冲区</strong>；</li>
+<li>bufferevent 会持续监听 socket 可写事件，一旦 socket 可写，自动从输出缓冲区取数据写入 socket，直到输出缓冲区清空。</li>
+</ol>
+<blockquote>
+<p><code>bufferevent_setwatermark()</code> 可以设置水位线，控制 “输入缓冲区有多少数据时触发读回调”“输出缓冲区低于多少时触发写回调”，进一步优化性能。</p>
+</blockquote>
+<p><strong>bufferevent缓冲区是动态扩容的，理论上只要系统存在物理内存就可以无限扩容</strong></p>
+<p>如果系统内存真的耗尽了，<code>bufferevent_write()</code> 会返回 <code>-1</code>，并设置 <code>errno</code> 为 <code>ENOMEM</code>，但这是<strong>系统级的错误</strong>，不是 “缓冲区满” 的逻辑错误</p>
+<p>libevent 允许你通过 <code>bufferevent_setwatermark()</code> 设置两个水位线：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">bufferevent_setwatermark</span><span class="params">(<span class="keyword">struct</span> bufferevent *bufev, <span class="type">short</span> events,</span></span></span><br><span class="line"><span class="params"><span class="function">                               <span class="type">size_t</span> lowmark, <span class="type">size_t</span> highmark)</span></span>;</span><br></pre></td></tr></table></figure>
+<p>参数详解：</p>
+<p><strong><code>events</code></strong>：<code>EV_READ</code>（设置输入缓冲区水位线）或 <code>EV_WRITE</code>（设置输出缓冲区水位线）；</p>
+<p><strong><code>lowmark</code></strong>：低水位线；</p>
+<p><strong><code>highmark</code></strong>：高水位线。</p>
+<p><strong>输出缓冲区高 / 低水位线的真正作用</strong></p>
+<p>（控制<strong>发送速度</strong>，避免 “本地发太快，对端收太慢”）</p>
+<ol>
+<li>当输出缓冲区的<strong>数据量 ≥ 高水位线</strong>时，说明 “我发得太快，对端收得太慢”，此时 libevent 会<strong>自动暂停监听本地 socket 的 <code>EV_READ</code></strong>（不要再读对端的新数据了，先把本地输出缓冲区里的数据发完）；</li>
+<li>当输出缓冲区的<strong>数据量 ≤ 低水位线</strong>时，说明 “发得差不多了”，此时 libevent 会<strong>自动恢复监听本地 socket 的 <code>EV_READ</code></strong>（继续读对端的新数据）。</li>
+</ol>
+<p><strong>输入缓冲区高 / 低水位线的真正作用</strong></p>
+<p>（控制<strong>接收速度</strong>，避免 “对端发太快，本地收太慢 / 读太慢，导致内存爆炸”）</p>
+<ol>
+<li>当输入缓冲区的<strong>数据量 ≥ 高水位线</strong>时，说明 “对端发得太快，我收得太慢 / 读得太慢”，此时 libevent 会<strong>自动暂停监听本地 socket 的 <code>EV_READ</code></strong>（不要再读对端的新数据了，先把本地输入缓冲区里已收到的数据读走处理完）；</li>
+<li>当输入缓冲区的<strong>数据量 ≤ 低水位线</strong>时，说明 “已收数据读得差不多了”，此时 libevent 会<strong>自动恢复监听本地 socket 的 <code>EV_READ</code></strong>（继续读对端的新数据）。</li>
+</ol>
+<blockquote>
+<p>一句话总结：高水位线是 “流量控制开关”，不是 “写入拦截器”。</p>
+</blockquote>
+<p><strong>bufferevent输入/输出缓冲区底层结构：</strong></p>
+<p>bufferevent 的输出缓冲区是「动态链表结构（evbuffer）」，无固定物理上限</p>
+<p>bufferevent 的底层缓冲区是 <strong>libevent 自己实现的 <code>evbuffer</code></strong>，它的结构是<strong>链表式的内存块</strong>，不是固定大小的数组：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">evbuffer 结构示意：</span><br><span class="line">[内存块<span class="number">1</span> (<span class="number">4</span>KB)] → [内存块<span class="number">2</span> (<span class="number">4</span>KB)] → [内存块<span class="number">3</span> (<span class="number">4</span>KB)] → ...</span><br></pre></td></tr></table></figure>
+<p>当你调用 <code>bufferevent_write()</code> 追加数据时，<code>evbuffer</code> 会先看当前最后一个内存块有没有剩余空间；</p>
+<p>如果有剩余空间，直接写进去；</p>
+<p>如果没有剩余空间，<strong>申请新的内存块</strong>，追加到链表后面，再写数据；</p>
+<p>只要系统内存够，这个链表可以无限延长，<strong>永远不会因为 “缓冲区满” 而阻止你写入</strong>。</p>
+<h3 id="输出-输入缓冲区满了bufferevent到底做了什么？"><strong>输出/输入缓冲区满了bufferevent到底做了什么？</strong></h3>
+<p>假设设置10KB作为输入/输出缓冲区的高水位线，5KB作为低水位线</p>
+<p><strong>输出缓冲区满（HW=10KB）</strong></p>
+<table>
+<thead>
+<tr>
+<th>步骤</th>
+<th>具体操作 / 事件</th>
+<th>输出缓冲区当前数据量</th>
+<th>libevent 自动行为</th>
+<th>用户侧行为 / 观察</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>初始状态</td>
+<td>0KB</td>
+<td>正常监听对端 <code>EV_READ</code>（可以读新数据），监听 socket <code>EV_WRITE</code>（准备发数据）</td>
+<td>程序启动，连接建立</td>
+</tr>
+<tr>
+<td>2</td>
+<td>用户调用 <code>bufferevent_write()</code> 写 8KB</td>
+<td>8KB（&lt; 10KB HW）</td>
+<td>1. 8KB 数据追加到动态 <code>evbuffer</code>；2. 继续监听 socket <code>EV_WRITE</code>；3. 继续监听对端 <code>EV_READ</code>。</td>
+<td><code>write()</code> 成功返回 0</td>
+</tr>
+<tr>
+<td>3</td>
+<td>对端收得慢，socket 暂不可写，数据未发出</td>
+<td>仍为 8KB</td>
+<td>继续等待 socket <code>EV_WRITE</code>，不做其他操作</td>
+<td>无感知，程序继续运行</td>
+</tr>
+<tr>
+<td>4</td>
+<td><strong>关键节点：触达高水位</strong>用户又调用 <code>bufferevent_write()</code> 写 5KB</td>
+<td>13KB（≥ 10KB HW）</td>
+<td>1. <strong>数据仍成功追加</strong>：<code>evbuffer</code> 动态申请新内存块，5KB 全部写入，链表延长；2. <strong><code>write()</code> 仍返回成功</strong>：不报错，不丢数据；3. <strong>触发流量控制</strong>：<strong>自动暂停监听对端 <code>EV_READ</code></strong>（告诉内核：“暂时别给我读新数据了，先把发出去的写完”）；4. 继续监听 socket <code>EV_WRITE</code>。</td>
+<td><code>write()</code> 成功返回，无报错</td>
+</tr>
+<tr>
+<td>5</td>
+<td>socket 终于可写了，libevent 自动发数据</td>
+<td>发了 6KB，剩余 7KB（≤ 10KB HW，但 &gt; 5KB LW）</td>
+<td>1. 从 <code>evbuffer</code> 取 6KB 写入 socket；2. 仍暂停监听对端 <code>EV_READ</code>（因为还没到低水位）；3. 不触发写回调（因为还没到低水位）。</td>
+<td>无感知</td>
+</tr>
+<tr>
+<td>6</td>
+<td><strong>关键节点：触达低水位</strong>socket 继续可写，又发了 3KB</td>
+<td>剩余 4KB（≤ 5KB LW）</td>
+<td>1. 从 <code>evbuffer</code> 取 3KB 写入 socket；2. <strong>恢复流量控制</strong>：<strong>自动恢复监听对端 <code>EV_READ</code></strong>（告诉内核：“我发得差不多了，可以读新数据了”）；3. <strong>触发写回调</strong>（如果设置了 <code>write_cb</code>）：通知用户 “输出缓冲区数据低于低水位了”。</td>
+<td>若设置了 <code>write_cb</code>，则回调被触发</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>“假设输出高水位 10KB，低水位 5KB，流程是这样的：</p>
+<ol>
+<li>当我写了 13KB 数据，触达 10KB 高水位时，数据仍会成功追加到动态 <code>evbuffer</code>，不会报错；</li>
+<li>此时 libevent 会自动暂停监听对端的读事件，做流量控制，避免我读太多新数据发不出去；</li>
+<li>当 socket 可写，数据发得只剩 4KB，触达 5KB 低水位时，libevent 会自动恢复监听对端的读事件，回到正常状态。”</li>
+</ol>
+</blockquote>
+<p><strong>输入缓冲区满（HW=10KB）</strong></p>
+<table>
+<thead>
+<tr>
+<th>步骤</th>
+<th>具体操作 / 事件</th>
+<th>输入缓冲区当前数据量</th>
+<th>libevent 自动行为</th>
+<th>用户侧行为 / 观察</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>初始状态</td>
+<td>0KB</td>
+<td>正常监听 socket <code>EV_READ</code>（准备收数据）</td>
+<td>程序启动，连接建立</td>
+</tr>
+<tr>
+<td>2</td>
+<td>对端发了 3KB</td>
+<td>3KB（&lt; 5KB LW）</td>
+<td>1. 3KB 数据写入动态 <code>evbuffer</code>；2. <strong>不触发读回调</strong>（数据不够低水位，避免频繁回调）。</td>
+<td>无感知，回调未触发</td>
+</tr>
+<tr>
+<td>3</td>
+<td>对端又发了 3KB</td>
+<td>6KB（≥ 5KB LW，&lt; 10KB HW）</td>
+<td>1. 3KB 数据继续写入 <code>evbuffer</code>；2. <strong>触发读回调</strong>（数据够低水位了）。</td>
+<td><code>read_cb</code> 被触发，你在回调中调用 <code>bufferevent_read()</code> 读走 2KB，剩余 4KB。</td>
+</tr>
+<tr>
+<td>4</td>
+<td>对端发得太快，你读得慢，对端连发 2 次，每次 4KB</td>
+<td>第一次发后剩 8KB，第二次发后 <strong>12KB（≥ 10KB HW）</strong></td>
+<td>【关键节点】1. <strong>数据仍成功写入</strong>：<code>evbuffer</code> 动态扩容，12KB 全部存入；2. <strong>触发防内存爆炸机制</strong>：<strong>自动暂停监听 socket <code>EV_READ</code></strong>（告诉内核：“别给我发了，我内存快满了”，内核会让对端的发送缓冲区变满，对端会暂停发送）；3. 再次触发读回调（因为数据仍 ≥ LW）。</td>
+<td><code>read_cb</code> 再次被触发</td>
+</tr>
+<tr>
+<td>5</td>
+<td>你在回调中读走了 8KB</td>
+<td>剩余 4KB（≤ 5KB LW，&lt; 10KB HW）</td>
+<td>【关键节点】1. 从 <code>evbuffer</code> 移除读走的 8KB；2. <strong>恢复接收</strong>：<strong>自动恢复监听 socket <code>EV_READ</code></strong>（告诉内核：“我内存够了，可以继续发了”）；3. 若后续数据仍 ≥ LW，会再次触发读回调。</td>
+<td>无感知，或再次触发 <code>read_cb</code></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>“假设输入高水位 10KB，低水位 5KB，流程是这样的：</p>
+<ol>
+<li>当对端发了 12KB 数据，触达 10KB 高水位时，数据仍会成功存入动态 <code>evbuffer</code>，不会丢；</li>
+<li>此时 libevent 会自动暂停监听 socket 的读事件，防止本地内存爆炸，内核会让对端暂停发送；</li>
+<li>当我读走 8KB，数据只剩 4KB，触达 5KB 低水位时，libevent 会自动恢复监听读事件，继续接收数据。”****</li>
+</ol>
+</blockquote>
+<h3 id="bufferevent怎么监听socket的读事件？"><strong>bufferevent怎么监听socket的读事件？</strong></h3>
+<p>每个 bufferevent 内部，至少有<strong>两个普通的 <code>struct event</code></strong>：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">┌─────────────────────────────────────────────────────────┐</span><br><span class="line">│              bufferevent 对象                           │</span><br><span class="line">├─────────────────────────────────────────────────────────┤</span><br><span class="line">│  <span class="number">1.</span> 底层普通 event 组（核心！）                            │</span><br><span class="line">│     ┌──────────────────────────────────────────────--┐  │</span><br><span class="line">│     │  读 <span class="built_in">event</span> (bev_read)                            │  │</span><br><span class="line">│     │  - 监听 socket 的 EV_READ                        │  │</span><br><span class="line">│     │  - 回调：bufferevent 内部的读回调（不是用户的）      │  │</span><br><span class="line">│     └──────────────────────────────────────────────┘  │</span><br><span class="line">│     ┌──────────────────────────────────────────────┐  │</span><br><span class="line">│     │  写 <span class="built_in">event</span> (bev_write)                             │ │</span><br><span class="line">│     │  - 监听 socket 的 EV_WRITE                        │  │</span><br><span class="line">│     │  - 回调：bufferevent 内部的写回调                   │  │</span><br><span class="line">│     └──────────────────────────────────────────────┘  │</span><br><span class="line">├─────────────────────────────────────────────────────────┤</span><br><span class="line">│  <span class="number">2.</span> 双缓冲区 (evbuffer)                                  │</span><br><span class="line">│  <span class="number">3.</span> 用户回调 (read_cb/write_cb/event_cb)                 │</span><br><span class="line">└─────────────────────────────────────────────────────────┘</span><br></pre></td></tr></table></figure>
+<p>每个 bufferevent 内部都有一个专门监听 socket <code>EV_READ</code> 的普通 <code>struct event</code>；</p>
+<p>当输出缓冲区触达高水位线时，libevent 会对这个内部读 event 调用 <code>event_del()</code>；</p>
+<p>这会进一步触发内核层面的操作（比如 Linux 下的 <code>epoll_ctl(EPOLL_CTL_DEL)</code>），告诉内核不要再监听这个 socket 的可读事件；</p>
+<p>这样，即使对端发了新数据，<code>epoll_wait</code> 也不会返回，数据会留在对端的发送缓冲区，对端会暂停发送，从而实现流量控制。</p>
+<p>当数据量降到低水位线时，libevent 会再对这个读 event 调用 <code>event_add()</code>，恢复监听。”</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 假设你有一个 bufferevent 对象指针 bev</span></span><br><span class="line"><span class="comment">// 1. 暂停监听读事件（对应输出缓冲区触达高水位线时的自动操作）</span></span><br><span class="line"><span class="built_in">bufferevent_disable</span>(bev, EV_READ);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 2. 恢复监听读事件（对应输出缓冲区触达低水位线时的自动操作）</span></span><br><span class="line"><span class="built_in">bufferevent_enable</span>(bev, EV_READ);</span><br><span class="line"><span class="comment">//内部还是调用event_del()</span></span><br></pre></td></tr></table></figure>
+<p><strong>底层流程</strong></p>
+<p>因为bufferevent对象内部封装了两个event对象，因此不用维护event与fd之间的关系，可以直接通过API暂停对读/写事件的监听，但对于普通event当移除事件监听表（不释放内存）的时候需要保存event的指针，再次添加进事件循环</p>
+<p>一个是 <code>bev_read</code>，绑定同一个 fd，监听 <code>EV_READ</code>，内部回调负责把数据从 socket 读到输入 evbuffer；</p>
+<p>一个是 <code>bev_write</code>，绑定同一个 fd，监听 <code>EV_WRITE</code>，内部回调负责把数据从输出 evbuffer 写到 socket。</p>
+<p>之所以用两个独立的 event，是因为 TCP 是全双工的，读和写完全独立，可以同时进行，用两个 event 可以独立控制读和写的监听状态，逻辑也更清晰。</p>
+<p>比如输出缓冲区触达高水位线时，我们可以只暂停 <code>EV_READ</code>，但继续监听 <code>EV_WRITE</code> 发数据，非常灵活。”</p>
+<p>因此，可以绑定两个回调函数。</p>
+<h1>五.源码组织结构</h1>
+<p><img src="https://gitee.com/WFWFWFWFG/image-bed/raw/master/img/20260228221759650.png" alt="image-20260228221759494"></p>
+<p>11）实用网络库</p>
+<p>http 和 evdns：是基于libevent 实现的http 服务器和异步dns查询库；</p>
+<h1>六.event结构体</h1>
+<p>对与signal事件和定时器事件，本是两个不同的接口接口函数分别完成对应的创建</p>
+<p>evsignal_new()  和  evtimer_new()</p>
+<p><img src="https://gitee.com/WFWFWFWFG/image-bed/raw/master/img/20260301111151832.png" alt="image-20260301111151719"></p>
+<p><img src="https://gitee.com/WFWFWFWFG/image-bed/raw/master/img/20260301111223635.png" alt="image-20260301111223505"></p>
+<p>这两个函数通过宏定义与参数固定实现接口调用的统一</p>
+<p>但是一个由统一的入口函数封装这些单独的入口函数，仅该变参数就可实现对函数的选择</p>
+<p><img src="https://gitee.com/WFWFWFWFG/image-bed/raw/master/img/20260301111511199.png" alt="image-20260301111511078"></p>
+<h2 id="event结构体声明">event结构体声明</h2>
+<p>仅列举一些重要声明</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">struct</span> <span class="title class_">event</span> &#123;</span><br><span class="line">    <span class="comment">/* ---------------- 核心成员 ---------------- */</span></span><br><span class="line">    <span class="keyword">struct</span> <span class="title class_">event_base</span> *ev_base;       <span class="comment">// 【1】事件循环对象指针：该事件属于哪个 event_base</span></span><br><span class="line">    <span class="type">evutil_socket_t</span> ev_fd;             <span class="comment">// 【2】文件描述符/信号编号：socket事件传fd，定时器传-1，信号事件传信号编号</span></span><br><span class="line">    <span class="type">short</span> ev_events;                    <span class="comment">// 【3】事件类型：EV_READ/EV_WRITE/EV_PERSIST/EV_SIGNAL/EV_TIMEOUT等</span></span><br><span class="line">    event_callback_fn ev_callback;      <span class="comment">// 【4】回调函数指针：事件就绪后调用的函数</span></span><br><span class="line">    <span class="type">void</span> *ev_arg;                       <span class="comment">// 【5】用户自定义参数：传递给回调函数的参数</span></span><br><span class="line">    <span class="keyword">struct</span> <span class="title class_">timeval</span> ev_timeout;          <span class="comment">// 【6】绝对超时时间：定时器事件用，记录什么时候超时</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">/* ---------------- 链表/堆节点 ---------------- */</span></span><br><span class="line">    <span class="built_in">TAILQ_ENTRY</span>(event) ev_next;         <span class="comment">// 【7】事件监听列表的链表节点：用于将事件挂到 event_base 的监听列表</span></span><br><span class="line">    <span class="built_in">TAILQ_ENTRY</span>(event) ev_active_next;  <span class="comment">// 【8】活跃事件列表的链表节点：用于将事件挂到 event_base 的活跃列表</span></span><br><span class="line">    <span class="keyword">struct</span> <span class="title class_">min_heap_node</span> ev_timeout_node; <span class="comment">// 【9】时间堆的节点：用于将定时器事件挂到 event_base 的最小堆</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">/* ---------------- 状态/优先级/其他） ---------------- */</span></span><br><span class="line">    <span class="type">int</span> ev_flags;                       <span class="comment">// 事件状态标记：EVLIST_INIT/EVLIST_INSERTED/EVLIST_ACTIVE等</span></span><br><span class="line">    <span class="type">int</span> ev_pri;                         <span class="comment">// 事件优先级：数字越小优先级越高</span></span><br><span class="line">    <span class="type">short</span> ev_ncalls;                    <span class="comment">// 回调调用次数（内部用）</span></span><br><span class="line">    <span class="type">short</span> ev_pncalls;                   <span class="comment">// 回调调用指针（内部用）</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<table>
+<thead>
+<tr>
+<th>核心成员</th>
+<th style="text-align:left">作用</th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ev_base</code></td>
+<td style="text-align:left">指向该事件所属的 <code>event_base</code>（事件循环对象）</td>
+<td>事件必须挂载到 <code>event_base</code> 上才能工作，所有事件共享同一个事件循环</td>
+</tr>
+<tr>
+<td><code>ev_fd</code></td>
+<td style="text-align:left">事件的标识符：- socket 事件：传 socket fd- 定时器事件：传 <code>-1</code>- 信号事件：传信号编号（如 <code>SIGINT</code>）</td>
+<td><code>event_new()</code> 的第二个参数就是这个</td>
+</tr>
+<tr>
+<td><code>ev_events</code></td>
+<td style="text-align:left">事件类型宏，常用组合：- <code>EV_READ</code>/<code>EV_WRITE</code>：IO 事件- <code>EV_PERSIST</code>：持续触发- <code>EV_SIGNAL</code>：信号事件- <code>EV_TIMEOUT</code>：定时器事件</td>
+<td><code>event_new()</code> 的第三个参数就是这个</td>
+</tr>
+<tr>
+<td><code>ev_callback</code></td>
+<td style="text-align:left">事件就绪后的回调函数指针，原型为：<code>void (*cb)(evutil_socket_t, short, void*)</code></td>
+<td><code>event_new()</code> 的第四个参数就是这个</td>
+</tr>
+<tr>
+<td><code>ev_arg</code></td>
+<td style="text-align:left">传递给回调函数的用户自定义参数（可以是任意指针）</td>
+<td><code>event_new()</code> 的第五个参数就是这个</td>
+</tr>
+<tr>
+<td><code>ev_timeout</code></td>
+<td style="text-align:left">定时器事件的<strong>绝对超时时间</strong>（不是相对时间），内部用 <code>gettimeofday()</code> + 相对时间计算得出</td>
+<td>对应定时器的最小堆实现，堆顶元素的 <code>ev_timeout</code> 最小</td>
+</tr>
+</tbody>
+</table>
+<p><strong>总结：</strong></p>
+<p><strong>6 个核心成员</strong>：<code>ev_base</code>、<code>ev_fd</code>、<code>ev_events</code>、<code>ev_callback</code>、<code>ev_arg</code>、<code>ev_timeout</code>；</p>
+<p><strong>每个成员的作用</strong>：能讲出对应 <code>event_new()</code> 的哪个参数，以及在事件循环中的作用；</p>
+<p><strong>链表 / 堆节点</strong>：是用来挂到 <code>event_base</code> 的列表 / 堆上的（监听列表，就绪列表，超时堆（小根堆）</p>
+<h2 id="libevent对event的管理">libevent对event的管理</h2>
+<p>基础事件监听列表（I/O和普通信号）（双向列表）</p>
+<p>按信号编号分组的信号事件列表（每个信号对应一个独立的事件列表）</p>
+<p>按信号编号（如<code>SIGINT</code>/<code>SIGTERM</code>/<code>SIGCHLD</code>）分组的双向链表，通过<code>struct event</code>的<code>ev_signal_next</code>成员串联</p>
+<p><strong>数组下标 = 信号编号，值 = 对应链表的头节点</strong></p>
+<p>每个信号编号对应一个独立链表，信号触发时，libevent 可通过信号编号 O (1) 定位到对应事件，无需遍历全量 IO 事件；</p>
+<p>定时器最小堆</p>
+<p>堆内事件按<code>ev_timeout</code>（绝对超时时间）升序排列，<strong>堆顶永远是最近要超时的定时器</strong>；</p>
+<p><code>event_base_loop()</code>会取堆顶的超时时间，作为<code>epoll_wait</code>/<code>kevent</code>的阻塞超时参数；</p>
+<p>按优先级分组的活跃事件表</p>
+<p>事件的「待执行池」，存储<strong>所有已就绪、等待执行回调的事件</strong></p>
+<ul>
+<li>
+<ul>
+<li>数组下标对应事件优先级，数字越小优先级越高；</li>
+<li>libevent 会严格按<strong>优先级从高到低</strong>遍历链表，执行每个事件的回调函数；</li>
+<li>回调执行完成后：设置了<code>EV_PERSIST</code>的事件会回到对应的监听列表 / 堆，未设置的事件会被直接移除。</li>
+</ul>
+</li>
+</ul>
+<p><img src="https://gitee.com/WFWFWFWFG/image-bed/raw/master/img/20260301115329906.png" alt="image-20260301115329770"></p>
+<p>具体流程：</p>
+<p><strong>注册阶段</strong>：调用<code>event_add()</code>时，IO 事件加入第一列链表，信号事件加入第二列链表，定时器事件加入第三列最小堆；</p>
+<p><strong>就绪阶段</strong>：IO / 信号事件触发、定时器超时，事件会从对应的监听结构中取出，按优先级加入第四列的活跃事件列表；</p>
+<p><strong>执行阶段</strong>：<code>event_base_loop()</code>按优先级从高到低，遍历活跃事件列表，执行每个事件的用户回调；</p>
+<p><strong>收尾阶段</strong>：设置了<code>EV_PERSIST</code>的事件，回调完成后回到对应的监听结构；未设置的事件直接移除，等待<code>event_free()</code>释放内存。</p>
+<h2 id="事件设置接口函数">事件设置接口函数</h2>
+<p>event_set(), event_base_set(), event_priority_set()</p>
+<p><img src="https://gitee.com/WFWFWFWFG/image-bed/raw/master/img/20260301120455118.png" alt="image-20260301120454994"></p>
+<h1>七.事件处理框架</h1>
+<p><code>event_base</code> 是 libevent 的「事件循环总控对象」，它的核心职责是：</p>
+<ol>
+<li>管理 IO 多路复用后端（epoll/kqueue/select 等）；</li>
+<li>管理所有已注册的 event（监听列表、活跃列表、时间堆）；</li>
+<li>管理信号事件的 socketpair 管道；</li>
+<li>控制事件循环的启动、暂停、退出；</li>
+<li>提供线程安全支持（如果启用）。</li>
+</ol>
+<hr>
+<p><img src="https://gitee.com/WFWFWFWFG/image-bed/raw/master/img/20260301121004406.png" alt="image-20260301121004276"></p>
+<p><img src="https://gitee.com/WFWFWFWFG/image-bed/raw/master/img/20260301121058838.png" alt="image-20260301121058701"></p>
+<p><strong>核心分为7类</strong></p>
+<p><strong>IO 多路复用后端管理</strong>：<code>evsel</code> 指向当前 IO 后端的操作函数表，<code>evbase</code> 指向后端私有数据；</p>
+<p><strong>信号事件管理</strong>：<code>sig</code> 结构内部包含 socketpair 双端管道，用于把异步信号转为同步 IO；</p>
+<p><strong>事件管理</strong>：<code>eventqueue</code> 是事件监听列表，<code>activequeues</code> 是按优先级分组的活跃事件列表，<code>io</code>/<code>sigmap</code> 是 fd / 信号编号到 event 的哈希映射；</p>
+<p><strong>定时器管理</strong>：<code>timeheap</code> 是定时器最小堆，堆顶是最近要超时的 event；</p>
+<p><strong>事件循环控制</strong>：<code>event_break</code> 是立即退出标记，<code>event_gotterm</code> 是优雅退出标记；</p>
+<p><strong>事件循环唤醒机制</strong>：<code>th_notify_fd</code> 是 socketpair 双端管道，用于唤醒事件循环；</p>
+<p><strong>线程安全支持</strong>：<code>th_base_lock</code> 是保护 event_base 的互斥锁。</p>
+<p>核心就是这 7 类，所有 event 都挂载在 event_base 上，通过它统一调度。”</p>
+<h2 id="创建一个event-base实例">创建一个event_base实例</h2>
+<p><img src="https://gitee.com/WFWFWFWFG/image-bed/raw/master/img/20260301121802815.png" alt="image-20260301121802692"></p>
+<h2 id="管理事件添加（event-add）">管理事件添加（<code>event_add</code>）</h2>
+<p><code>event_add</code> 的所有操作都围绕 event_base 的核心成员展开，完整流程如下：</p>
+<ol>
+<li><strong>绑定检查</strong>：确认 <code>ev-&gt;ev_base</code> 不为空（event 必须绑定到 event_base）；</li>
+<li><strong>状态检查</strong>：若 event 已在监听列表，先调用 <code>event_del</code> 移除；</li>
+<li>IO / 信号事件处理：
+<ul>
+<li>通过 <code>ev-&gt;ev_base-&gt;io</code>（fd→event 哈希表）或 <code>ev-&gt;ev_base-&gt;sigmap</code>（信号编号→event 哈希表）快速查找；</li>
+<li>调用 <code>ev-&gt;ev_base-&gt;evsel-&gt;add()</code>（IO 后端的 add 函数，如 <code>epoll_add()</code>），通过 <code>epoll_ctl(EPOLL_CTL_ADD)</code> 将 fd 加入内核事件表；</li>
+</ul>
+</li>
+<li>定时器事件处理：
+<ul>
+<li>若传了时间参数 <code>tv</code>，计算绝对超时时间存入 <code>ev-&gt;ev_timeout</code>；</li>
+<li>将 event 插入 <code>ev-&gt;ev_base-&gt;timeheap</code>（定时器最小堆）；</li>
+</ul>
+</li>
+<li><strong>加入监听列表</strong>：将 event 加入 <code>ev-&gt;ev_base-&gt;eventqueue</code>（事件监听列表），设置 <code>ev-&gt;ev_flags = EVLIST_INSERTED</code>。</li>
+</ol>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">int</span> <span class="title">event_add</span><span class="params">(<span class="keyword">struct</span> event *ev, <span class="type">const</span> <span class="keyword">struct</span> timeval *tv)</span> </span></span><br><span class="line"><span class="function"></span>&#123; </span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">event_base</span> *base = ev-&gt;ev_base; <span class="comment">// 要注册到的event_base </span></span><br><span class="line"><span class="type">const</span> <span class="keyword">struct</span> <span class="title class_">eventop</span> *evsel = base-&gt;evsel; </span><br><span class="line"><span class="type">void</span> *evbase = base-&gt;evbase; <span class="comment">// base使用的系统I/O策略 </span></span><br><span class="line"><span class="comment">// 新的timer事件，调用timer heap接口在堆上预留一个位置 </span></span><br><span class="line"><span class="comment">// 注：这样能保证该操作的原子性： </span></span><br><span class="line"><span class="comment">// 向系统I/O机制注册可能会失败，而当在堆上预留成功后， </span></span><br><span class="line"><span class="comment">// 定时事件的添加将肯定不会失败； </span></span><br><span class="line"><span class="comment">// 而预留位置的可能结果是堆扩充，但是内部元素并不会改变 </span></span><br><span class="line"><span class="keyword">if</span> (tv != <span class="literal">NULL</span> &amp;&amp; !(ev-&gt;ev_flags &amp; EVLIST_TIMEOUT)) &#123; </span><br><span class="line"><span class="keyword">if</span> (<span class="built_in">min_heap_reserve</span>(&amp;base-&gt;timeheap, </span><br><span class="line"><span class="number">1</span> + <span class="built_in">min_heap_size</span>(&amp;base-&gt;timeheap)) == <span class="number">-1</span>) </span><br><span class="line"><span class="keyword">return</span> (<span class="number">-1</span>);  <span class="comment">/* ENOMEM == errno */</span> </span><br><span class="line"> &#125; </span><br><span class="line"><span class="comment">// 如果事件ev不在已注册或者激活链表中，则调用evbase注册事件 </span></span><br><span class="line"><span class="keyword">if</span> ((ev-&gt;ev_events &amp; (EV_READ|EV_WRITE|EV_SIGNAL)) &amp;&amp; </span><br><span class="line">  !</span><br><span class="line">(ev-&gt;ev_flags &amp; (EVLIST_INSERTED|EVLIST_ACTIVE))) &#123; </span><br><span class="line">res = evsel-&gt;<span class="built_in">add</span>(evbase, ev); </span><br><span class="line"><span class="keyword">if</span> (res != <span class="number">-1</span>) <span class="comment">// 注册成功，插入event到已注册链表中 </span></span><br><span class="line"><span class="built_in">event_queue_insert</span>(base, ev, EVLIST_INSERTED); </span><br><span class="line"> &#125; </span><br><span class="line"><span class="comment">// 准备添加定时事件 </span></span><br><span class="line"><span class="keyword">if</span> (res != <span class="number">-1</span> &amp;&amp; tv != <span class="literal">NULL</span>) &#123; </span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">timeval</span> now; </span><br><span class="line"><span class="comment">// EVLIST_TIMEOUT表明event已经在定时器堆中了，删除旧的 </span></span><br><span class="line"><span class="keyword">if</span> (ev-&gt;ev_flags &amp; EVLIST_TIMEOUT) </span><br><span class="line"><span class="built_in">event_queue_remove</span>(base, ev, EVLIST_TIMEOUT); </span><br><span class="line"><span class="number">21</span></span><br><span class="line"> </span><br><span class="line">  <span class="comment">// 如果事件已经是就绪状态则从激活链表中删除 </span></span><br><span class="line">  <span class="keyword">if</span> ((ev-&gt;ev_flags &amp; EVLIST_ACTIVE) &amp;&amp; </span><br><span class="line">   (ev-&gt;ev_res &amp; EV_TIMEOUT)) &#123; </span><br><span class="line">    <span class="comment">// 将ev_callback调用次数设置为0 </span></span><br><span class="line">    <span class="keyword">if</span> (ev-&gt;ev_ncalls &amp;&amp; ev-&gt;ev_pncalls) &#123; </span><br><span class="line">     *ev-&gt;ev_pncalls = <span class="number">0</span>; </span><br><span class="line">    &#125; </span><br><span class="line">    <span class="built_in">event_queue_remove</span>(base, ev, EVLIST_ACTIVE); </span><br><span class="line">  &#125; </span><br><span class="line">  <span class="comment">// 计算时间，并插入到timer小根堆中 </span></span><br><span class="line">  <span class="built_in">gettime</span>(base, &amp;now); </span><br><span class="line">  <span class="built_in">evutil_timeradd</span>(&amp;now, tv, &amp;ev-&gt;ev_timeout); </span><br><span class="line">  <span class="built_in">event_queue_insert</span>(base, ev, EVLIST_TIMEOUT); </span><br><span class="line"> &#125; </span><br><span class="line"> <span class="keyword">return</span> (res); </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>event_queue_insert()负责将事件插入到对应的链表中，</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">event_queue_insert</span><span class="params">(<span class="keyword">struct</span> event_base *base, <span class="keyword">struct</span> event *ev, </span></span></span><br><span class="line"><span class="params"><span class="function"><span class="type">int</span> queue)</span> </span></span><br><span class="line"><span class="function"></span>&#123; </span><br><span class="line"> <span class="comment">// ev可能已经在激活列表中了，避免重复插入 </span></span><br><span class="line"> <span class="keyword">if</span> (ev-&gt;ev_flags &amp; queue) &#123; </span><br><span class="line">  <span class="keyword">if</span> (queue &amp; EVLIST_ACTIVE) </span><br><span class="line">   <span class="keyword">return</span>; </span><br><span class="line"> &#125; </span><br><span class="line"> <span class="comment">// ... </span></span><br><span class="line"> ev-&gt;ev_flags |= queue; <span class="comment">// 记录queue标记 </span></span><br><span class="line"> <span class="keyword">switch</span> (queue) &#123; </span><br><span class="line"> <span class="keyword">case</span> EVLIST_INSERTED: <span class="comment">// I/O或Signal事件，加入已注册事件链表 </span></span><br><span class="line">  <span class="built_in">TAILQ_INSERT_TAIL</span>(&amp;base-&gt;eventqueue, ev, ev_next); </span><br><span class="line">  <span class="keyword">break</span>; </span><br><span class="line"> <span class="keyword">case</span> EVLIST_ACTIVE: <span class="comment">// 就绪事件，加入激活链表 </span></span><br><span class="line">  base-&gt;event_count_active++; </span><br><span class="line">  <span class="built_in">TAILQ_INSERT_TAIL</span>(base-&gt;activequeues[ev-&gt;ev_pri], ev, </span><br><span class="line">ev_active_next); </span><br><span class="line">  <span class="keyword">break</span>; </span><br><span class="line"> <span class="keyword">case</span> EVLIST_TIMEOUT: <span class="comment">// 定时事件，加入堆 </span></span><br><span class="line">  <span class="built_in">min_heap_push</span>(&amp;base-&gt;timeheap, ev); </span><br><span class="line">  <span class="keyword">break</span>; </span><br><span class="line"> &#125; </span><br><span class="line">&#125; </span><br></pre></td></tr></table></figure>
+<p>event_queue_remove()负责将事件从对应的链表中删除，</p>
+<hr>
+<h2 id="管理事件删除（event-del）">管理事件删除（<code>event_del</code>）</h2>
+<p><code>event_del</code> 是 <code>event_add</code> 的逆操作，同样围绕 event_base 的核心成员展开：</p>
+<ol>
+<li>
+<p><strong>状态检查</strong>：若 event 未注册（<code>ev-&gt;ev_flags == EVLIST_INIT</code>），直接返回；</p>
+</li>
+<li>
+<p><strong>从活跃列表移除</strong>：若 event 在活跃列表，从 <code>ev-&gt;ev_base-&gt;activequeues</code> 中移除；</p>
+</li>
+<li>
+<p>从 IO / 信号后端移除：</p>
+<ul>
+<li>调用 <code>ev-&gt;ev_base-&gt;evsel-&gt;del()</code>（IO 后端的 del 函数，如 <code>epoll_del()</code>），通过 <code>epoll_ctl(EPOLL_CTL_DEL)</code> 将 fd 从内核事件表移除；</li>
+<li>从 <code>ev-&gt;ev_base-&gt;io</code> 或 <code>ev-&gt;ev_base-&gt;sigmap</code> 哈希表中移除；</li>
+</ul>
+</li>
+<li>
+<p><strong>从时间堆移除</strong>：若 event 在时间堆中，从 <code>ev-&gt;ev_base-&gt;timeheap</code> 中移除；</p>
+</li>
+<li>
+<p><strong>从监听列表移除</strong>：将 event 从 <code>ev-&gt;ev_base-&gt;eventqueue</code> 中移除，设置 <code>ev-&gt;ev_flags = EVLIST_INIT</code>。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">int</span> <span class="title">event_del</span><span class="params">(<span class="keyword">struct</span> event *ev)</span> </span></span><br><span class="line"><span class="function"></span>&#123; </span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">event_base</span> *base; </span><br><span class="line"><span class="type">const</span> <span class="keyword">struct</span> <span class="title class_">eventop</span> *evsel; </span><br><span class="line"><span class="type">void</span> *evbase; </span><br><span class="line"><span class="comment">// ev_base为NULL，表明ev没有被注册 </span></span><br><span class="line"><span class="keyword">if</span> (ev-&gt;ev_base == <span class="literal">NULL</span>) </span><br><span class="line"><span class="keyword">return</span> (<span class="number">-1</span>); </span><br><span class="line"><span class="comment">// 取得ev注册的event_base和eventop指针 </span></span><br><span class="line">base = ev-&gt;ev_base; </span><br><span class="line">evsel = base-&gt;evsel; </span><br><span class="line">evbase = base-&gt;evbase; </span><br><span class="line"><span class="comment">// 将ev_callback调用次数设置为 </span></span><br><span class="line"><span class="keyword">if</span> (ev-&gt;ev_ncalls &amp;&amp; ev-&gt;ev_pncalls) &#123; </span><br><span class="line">  *</span><br><span class="line">ev-&gt;ev_pncalls = <span class="number">0</span>; </span><br><span class="line"> &#125; </span><br><span class="line"><span class="comment">// 从对应的链表中删除 </span></span><br><span class="line"><span class="keyword">if</span> (ev-&gt;ev_flags &amp; EVLIST_TIMEOUT) </span><br><span class="line"><span class="built_in">event_queue_remove</span>(base, ev, EVLIST_TIMEOUT); </span><br><span class="line"><span class="keyword">if</span> (ev-&gt;ev_flags &amp; EVLIST_ACTIVE) </span><br><span class="line"><span class="built_in">event_queue_remove</span>(base, ev, EVLIST_ACTIVE); </span><br><span class="line"><span class="keyword">if</span> (ev-&gt;ev_flags &amp; EVLIST_INSERTED) &#123; </span><br><span class="line"><span class="built_in">event_queue_remove</span>(base, ev, EVLIST_INSERTED); </span><br><span class="line"><span class="comment">// EVLIST_INSERTED表明是I/O或者Signal事件， </span></span><br><span class="line"><span class="comment">// 需要调用I/O demultiplexer注销事件 </span></span><br><span class="line"><span class="keyword">return</span> (evsel-&gt;<span class="built_in">del</span>(evbase, ev)); </span><br><span class="line"> &#125; </span><br><span class="line"><span class="keyword">return</span> (<span class="number">0</span>); </span><br><span class="line">&#125;                                                                                                                                                                                                          </span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h1>八.事件处理主循环</h1>
+<p><img src="https://gitee.com/WFWFWFWFG/image-bed/raw/master/img/20260301124108175.png" alt="image-20260301124108037"></p>
+<p>Libevent 的事件主循环主要是通过event_base_loop ()函数完成的，其主要操作如下面的流程 图所示，event_base_loop 所作的就是持续执行下面的循环。</p>
+<h2 id="event-base-loop">event_base_loop()</h2>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">int</span> <span class="title">event_base_loop</span><span class="params">(<span class="keyword">struct</span> event_base *base, <span class="type">int</span> flags)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">// ---------------- 第一步：初始化与加锁 ----------------</span></span><br><span class="line">    <span class="type">const</span> <span class="keyword">struct</span> <span class="title class_">eventop</span> *evsel = base-&gt;evsel; <span class="comment">// 【面试重点】获取当前选择的 IO 后端操作函数表（如 epollops/kqops）</span></span><br><span class="line">    <span class="keyword">struct</span> <span class="title class_">timeval</span> tv;</span><br><span class="line">    <span class="keyword">struct</span> <span class="title class_">timeval</span> *tv_p;</span><br><span class="line">    <span class="type">int</span> res, done, retval = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* Grab the lock. We will release it inside evsel.dispatch, and again</span></span><br><span class="line"><span class="comment">     * as we invoke user callbacks. */</span></span><br><span class="line">    <span class="built_in">EVBASE_ACQUIRE_LOCK</span>(base, th_base_lock); <span class="comment">// 【面试重点】加锁：保护 event_base，保证多线程安全（如果启用了线程支持）</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 【面试重点】防止重入：一个 event_base 同一时间只能有一个事件循环在运行</span></span><br><span class="line">    <span class="keyword">if</span> (base-&gt;running_loop) &#123;</span><br><span class="line">        <span class="built_in">event_warnx</span>(<span class="string">&quot;%s: reentrant invocation. Only one event_base_loop&quot;</span></span><br><span class="line">            <span class="string">&quot; can run on each event_base at once.&quot;</span>, __func__);</span><br><span class="line">        <span class="built_in">EVBASE_RELEASE_LOCK</span>(base, th_base_lock); <span class="comment">// 重入则解锁并返回错误</span></span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    base-&gt;running_loop = <span class="number">1</span>; <span class="comment">// 【面试重点】标记：事件循环正在运行</span></span><br><span class="line"></span><br><span class="line">    <span class="built_in">clear_time_cache</span>(base); <span class="comment">// 清空时间缓存（避免频繁调用 gettimeofday）</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 【面试重点】如果有信号事件已注册，设置信号事件的 event_base</span></span><br><span class="line">    <span class="keyword">if</span> (base-&gt;sig.ev_signal_added &amp;&amp; base-&gt;sig.ev_n_signals_added)</span><br><span class="line">        <span class="built_in">evsig_set_base</span>(base);</span><br><span class="line"></span><br><span class="line">    done = <span class="number">0</span>; <span class="comment">// 循环退出标记：0=继续循环，1=退出循环</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">ifndef</span> _EVENT_DISABLE_THREAD_SUPPORT</span></span><br><span class="line">    base-&gt;th_owner_id = <span class="built_in">EVTHREAD_GET_ID</span>(); <span class="comment">// 【面试重点】记录当前运行事件循环的线程 ID（线程安全用）</span></span><br><span class="line"><span class="meta">#<span class="keyword">endif</span></span></span><br><span class="line"></span><br><span class="line">    base-&gt;event_gotterm = base-&gt;event_break = <span class="number">0</span>; <span class="comment">// 【面试重点】清空退出标记：event_gotterm=优雅退出，event_break=立即退出</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// ---------------- 第二步：进入 while 主循环 ----------------</span></span><br><span class="line">    <span class="keyword">while</span> (!done) &#123;</span><br><span class="line">        base-&gt;event_continue = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 【面试重点】检查退出标记：如果设置了优雅退出或立即退出，跳出循环</span></span><br><span class="line">        <span class="comment">/* Terminate the loop if we have been asked to */</span></span><br><span class="line">        <span class="keyword">if</span> (base-&gt;event_gotterm) &#123; <span class="comment">// 对应 event_base_loopexit()：处理完当前活跃事件后退出</span></span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (base-&gt;event_break) &#123; <span class="comment">// 对应 event_base_loopbreak()：立刻跳出循环，不处理剩余活跃事件</span></span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// ---------------- 第三步：计算超时时间 ----------------</span></span><br><span class="line">        <span class="built_in">timeout_correct</span>(base, &amp;tv); <span class="comment">// 【面试重点】时间校正：处理系统时间跳变（比如用户手动改了时间）</span></span><br><span class="line"></span><br><span class="line">        tv_p = &amp;tv;</span><br><span class="line">        <span class="comment">// 【面试重点】计算 dispatch() 的阻塞超时时间</span></span><br><span class="line">        <span class="keyword">if</span> (!<span class="built_in">N_ACTIVE_CALLBACKS</span>(base) &amp;&amp; !(flags &amp; EVLOOP_NONBLOCK)) &#123;</span><br><span class="line">            <span class="built_in">timeout_next</span>(base, &amp;tv_p); <span class="comment">// 【面试重点】核心！取时间堆堆顶的绝对超时时间，计算与当前时间的差值，作为 dispatch() 的阻塞参数</span></span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="comment">/*</span></span><br><span class="line"><span class="comment">             * if we have active events, we just poll new events</span></span><br><span class="line"><span class="comment">             * without waiting.</span></span><br><span class="line"><span class="comment">             */</span></span><br><span class="line">            <span class="built_in">evutil_timerclear</span>(&amp;tv); <span class="comment">// 有活跃事件或非阻塞模式（EVLOOP_NONBLOCK）：不阻塞，立刻返回</span></span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 【面试重点】如果没有任何事件了，直接退出</span></span><br><span class="line">        <span class="comment">/* If we have no events, we just exit */</span></span><br><span class="line">        <span class="keyword">if</span> (!<span class="built_in">event_haveevents</span>(base) &amp;&amp; !<span class="built_in">N_ACTIVE_CALLBACKS</span>(base)) &#123;</span><br><span class="line">            <span class="built_in">event_debug</span>((<span class="string">&quot;%s: no events registered.&quot;</span>, __func__));</span><br><span class="line">            retval = <span class="number">1</span>;</span><br><span class="line">            <span class="keyword">goto</span> done;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">/* update last old time */</span></span><br><span class="line">        <span class="built_in">gettime</span>(base, &amp;base-&gt;event_tv); <span class="comment">// 更新当前时间到 event_tv（用于时间校正）</span></span><br><span class="line"></span><br><span class="line">        <span class="built_in">clear_time_cache</span>(base); <span class="comment">// 再次清空时间缓存</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">// ---------------- 第四步：调用 IO 后端的 dispatch() 阻塞等待事件 ----------------</span></span><br><span class="line">        res = evsel-&gt;<span class="built_in">dispatch</span>(base, tv_p); <span class="comment">// 【面试重点】核心中的核心！调用 IO 后端的 dispatch 函数</span></span><br><span class="line">                                             <span class="comment">// 比如 Linux 下是 epoll_dispatch()，内部调用 epoll_wait 阻塞等待事件就绪</span></span><br><span class="line">                                             <span class="comment">// 比如 macOS 下是 kq_dispatch()，内部调用 kevent 阻塞等待事件就绪</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (res == <span class="number">-1</span>) &#123;</span><br><span class="line">            <span class="built_in">event_debug</span>((<span class="string">&quot;%s: dispatch returned unsuccessfully.&quot;</span>,</span><br><span class="line">                __func__));</span><br><span class="line">            retval = <span class="number">-1</span>;</span><br><span class="line">            <span class="keyword">goto</span> done;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="built_in">update_time_cache</span>(base); <span class="comment">// 更新时间缓存（优化性能，避免频繁调用 gettimeofday）</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">// ---------------- 第五步：处理就绪事件 ----------------</span></span><br><span class="line">        <span class="built_in">timeout_process</span>(base); <span class="comment">// 【面试重点】处理超时定时器！遍历时间堆，将所有 ev_timeout ≤ 当前时间的 event 取出，加入活跃事件列表</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">// 【面试重点】执行活跃事件回调！</span></span><br><span class="line">        <span class="keyword">if</span> (<span class="built_in">N_ACTIVE_CALLBACKS</span>(base)) &#123;</span><br><span class="line">            <span class="type">int</span> n = <span class="built_in">event_process_active</span>(base); <span class="comment">// 【面试重点】核心！按优先级从高到低遍历活跃事件列表数组，调用每个 event 的用户回调</span></span><br><span class="line">                                                 <span class="comment">// 未设置 EV_PERSIST 的 event，回调执行完后会自动从监听列表移除</span></span><br><span class="line">                                                 <span class="comment">// 设置了 EV_PERSIST 的 event，回调执行完后会重新加入监听列表</span></span><br><span class="line">            <span class="keyword">if</span> ((flags &amp; EVLOOP_ONCE)</span><br><span class="line">                &amp;&amp; <span class="built_in">N_ACTIVE_CALLBACKS</span>(base) == <span class="number">0</span></span><br><span class="line">                &amp;&amp; n != <span class="number">0</span>)</span><br><span class="line">                done = <span class="number">1</span>; <span class="comment">// EVLOOP_ONCE 模式：处理完一次活跃事件就退出</span></span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (flags &amp; EVLOOP_NONBLOCK)</span><br><span class="line">            done = <span class="number">1</span>; <span class="comment">// EVLOOP_NONBLOCK 模式：没有活跃事件就退出</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">event_debug</span>((<span class="string">&quot;%s: asked to terminate loop.&quot;</span>, __func__));</span><br><span class="line"></span><br><span class="line">    <span class="comment">// ---------------- 第六步：退出循环，解锁返回 ----------------</span></span><br><span class="line">done:</span><br><span class="line">    <span class="built_in">clear_time_cache</span>(base);</span><br><span class="line">    base-&gt;running_loop = <span class="number">0</span>; <span class="comment">// 【面试重点】清除“正在运行”标记</span></span><br><span class="line"></span><br><span class="line">    <span class="built_in">EVBASE_RELEASE_LOCK</span>(base, th_base_lock); <span class="comment">// 【面试重点】解锁：释放 event_base 的互斥锁</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> (retval); <span class="comment">// 返回：0=正常退出，1=无事件退出，-1=错误退出</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>初始化与加锁</strong>：加锁保护 event_base，防止重入（一个 event_base 同一时间只能有一个事件循环在运行）；</p>
+<p><strong>进入 while 主循环</strong>：持续执行，直到 <code>done=1</code>；</p>
+<p><strong>计算超时时间</strong>：调用 <code>timeout_next()</code> 取时间堆堆顶的绝对超时时间，计算与当前时间的差值，作为 <code>dispatch()</code> 的阻塞参数；</p>
+<p><strong>调用 IO 后端的 <code>dispatch()</code></strong>：比如 Linux 下调用 <code>epoll_dispatch()</code>，内部调用 <code>epoll_wait</code> 阻塞等待事件就绪；</p>
+<p><strong>处理就绪事件</strong>：</p>
+<ul>
+<li>调用 <code>timeout_process()</code> 处理超时定时器，将已超时的 event 加入活跃事件列表；</li>
+<li>调用 <code>event_process_active()</code> 按优先级从高到低执行活跃事件的用户回调；</li>
+</ul>
+<p><strong>检查退出标记</strong>：检查 <code>event_gotterm</code>（优雅退出）和 <code>event_break</code>（立即退出），决定是否退出循环，最后解锁返回。</p>
+<h2 id="I-O和Timer-Signal事件的统一">I/O和Timer  Signal事件的统一</h2>
+<p><strong>定时器事件</strong>：利用<code>epoll_wait</code>的超时参数，用最小堆管理所有定时器，每次取堆顶的最近超时时间作为<code>epoll_wait</code>的阻塞超时值；超时后遍历堆处理所有到期定时器，和 I/O 事件一起加入活跃列表执行回调。</p>
+<p><strong>信号事件</strong>：通过<code>socketpair</code>管道把异步信号转为同步 I/O 事件。信号触发时，信号处理函数向管道写入信号编号，管道读端触发可读事件，libevent 读取信号后处理对应事件，完美融入事件循环。</p>
+<p>最终所有就绪事件都会被加入按优先级分组的活跃事件列表，统一按优先级执行回调，实现了三类事件的完全统一。</p>
+<h1>九.信号处理</h1>
+<table>
+<thead>
+<tr>
+<th>原生信号处理的缺陷</th>
+<th>libevent信号事件的解决方案</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>信号处理函数只能调用异步信号安全的函数，printf/malloc/free/event_base相关操作均不允许，限制极大</td>
+<td>信号回调在事件循环主线程同步执行，无异步安全限制，可调用任意函数</td>
+</tr>
+<tr>
+<td>信号异步触发，会打断当前执行的代码，极易引发竞态问题</td>
+<td>信号触发仅做极简通知，回调在正常执行流中处理，无竞态风险</td>
+</tr>
+<tr>
+<td>多个同类型信号同时触发，内核会合并丢失</td>
+<td>管道缓存所有信号编号，不会丢失触发记录</td>
+</tr>
+<tr>
+<td>无法与事件循环结合，处理函数中无法安全控制事件循环</td>
+<td>与事件循环深度融合，回调中可直接调用event_base_loopbreak()等所有API</td>
+</tr>
+</tbody>
+</table>
+<h2 id="socket-pair">socket pair</h2>
+<p><code>socketpair</code> 是<strong>用 Socket API 实现的 “全双工管道”</strong>，是 libevent 处理信号事件和唤醒事件循环的核心。</p>
+<p><img src="https://gitee.com/WFWFWFWFG/image-bed/raw/master/img/20260301125938853.png" alt="image-20260301125938701"></p>
+<p><strong>创建一个socket pair</strong></p>
+<p><img src="https://gitee.com/WFWFWFWFG/image-bed/raw/master/img/20260301130021828.png" alt="image-20260301130021678"></p>
+<h2 id="集成到event-base">集成到event_base</h2>
+<p>现在已经知道信号的相应，还要将socket_pair集成到event_base上</p>
+<p>Socket pair 创建好了，可是libevent 的事件主循环还是不知道Signal是否发生了啊，看 来我们还差了最后一步，那就是：为socket pair的读socket在libevent的event_base实例 上注册一个persist的读事件。  这样当向写socket写入数据时，读socket就会得到通知，触发读事件，从而event_base 就能相应的得到通知了。</p>
+<p><img src="https://gitee.com/WFWFWFWFG/image-bed/raw/master/img/20260301172340630.png" alt="image-20260301172340461"></p>
+<p>处理流程</p>
+<p><img src="https://gitee.com/WFWFWFWFG/image-bed/raw/master/img/20260301172509248.png" alt="image-20260301172509084"></p>
+<h2 id="signal事件的管理">signal事件的管理</h2>
+<p><strong>evsignal_info 结构体</strong></p>
+<p>用 <code>socketpair</code> 管道把<strong>异步、不可重入的信号事件</strong>，转为<strong>同步、可融入 I/O 事件循环的可读事件</strong>；</p>
+<p>管理所有注册的信号事件，保存并恢复信号原有的处理函数，保证程序兼容性；</p>
+<p>把信号事件完全融入 libevent 的事件循环，和 I/O、定时器事件统一调度。****</p>
+<p><img src="https://gitee.com/WFWFWFWFG/image-bed/raw/master/img/20260301173037962.png" alt="image-20260301173037804"></p>
+<table>
+<thead>
+<tr>
+<th>成员</th>
+<th>核心作用</th>
+<th>面试重点 / 关联知识点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>struct event ev_signal</code></td>
+<td>专门监听 socketpair 读端的内部 event 对象：- 绑定 <code>ev_signal_pair[0]</code>（管道读端）- 监听 <code>EV_READ</code> 可读事件- 回调为 libevent 内部的信号处理函数 <code>evsig_cb</code></td>
+<td>这是信号事件融入 I/O 事件循环的核心。信号触发后，管道写端写入数据，这个 event 就会就绪，和普通 I/O 事件一起进入活跃列表，统一调度。</td>
+</tr>
+<tr>
+<td><code>evutil_socket_t ev_signal_pair[2]</code></td>
+<td><code>socketpair()</code> 创建的<strong>全双工双端管道</strong>，是整个方案的核心：- <code>[1]</code>：写端，信号处理函数中向这个 fd 写入信号编号（<code>write</code> 是异步信号安全的操作）- <code>[0]</code>：读端，绑定到上面的 <code>ev_signal</code> event，监听可读事件</td>
+<td>面试高频考点：为什么用 socketpair 而不是普通 pipe？1. socketpair 是全双工，两端可同时读写；普通 pipe 是半双工，只能单向传输2. 支持本机无亲缘关系进程通信，灵活性更强</td>
+</tr>
+<tr>
+<td><code>int ev_signal_added</code></td>
+<td>布尔标记，标记 <code>ev_signal</code> 这个内部 event 是否已添加到 event_base 的监听列表，避免重复添加 / 删除</td>
+<td>对应 <code>event_base_loop</code> 中的判断：<code>if (base-&gt;sig.ev_signal_added &amp;&amp; base-&gt;sig.ev_n_signals_added) evsig_set_base(base);</code></td>
+</tr>
+<tr>
+<td><code>int ev_n_signals_added</code></td>
+<td>计数器，统计当前 event_base 正在监听的信号事件总数</td>
+<td>核心作用：1. 计数为 0 时，关闭信号处理机制，避免不必要的性能开销2. 计数 &gt; 0 时，才会启用 socketpair 和全局信号处理函数</td>
+</tr>
+<tr>
+<td><code>struct sigaction **sh_old;``ev_sighandler_t **sh_old;</code></td>
+<td>数组，保存 libevent 接管信号之前，该信号<strong>原本的处理函数</strong></td>
+<td>面试重点：这是 libevent 兼容性设计的核心。当停止监听某个信号、释放 event_base 时，会恢复信号原有的处理函数，不会破坏程序其他部分的信号处理逻辑。</td>
+</tr>
+<tr>
+<td><code>int sh_old_max</code></td>
+<td><code>sh_old</code> 数组的最大长度，即当前支持的最大信号编号，用于管理数组的内存扩容</td>
+<td>内部使用，面试一般不深入考察</td>
+</tr>
+</tbody>
+</table>
+<p><strong><code>int evsig_init(struct event_base \*base);</code></strong></p>
+<ul>
+<li>作用：信号管理模块的初始化函数，在 event_base 创建时自动调用。</li>
+<li>核心操作：创建 socketpair 管道、初始化 <code>ev_signal</code> 内部 event、初始化 <code>sh_old</code> 数组，完成信号处理的准备工作。</li>
+</ul>
+<p><strong><code>void evsig_dealloc(struct event_base \*base);</code></strong></p>
+<ul>
+<li>作用：信号管理模块的销毁函数，在 event_base 释放时自动调用。</li>
+<li>核心操作：关闭 socketpair 双端 fd、释放 <code>sh_old</code> 数组内存、恢复所有信号原本的处理函数，完成资源清理。</li>
+</ul>
+<p><strong><code>void evsig_set_base(struct event_base \*base);</code></strong></p>
+<ul>
+<li>作用：设置当前处理信号的 event_base，处理多 event_base 场景的信号调度。</li>
+<li>面试重点：libevent 同一时间只能有一个 event_base 处理信号事件，这个函数用于切换当前接管信号的 event_base。</li>
+</ul>
+<p>libevent 通过 <code>struct evsig_info</code> 这个核心结构，用 socketpair 管道把异步信号转为同步 I/O 事件，融入事件循环统一处理：</p>
+<ol>
+<li>初始化时创建 socketpair 双端管道，把管道读端绑定到一个内部 event 上，注册到事件循环；</li>
+<li>注册信号事件时，接管信号的处理函数，把原处理函数保存到 <code>sh_old</code> 数组，保证后续可恢复；</li>
+<li>信号触发时，信号处理函数仅向管道写端写入信号编号，完全符合异步信号安全要求；</li>
+<li>管道读端收到数据，内部 event 就绪，libevent 读取信号编号，触发用户注册的信号回调，和 I/O、定时器事件统一按优先级调度；</li>
+<li>销毁时恢复所有信号原有的处理函数，清理管道资源，不会影响程序原有行为。</li>
+</ol>
+<h2 id="完整的信号处理流程">完整的信号处理流程</h2>
+<p><img src="https://gitee.com/WFWFWFWFG/image-bed/raw/master/img/20260301173515404.png" alt="image-20260301173515161"></p>
+<h1>十.集成定时器事件</h1>
+<h2 id="集成到主循环">集成到主循环</h2>
+<p>因为系统的I/O机制无论select还是epoll,都允许设置最大超时时间，</p>
+<p>因为系统的I/O 机制像select()和 epoll_wait()都允许程序制定一个最大等待时间（也称 为最大超时时间）timeout，即使没有I/O事件发生，它们也保证能在timeout时间内返回。  那么根据所有Timer 事件的最小超时时间来设置系统I/O的timeout 时间；当系统 I/O 返回时，再激活所有就绪的Timer事件就可以了，这样就能将Timer事件完美的融合到系统 的I/O机制中了。</p>
+<p><img src="https://gitee.com/WFWFWFWFG/image-bed/raw/master/img/20260301174403643.png" alt="image-20260301174403481"></p>
+<p><img src="https://gitee.com/WFWFWFWFG/image-bed/raw/master/img/20260301174416884.png" alt="image-20260301174416730"></p>
+<h2 id="Timer小根堆">Timer小根堆</h2>
+<p>Libevent 使用堆来管理 Timer 事件，其 key 值就是事件的超时时间，源代码位于文件 min_heap.h 中。</p>
+<p><img src="https://gitee.com/WFWFWFWFG/image-bed/raw/master/img/20260301174859826.png" alt="image-20260301174859664"></p>
+<p>而libevent 的 heap 代码对这一过程做了优化，在插入新元素时，只是为新元素预留了 一个位置hole（初始时hole位于数组尾部），但并不立刻将新元素插入到hole上，而是不断 向上调整hole的值，将父节点向下调整，最后确认hole就是新元素的所在位置时，才会真 正的将新元素插入到 hole 上，因此在调整过程中就比上面的代码少了一次赋值的操作</p>
+<p><strong>向上调整的主要逻辑</strong></p>
+<p><img src="https://gitee.com/WFWFWFWFG/image-bed/raw/master/img/20260301175000827.png" alt="image-20260301175000663"></p>
+<p><img src="https://gitee.com/WFWFWFWFG/image-bed/raw/master/img/20260301175032217.png" alt="image-20260301175032019"></p>
+<h2 id="为什么不用时间轮？">为什么不用时间轮？</h2>
+<h3 id="什么是时间轮">什么是时间轮</h3>
+<p>时间轮是一种<strong>模拟钟表指针转动的高效定时器管理数据结构</strong>，核心思想是 <strong>“批量处理、按时间槽分组”</strong>，把定时器按 “到期时间” 分到不同的 “时间槽” 里，通过指针的周期性转动来处理到期的定时器。</p>
+<h3 id="时间轮分类"><strong>时间轮分类</strong></h3>
+<p><strong>单层时间轮</strong></p>
+<ul>
+<li>结构：只有一个表盘，一个指针；</li>
+<li>缺点：如果定时器的超时时间跨度很大（比如 1 秒和 1 小时），表盘需要做的非常大，内存浪费严重；</li>
+<li>适用场景：超时时间跨度小、精度要求固定的场景。</li>
+</ul>
+<p><strong>多层时间轮（Hierarchical Time Wheel，主流方案）</strong></p>
+<ul>
+<li>结构：多个不同精度的表盘嵌套，比如：
+<ul>
+<li>第一层（秒轮）：60 个槽，精度 1 秒，处理 0-59 秒的定时器；</li>
+<li>第二层（分钟轮）：60 个槽，精度 1 分钟，处理 1-59 分钟的定时器；</li>
+<li>第三层（小时轮）：24 个槽，精度 1 小时，处理 1-24 小时的定时器；</li>
+</ul>
+</li>
+<li>工作原理：
+<ul>
+<li>秒轮指针每秒转一格，处理秒级定时器；</li>
+<li>秒轮转满一圈（60 秒），分钟轮指针转一格，把分钟轮当前槽里的定时器 “降级” 到秒轮的对应槽里；</li>
+<li>以此类推，实现大跨度超时时间的高效管理；</li>
+</ul>
+</li>
+<li>优势：内存占用小，能高效处理各种跨度的超时时间，是 Netty、Kafka、Skynet 等主流高性能网络库 / 框架的首选。</li>
+</ul>
+<h3 id="最小堆VS时间轮">最小堆VS时间轮</h3>
+<table>
+<thead>
+<tr>
+<th>维度</th>
+<th>最小堆（libevent 默认方案）</th>
+<th>时间轮（Netty/Kafka 方案）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>插入定时器的时间复杂度</strong></td>
+<td>O(logN)</td>
+<td>O (1)（直接放到对应时间槽）</td>
+</tr>
+<tr>
+<td><strong>删除定时器的时间复杂度</strong></td>
+<td>O(logN)</td>
+<td>O (1)（如果是双向链表管理时间槽）</td>
+</tr>
+<tr>
+<td><strong>处理到期定时器的时间复杂度</strong></td>
+<td>O (K*logN)，K 是到期定时器数量</td>
+<td>O (K)，K 是到期定时器数量（直接遍历当前时间槽）</td>
+</tr>
+<tr>
+<td><strong>内存占用</strong></td>
+<td>低，只存储实际的定时器</td>
+<td>相对高，需要预分配时间槽（多层时间轮已优化）</td>
+</tr>
+<tr>
+<td><strong>通用性</strong></td>
+<td>极高，适合所有场景，无特殊限制</td>
+<td>较高，适合超时时间相对规律、高频触发的场景</td>
+</tr>
+<tr>
+<td><strong>实现复杂度</strong></td>
+<td>非常简单，代码量少</td>
+<td>相对复杂，多层时间轮的降级逻辑需要仔细处理</td>
+</tr>
+<tr>
+<td><strong>典型适用场景</strong></td>
+<td>通用网络库（如 libevent）、定时器数量适中的场景</td>
+<td>高性能网络库（如 Netty）、消息队列（如 Kafka）、游戏服务器（如 Skynet）、定时器数量巨大且高频触发的场景</td>
+</tr>
+</tbody>
+</table>
+<h3 id="为什么-libevent-默认用最小堆，而不用时间轮？">为什么 libevent 默认用最小堆，而不用时间轮？</h3>
+<p>这是面试的高频追问，核心原因是 <strong>libevent 的设计目标是 “通用、简单、跨平台”，而不是 “极致性能”</strong>：</p>
+<ol>
+<li>通用性优先：
+<ul>
+<li>libevent 是一个通用的事件驱动库，需要适配各种场景（从嵌入式设备到高性能服务器）；</li>
+<li>最小堆没有任何场景限制，不管定时器数量多少、超时时间跨度多大，都能稳定工作；</li>
+<li>时间轮虽然在高频场景下性能更好，但在定时器数量极少、超时时间极不规律的场景下，优势不明显，甚至可能有内存浪费。</li>
+</ul>
+</li>
+<li>实现简单、维护成本低：
+<ul>
+<li>最小堆的实现非常简单，代码量少，逻辑清晰，跨平台兼容性好；</li>
+<li>多层时间轮的实现相对复杂，需要处理 “降级” 逻辑，维护成本更高；</li>
+<li>libevent 作为一个开源通用库，简单、可维护是非常重要的设计目标。</li>
+</ul>
+</li>
+<li>性能足够满足大多数场景：
+<ul>
+<li>对于大多数通用网络编程场景，定时器数量不会特别巨大（比如几千、几万），O (logN) 的复杂度完全可以接受；</li>
+<li>只有在定时器数量特别巨大（比如几十万、上百万）且高频触发的场景下，时间轮的 O (1) 优势才会明显体现。</li>
+</ul>
+</li>
+</ol>
+<p><strong>补充：libevent 也有时间轮补丁！</strong></p>
+<p>虽然 libevent 默认用最小堆，但社区里有基于时间轮的优化补丁（比如 <code>libevent-timerwheel</code>），如果你需要在 libevent 中使用时间轮，可以集成这些补丁，或者自己实现一个简单的时间轮作为补充。</p>
+<h3 id="结论">结论</h3>
+<p><strong>什么是时间轮</strong>：时间轮是模拟钟表指针转动的定时器管理结构，把定时器按到期时间分到不同时间槽，通过指针转动批量处理，多层时间轮可以高效处理大跨度超时时间，Netty、Kafka 都用它。</p>
+<p><strong>最小堆 vs 时间轮</strong>：</p>
+<ul>
+<li>最小堆的插入、删除是 O (logN)，处理到期是 O (K*logN)，但实现简单、通用性极高、内存占用小；</li>
+<li>时间轮的插入、删除、处理到期都是 O (1)（或 O (K)），高频场景下性能更好，但实现相对复杂、内存占用稍高。</li>
+</ul>
+<p><strong>libevent 为什么选最小堆</strong>：</p>
+<ul>
+<li>因为 libevent 的设计目标是通用、简单、跨平台，最小堆没有场景限制，实现简单，维护成本低，且对于大多数通用场景，O (logN) 的性能完全足够；</li>
+<li>时间轮虽然在高频场景下性能好，但不是所有场景都需要，libevent 作为通用库，优先选择了更通用、更简单的方案；</li>
+<li>当然，如果有极致性能需求，libevent 也有时间轮的社区补丁可以集成。”</li>
+</ul>
+<h1>十一.支持I/O多路复用</h1>
+<p>Libevent 的核心是事件驱动、同步非阻塞，为了达到这一目标，必须采用系统提供的I/O 多路复用技术，而这些在Windows、Linux、Unix等不同平台上却各有不同，如何统一不同操作平台上的I/O复用方式</p>
+<h2 id="I-O统一的关键">I/O统一的关键</h2>
+<p>Libevent支持多种I/O多路复用技术的关键就在于结构体eventop，这个结构体前面也曾 提到过，它的成员是一系列的函数指针, 定义在event-internal.h文件中：</p>
+<p><img src="https://gitee.com/WFWFWFWFG/image-bed/raw/master/img/20260301180017376.png" alt="image-20260301180017202"></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">struct</span> <span class="title class_">eventop</span> &#123; </span><br><span class="line"><span class="type">const</span> <span class="type">char</span> *name; </span><br><span class="line"><span class="type">void</span> *(*init)(<span class="keyword">struct</span> event_base *); <span class="comment">// 初始化 </span></span><br><span class="line"><span class="built_in">int</span> (*add)(<span class="type">void</span> *, <span class="keyword">struct</span> event *); <span class="comment">// 注册事件 </span></span><br><span class="line"><span class="built_in">int</span> (*del)(<span class="type">void</span> *, <span class="keyword">struct</span> event *); <span class="comment">// 删除事件 </span></span><br><span class="line"><span class="built_in">int</span> (*dispatch)(<span class="keyword">struct</span> event_base *, <span class="type">void</span> *, <span class="keyword">struct</span> timeval *); <span class="comment">// </span></span><br><span class="line">事件分发 </span><br><span class="line"><span class="built_in">void</span> (*dealloc)(<span class="keyword">struct</span> event_base *, <span class="type">void</span> *); <span class="comment">// 注销，释放资源 </span></span><br><span class="line"><span class="comment">/* set if we need to reinitialize the event base */</span> </span><br><span class="line"><span class="type">int</span> need_reinit; </span><br><span class="line">&#125;; </span><br></pre></td></tr></table></figure>
+<p>在libevent 中，每种I/O demultiplex 机制的实现都必须提供这五个函数接口，来完成自 身的初始化、销毁释放；对事件的注册、注销和分发。  比如对于epoll，libevent 实现了 5 个对应的接口函数，并在初始化时并将eventop的5 个函数指针指向这5个函数，那么程序就可以使用epoll作为I/O demultiplex机制了。</p>
+<table>
+<thead>
+<tr>
+<th>函数指针</th>
+<th>核心作用</th>
+<th>关联你之前学的知识点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>const char *name</code></td>
+<td>IO 后端的名称，比如 “epoll”、“kqueue”、“select”</td>
+<td>用于日志打印、调试，也可以通过 <code>event_base_get_method()</code> 对外暴露当前使用的 IO 模型</td>
+</tr>
+<tr>
+<td><code>void *(*init)(struct event_base *);</code></td>
+<td>后端初始化函数</td>
+<td>【面试重点】在 <code>event_base_new()</code> 时调用，负责创建后端的私有数据（比如 epoll 的 fd、事件数组），返回的私有数据指针会存入 <code>event_base.evbase</code> 成员。失败返回 NULL。</td>
+</tr>
+<tr>
+<td><code>int (*add)(struct event_base *, evutil_socket_t fd, short old, short events, void *fdinfo);</code></td>
+<td>事件注册函数</td>
+<td>【面试重点】对应 <code>event_add()</code> 的核心逻辑，负责把 fd 的指定事件（<code>EV_READ</code>/<code>EV_WRITE</code>/<code>EV_SIGNAL</code>）注册到 IO 多路复用内核中。- <code>old</code>：该 fd 之前已经注册的事件，用于区分是新增还是修改；- <code>events</code>：本次要新增的事件；- <code>fdinfo</code>：该 fd 对应的后端私有数据；成功返回 0，失败返回 - 1。</td>
+</tr>
+<tr>
+<td><code>int (*del)(struct event_base *, evutil_socket_t fd, short old, short events, void *fdinfo);</code></td>
+<td>事件移除函数</td>
+<td>【面试重点】对应 <code>event_del()</code> 的核心逻辑，负责把 fd 的指定事件从 IO 多路复用内核中移除。参数含义和 <code>add</code> 一致，成功返回 0，失败返回 - 1。</td>
+</tr>
+<tr>
+<td><code>int (*dispatch)(struct event_base *, struct timeval *);</code></td>
+<td>事件分发核心函数</td>
+<td>【面试重点】对应 <code>event_base_loop()</code> 的核心阻塞逻辑，是整个事件循环的心脏。它会阻塞等待事件就绪，超时时间由传入的 <code>timeval</code> 决定；事件就绪后，会把就绪事件加入活跃事件列表，等待回调执行。成功返回 0，失败返回 - 1。</td>
+</tr>
+<tr>
+<td><code>void (*dealloc)(struct event_base *);</code></td>
+<td>后端销毁函数</td>
+<td>在 <code>event_base_free()</code> 时调用，负责释放后端的私有数据、关闭 fd 等清理工作。</td>
+</tr>
+</tbody>
+</table>
+<p><strong>libevent 为每个支持的 IO 多路复用模型，都实现了对应的 <code>struct eventop</code> 实例，举几个最常见的例子：</strong></p>
+<ol>
+<li>
+<p><strong>Linux epoll</strong>：<code>epoll.c</code> 中定义了 <code>struct eventop epollops</code>，把 <code>init/add/del/dispatch</code> 分别指向 <code>epoll_init/epoll_add/epoll_del/epoll_dispatch</code>，内部封装了 <code>epoll_create/epoll_ctl/epoll_wait</code> 系统调用。</p>
+</li>
+<li>
+<p><strong>macOS/FreeBSD kqueue</strong>：<code>kqueue.c</code> 中定义了 <code>struct eventop kqops</code>，封装了 <code>kqueue/kevent</code> 系统调用。</p>
+</li>
+<li>
+<p><strong>全平台通用 select</strong>：<code>select.c</code> 中定义了 <code>struct eventop selectops</code>，封装了 <code>select</code> 系统调用，兼容所有支持 POSIX 标准的系统。</p>
+</li>
+<li>
+<p><strong>全平台通用 poll</strong>：<code>poll.c</code> 中定义了 <code>struct eventop pollops</code>，封装了 <code>poll</code> 系统调用。</p>
+</li>
+</ol>
+<p>Libevent 把所有支持的I/O demultiplex 机制存储在一个<strong>全局静态数组eventops</strong>中，并在 初始化时选择使用何种机制，数组内容根据优先级顺序声明如下：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">static</span> <span class="type">const</span> <span class="keyword">struct</span> <span class="title class_">eventop</span> *eventops[] = &#123; </span><br><span class="line"><span class="meta">#<span class="keyword">ifdef</span> HAVE_EVENT_PORTS </span></span><br><span class="line">&amp;evportops, </span><br><span class="line"><span class="meta">#<span class="keyword">endif</span> </span></span><br><span class="line"><span class="meta">#<span class="keyword">ifdef</span> HAVE_WORKING_KQUEUE </span></span><br><span class="line">&amp;kqops, </span><br><span class="line"><span class="meta">#<span class="keyword">endif</span> </span></span><br><span class="line"><span class="meta">#<span class="keyword">ifdef</span> HAVE_EPOLL </span></span><br><span class="line">&amp;epollops, </span><br><span class="line"><span class="number">35</span></span><br><span class="line"><span class="meta">#<span class="keyword">endif</span> </span></span><br><span class="line"><span class="meta">#<span class="keyword">ifdef</span> HAVE_DEVPOLL </span></span><br><span class="line">&amp;devpollops, </span><br><span class="line"><span class="meta">#<span class="keyword">endif</span> </span></span><br><span class="line"><span class="meta">#<span class="keyword">ifdef</span> HAVE_POLL </span></span><br><span class="line">&amp;pollops, </span><br><span class="line"><span class="meta">#<span class="keyword">endif</span> </span></span><br><span class="line"><span class="meta">#<span class="keyword">ifdef</span> HAVE_SELECT </span></span><br><span class="line">&amp;selectops, </span><br><span class="line"><span class="meta">#<span class="keyword">endif</span> </span></span><br><span class="line"><span class="meta">#<span class="keyword">ifdef</span> WIN32 </span></span><br><span class="line">&amp;win32ops, </span><br><span class="line"><span class="meta">#<span class="keyword">endif</span> </span></span><br><span class="line"><span class="literal">NULL</span> </span><br><span class="line">&#125;; </span><br></pre></td></tr></table></figure>
+<p><strong>注：在预编译阶段展开宏就知道要选择哪个后端I/O，而不是在运行阶段动态选择</strong></p>
+<p><img src="https://gitee.com/WFWFWFWFG/image-bed/raw/master/img/20260301181651588.png" alt="image-20260301181651401"></p>
+<p>那么如果选择的是epoll，那么调用结构体eventop的init和dispatch函数指针时，实际 调用的函数就是epoll的初始化函数epoll_init()和事件分发函数epoll_dispatch()了；</p>
+<h2 id="libevent-是怎么实现跨平台的？">libevent 是怎么实现跨平台的？</h2>
+<blockquote>
+<p>libevent 是通过 <code>struct eventop</code> 这个 IO 后端抽象接口，结合策略模式实现跨平台的：</p>
+<ol>
+<li>它把所有 IO 多路复用模型的核心操作，抽象成 <code>init/add/del/dispatch</code> 等统一的函数接口；</li>
+<li>针对不同操作系统的 IO 模型（Linux 的 epoll、macOS 的 kqueue、全平台的 select 等），分别实现这套接口，封装成独立的 <code>struct eventop</code> 实例；</li>
+<li>初始化 <code>event_base</code> 时，libevent 会按优先级自动选择当前系统支持的最优 IO 后端，上层事件循环只需要通过统一接口调用，完全不需要关心底层实现，从而实现了跨平台兼容。</li>
+</ol>
+</blockquote>
+<h2 id="event-base-loop-中-evsel-dispatch-做了什么？"><code>event_base_loop</code> 中 <code>evsel-&gt;dispatch</code> 做了什么？</h2>
+<blockquote>
+<p><code>evsel-&gt;dispatch</code> 是 IO 后端的事件分发核心函数，对应 <code>event_base_loop</code> 的阻塞等待逻辑：</p>
+<ol>
+<li>它接收一个超时时间参数，这个参数来自定时器最小堆的最近超时时间；</li>
+<li>内部调用对应 IO 模型的阻塞函数（比如 epoll 的 <code>epoll_wait</code>、kqueue 的 <code>kevent</code>），阻塞等待事件就绪；</li>
+<li>当有事件就绪或超时后，它会把所有就绪的 IO 事件，通过 <code>event_io_active</code> 加入 <code>event_base</code> 的活跃事件列表；</li>
+<li>最后返回，由上层的 <code>event_process_active</code> 统一执行所有就绪事件的回调。</li>
+</ol>
+</blockquote>
+<h1>十二.时间管理</h1>
+<p><img src="https://gitee.com/WFWFWFWFG/image-bed/raw/master/img/20260301181857099.png" alt="image-20260301181856920"></p>
+<h2 id="时间管理模块">时间管理模块</h2>
+<p>libevent的时间管理分为四个模块</p>
+<table>
+<thead>
+<tr>
+<th>核心模块</th>
+<th>核心目标</th>
+<th>对应 <code>struct event_base</code> 成员</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>时间获取与缓存</td>
+<td>减少 <code>gettimeofday()</code>/<code>clock_gettime()</code> 系统调用次数</td>
+<td><code>tv_cache</code>、<code>tv_clock_diff</code>、<code>last_updated_clock_diff</code></td>
+</tr>
+<tr>
+<td>时间校正</td>
+<td>处理系统时间跳变（比如用户手动把时间从 10:00 改到 9:00）</td>
+<td><code>event_tv</code></td>
+</tr>
+<tr>
+<td>定时器管理</td>
+<td>高效管理所有定时器事件，快速获取最近超时的定时器</td>
+<td><code>timeheap</code>、<code>common_timeout_queues</code></td>
+</tr>
+<tr>
+<td>超时处理</td>
+<td>遍历时间堆，把所有已超时的定时器加入活跃事件列表</td>
+<td><code>timeout_next()</code>、<code>timeout_process()</code></td>
+</tr>
+</tbody>
+</table>
+<h2 id="时间获取与缓存">时间获取与缓存</h2>
+<h3 id="核心痛点">核心痛点</h3>
+<p><code>gettimeofday()</code>/<code>clock_gettime()</code> 是系统调用，频繁调用会有性能开销（虽然单次开销很小，但在高性能网络库中，每秒可能调用成千上万次，积少成多）。</p>
+<p><strong>ibevent 的解决方案：时间缓存 <code>tv_cache</code></strong></p>
+<ul>
+<li>
+<p><strong>核心逻辑</strong>：在一次事件循环迭代中，只调用一次 <code>gettimeofday()</code>，把结果缓存到 <code>event_base.tv_cache</code> 中；后续所有需要获取当前时间的地方，直接读缓存，不调用系统调用。</p>
+</li>
+<li>
+<p><strong>对应 <code>event_base_loop</code> 源码</strong>：</p>
+</li>
+<li>
+<pre><code class="language-c++">gettime(base, &amp;base-&gt;event_tv); // 【1】调用系统调用，获取当前时间，存入 event_tv（用于时间校正）
+clear_time_cache(base); // 【2】清空旧的时间缓存
+
+res = evsel-&gt;dispatch(base, tv_p); // 【3】阻塞等待事件，可能耗时较长
+
+update_time_cache(base); // 【4】dispatch 返回后，更新时间缓存 tv_cache
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">`clear_time_cache()`：在 `dispatch()` 之前清空缓存，因为 `dispatch()` 可能阻塞很久，旧缓存已经失效；</span><br><span class="line"></span><br><span class="line">`update_time_cache()`：在 `dispatch()` 之后更新缓存，后续的 `timeout_process()` 等操作直接读缓存</span><br><span class="line"></span><br><span class="line">### 单调时钟</span><br><span class="line"></span><br><span class="line"> 单调时钟支持（CLOCK_MONOTONIC）</span><br><span class="line"></span><br><span class="line">- **核心痛点**：`gettimeofday()` 获取的是「墙上时间」（Wall Clock Time），用户可以手动修改，会导致时间跳变；</span><br><span class="line">- **libevent 的解决方案**：如果系统支持 `CLOCK_MONOTONIC`（单调递增时钟，不受用户修改时间影响），libevent 会优先使用它；</span><br><span class="line">- 对应 `struct event_base` 成员：</span><br><span class="line">  - `tv_clock_diff`：单调时钟与墙上时间的差值，用于把单调时钟转换为墙上时间；</span><br><span class="line">  - `last_updated_clock_diff`：上次更新差值的时间，避免频繁更新。</span><br><span class="line"></span><br><span class="line">## 时间校正（处理系统时间跳变）</span><br><span class="line"></span><br><span class="line">如果用户手动把系统时间从「10:00」改到「9:00」（时间回退），或者改到「11:00」（时间快进），定时器的绝对超时时间 `ev_timeout` 就会失效，导致定时器提前触发或永远不触发。</span><br><span class="line"></span><br><span class="line">#### libevent 的解决方案：`timeout_correct()`</span><br><span class="line"></span><br><span class="line">核心逻辑：</span><br><span class="line"></span><br><span class="line">1. 每次事件循环迭代开始时，调用 `gettime(base, &amp;base-&gt;event_tv)` 获取当前时间；</span><br><span class="line">2. 对比当前时间和上次保存的 `event_tv`，计算时间差；</span><br><span class="line">3. 如果时间差超过阈值（比如 1 小时），认为发生了时间跳变；</span><br><span class="line">4. 遍历时间堆，把所有定时器的 `ev_timeout` 加上 / 减去时间差，校正绝对超时时间；</span><br><span class="line">5. 重新调整最小堆，保证堆的正确性。</span><br><span class="line"></span><br><span class="line">```c++</span><br><span class="line">timeout_correct(base, &amp;tv); // 时间校正：处理系统时间跳变</span><br></pre></td></tr></table></figure>
+
+</code></pre>
+</li>
+</ul>
+<h2 id="定时器管理（最小堆-公共超时队列）">定时器管理（最小堆 + 公共超时队列）</h2>
+<p><strong>核心数据结构 1：最小堆 <code>timeheap</code></strong></p>
+<ul>
+<li><strong>核心优势</strong>：插入、删除定时器 O (logN)，获取最近超时的定时器 O (1)；</li>
+<li><strong>对应 <code>struct event_base</code> 成员</strong>：<code>struct min_heap timeheap</code>；</li>
+<li>对应核心函数：
+<ul>
+<li><code>timeout_next(base, &amp;tv_p)</code>：取堆顶的绝对超时时间，计算与当前时间的差值，作为 <code>dispatch()</code> 的阻塞参数；</li>
+<li><code>timeout_process(base)</code>：遍历时间堆，把所有 <code>ev_timeout</code> ≤ 当前时间的定时器取出，加入活跃事件列表。</li>
+</ul>
+</li>
+</ul>
+<p>核心数据结构 2：公共超时队列 <code>common_timeout_queues</code></p>
+<p>这是 libevent 的性能优化方案，用于优化<strong>大量相同超时时间的定时器</strong>场景：</p>
+<ul>
+<li><strong>核心痛点</strong>：如果有 10000 个定时器，超时时间都是 1 秒，每个都单独插入最小堆，会有 10000 次 O (logN) 操作，性能开销大；</li>
+<li>libevent 的解决方案：
+<ul>
+<li>把相同超时时间的定时器，放到同一个「公共超时队列」里；</li>
+<li>每个公共超时队列，只在最小堆里插入一个「代表定时器」；</li>
+<li>当「代表定时器」超时时，批量处理这个队列里的所有定时器；</li>
+</ul>
+</li>
+<li>对应 <code>struct event_base</code> 成员：
+<ul>
+<li><code>struct common_timeout_list **common_timeout_queues</code>：公共超时队列数组；</li>
+<li><code>int n_common_timeouts</code>：当前使用的公共超时队列数量；</li>
+<li><code>int n_common_timeouts_allocated</code>：公共超时队列数组的总长度。</li>
+</ul>
+</li>
+</ul>
+<h2 id="超时处理（核心流程）">超时处理（核心流程）</h2>
+<p>就超时的事件放入就绪队列中等待执行回调函数</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 步骤 1：计算 dispatch() 的阻塞超时时间</span></span><br><span class="line">tv_p = &amp;tv;</span><br><span class="line"><span class="keyword">if</span> (!<span class="built_in">N_ACTIVE_CALLBACKS</span>(base) &amp;&amp; !(flags &amp; EVLOOP_NONBLOCK)) &#123;</span><br><span class="line">    <span class="built_in">timeout_next</span>(base, &amp;tv_p); <span class="comment">// 取时间堆堆顶，计算阻塞超时</span></span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="built_in">evutil_timerclear</span>(&amp;tv); <span class="comment">// 有活跃事件或非阻塞，不阻塞</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 步骤 2：调用 dispatch() 阻塞等待</span></span><br><span class="line">res = evsel-&gt;<span class="built_in">dispatch</span>(base, tv_p);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 步骤 3：处理超时定时器</span></span><br><span class="line"><span class="built_in">timeout_process</span>(base); <span class="comment">// 遍历时间堆，把所有已超时的定时器加入活跃事件列表</span></span><br></pre></td></tr></table></figure>
+<h2 id="总结-2">总结</h2>
+<p><strong>时间获取与缓存</strong>：为了减少 <code>gettimeofday()</code> 系统调用次数，libevent 用 <code>tv_cache</code> 缓存当前时间，一次事件循环迭代中只调用一次系统调用，后续直接读缓存；如果系统支持 <code>CLOCK_MONOTONIC</code> 单调时钟，还会优先用它，避免墙上时间跳变的影响。</p>
+<p><strong>时间校正</strong>：用 <code>timeout_correct()</code> 处理系统时间跳变，每次事件循环开始时对比当前时间和上次保存的 <code>event_tv</code>，如果时间差超过阈值，就遍历时间堆校正所有定时器的绝对超时时间，保证定时器不会提前触发或永远不触发。</p>
+<p><strong>定时器管理</strong>：默认用最小堆 <code>timeheap</code> 管理定时器，插入、删除 O (logN)，获取最近超时 O (1)；对于大量相同超时时间的定时器，还提供了公共超时队列 <code>common_timeout_queues</code> 优化性能，把相同超时的定时器放到一个队列，只在堆里插入一个代表定时器，超时后批量处理。</p>
+<p><strong>超时处理</strong>：通过 <code>timeout_next()</code> 取堆顶的最近超时时间作为 <code>dispatch()</code> 的阻塞参数，<code>dispatch()</code> 返回后通过 <code>timeout_process()</code> 遍历堆，把所有已超时的定时器加入活跃事件列表，和 I/O、信号事件统一调度。</p>
+<h1>十三.libevent支持多线程</h1>
+<h2 id="多线程">多线程</h2>
+<p>Libevent 本身不是多线程安全的，在多核的时代，如何能充分利用CPU的能力呢</p>
+<p><strong>事件循环是单线程的</strong>：一个 <code>event_base</code> 同一时间只能在一个线程中运行 <code>event_base_loop()</code>（对应 <code>struct event_base.running_loop</code> 防止重入的标记）；</p>
+<p><strong>提供了完善的线程安全机制</strong>：通过互斥锁、条件变量、socketpair 唤醒机制，支持多线程安全地操作 <code>event_base</code>（如 <code>event_add</code>/<code>event_del</code>）、唤醒事件循环；</p>
+<p><strong>需要用户显式启用</strong>：libevent 默认不启用线程安全（避免单线程场景下的锁开销），需要用户调用 <code>evthread_use_pthreads()</code>（Linux）或 <code>evthread_use_windows_threads()</code>（Windows）显式启用。</p>
+<p>libevent 默认不启用线程安全，需要显式调用 <code>evthread_use_pthreads()</code>（Linux）或 <code>evthread_use_windows_threads()</code>（Windows），<strong>必须在创建 <code>event_base</code> 之前调用</strong>。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;event2/event.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;event2/thread.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;thread&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">worker_thread</span><span class="params">(<span class="keyword">struct</span> event_base* base)</span> </span>&#123;</span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot;Worker thread: running event loop&quot;</span> &lt;&lt; std::endl;</span><br><span class="line">    <span class="built_in">event_base_dispatch</span>(base); <span class="comment">// 子线程运行事件循环</span></span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot;Worker thread: event loop exited&quot;</span> &lt;&lt; std::endl;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 必须在创建 event_base 之前启用线程安全！</span></span><br><span class="line">    <span class="built_in">evthread_use_pthreads</span>();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">struct</span> <span class="title class_">event_base</span>* base = <span class="built_in">event_base_new</span>();</span><br><span class="line">    <span class="keyword">if</span> (!base) &#123;</span><br><span class="line">        std::cerr &lt;&lt; <span class="string">&quot;Failed to create event_base&quot;</span> &lt;&lt; std::endl;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 启动子线程，运行事件循环</span></span><br><span class="line">    <span class="function">std::thread <span class="title">t</span><span class="params">(worker_thread, base)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 主线程可以安全地调用 event_add()/event_del()/event_base_loopbreak()</span></span><br><span class="line">    <span class="comment">// ... 这里可以添加你的业务逻辑 ...</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 等待子线程退出</span></span><br><span class="line">    t.<span class="built_in">join</span>();</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 清理</span></span><br><span class="line">    <span class="built_in">event_base_free</span>(base);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>一个 <code>event_base</code> 一个线程</strong>：这是最推荐的模式，每个线程运行一个独立的 <code>event_base</code>，线程之间通过 socketpair 或管道通信，避免锁竞争，性能最好；</p>
+<p><strong>不要多个线程同时运行同一个 <code>event_base</code> 的 <code>event_base_loop()</code></strong>：libevent 用 <code>running_loop</code> 标记防止重入，多个线程同时运行会直接报错；</p>
+<p><strong>多线程操作同一个 <code>event_base</code> 时，必须启用线程安全</strong>：否则会出现竞态条件，导致程序崩溃；</p>
+<p><strong>耗时操作不要放在事件回调中</strong>：事件回调是在 <code>event_base_loop()</code> 线程中执行的，如果回调耗时太长，会阻塞整个事件循环，影响其他事件的处理；耗时操作应该放到线程池里执行，执行完后通过 <code>event_add()</code> 唤醒事件循环。</p>
+<p><strong>总结</strong></p>
+<blockquote>
+<p>libevent 的事件循环本身是单线程的，但它提供了完善的线程安全机制，完全支持在多线程环境下安全使用：</p>
+<ol>
+<li><strong>核心结论</strong>：一个 <code>event_base</code> 同一时间只能在一个线程中运行 <code>event_base_loop()</code>，但可以在其他线程中安全地调用 <code>event_add()</code>/<code>event_del()</code>/<code>event_base_loopbreak()</code> 等函数。</li>
+<li>线程安全机制：
+<ul>
+<li>互斥锁 <code>th_base_lock</code>：保护 <code>event_base</code> 的核心数据结构，避免竞态条件；</li>
+<li>条件变量 <code>current_event_cond</code>：等待当前事件回调执行完成，避免释放时崩溃；</li>
+<li>socketpair 唤醒机制 <code>th_notify_fd</code>：跨线程唤醒阻塞的事件循环，和信号事件的处理机制一致。</li>
+</ul>
+</li>
+<li><strong>启用方式</strong>：libevent 默认不启用线程安全（避免单线程锁开销），需要在创建 <code>event_base</code> 之前显式调用 <code>evthread_use_pthreads()</code>（Linux）或 <code>evthread_use_windows_threads()</code>（Windows）。</li>
+<li><strong>最佳实践</strong>：推荐一个线程一个 <code>event_base</code>，线程之间通过 socketpair 通信，避免锁竞争；耗时操作不要放在事件回调中，应该放到线程池里执行。</li>
+</ol>
+</blockquote>
+<h2 id="与线程池结合">与线程池结合</h2>
+<p><strong>耗时计算任务放线程池，IO 操作必须回事件循环线程</strong></p>
+<p><strong>为什么需要线程池</strong>：libevent 的就绪事件回调默认在<strong>事件循环线程</strong>中执行，如果回调里有耗时操作（比如复杂计算、磁盘 IO、数据库查询），会<strong>阻塞整个事件循环</strong>，导致其他就绪事件无法及时处理，性能急剧下降；</p>
+<p><strong>可以用线程池处理什么</strong>：<strong>耗时的纯计算任务、非 libevent 的阻塞操作</strong>（比如磁盘 IO、数据库查询）；</p>
+<p><strong>绝对不能用线程池处理什么</strong>：<strong>libevent 的 IO 操作</strong>（比如<code>bufferevent_write</code>/<code>bufferevent_read</code>）—— 这些操作必须在事件循环线程中执行，否则会出现竞态条件；</p>
+<p><strong>线程池处理完后怎么通知事件循环</strong>：通过<strong>线程安全的<code>event_add()</code></strong> 或 <strong>socketpair 唤醒机制</strong>，把 “任务完成” 的消息传回事件循环线程，在事件循环线程中处理后续的 IO 操作。</p>
+<h3 id="具体流程"><strong>具体流程</strong></h3>
+<p><strong>初始化阶段</strong>：</p>
+<ul>
+<li>启用 libevent 线程安全（<code>evthread_use_pthreads()</code>）；</li>
+<li>创建<code>event_base</code>；</li>
+<li>创建一对<code>socketpair</code>（或使用 libevent 内置的<code>th_notify_fd</code>，但推荐自己创建，更灵活）；</li>
+<li>将<code>socketpair[0]</code>（读端）注册到<code>event_base</code>，监听可读事件；</li>
+<li>初始化线程池（比如用 C++11 的<code>std::thread</code> + 任务队列，或成熟的线程池库）。</li>
+</ul>
+<p><strong>就绪事件回调阶段</strong>（事件循环线程）：</p>
+<ul>
+<li>收到就绪事件（比如 socket 有数据可读）；</li>
+<li>读取数据，把 “数据 + 后续处理逻辑” 封装成一个任务；</li>
+<li>把任务丢到线程池的任务队列；</li>
+<li><strong>立刻返回</strong>，不阻塞事件循环。</li>
+</ul>
+<p><strong>线程池处理阶段</strong>（线程池线程）：</p>
+<ul>
+<li>从任务队列取任务；</li>
+<li>执行耗时操作（比如复杂计算、数据库查询）；</li>
+<li>处理完成后，向<code>socketpair[1]</code>（写端）写入 1 字节的 “完成标记”（或直接调用<code>event_add()</code>添加一个新事件，<code>event_add()</code>是线程安全的）。</li>
+</ul>
+<p><strong>任务完成通知阶段</strong>（事件循环线程）：</p>
+<ul>
+<li><code>socketpair[0]</code>可读，触发回调；</li>
+<li>从回调中获取线程池的处理结果；</li>
+<li>在事件循环线程中执行后续的 IO 操作（比如<code>bufferevent_write()</code>把结果写回客户端）。</li>
+</ul>
+<h3 id="注意点">注意点</h3>
+<p><strong>必须启用 libevent 线程安全</strong>：在创建<code>event_base</code>之前调用<code>evthread_use_pthreads()</code>（Linux），否则多线程调用<code>event_add()</code>会崩溃；</p>
+<p><strong>IO 操作必须回事件循环线程</strong>：<code>bufferevent_write()</code>/<code>bufferevent_read()</code>/<code>event_add()</code>（除了这个是线程安全的）等 libevent IO 操作，<strong>绝对不能在线程池线程中直接调用</strong>—— 必须通过 socketpair 或<code>event_add()</code>把消息传回事件循环线程，在事件循环线程中执行；</p>
+<p><strong><code>event_add()</code>是线程安全的</strong>：这是 libevent 少数几个可以在其他线程中直接调用的函数之一，线程池处理完任务后，可以直接在池线程中调用<code>event_add()</code>添加一个新的 “任务完成事件”，唤醒事件循环；</p>
+<p><strong>注意数据的线程安全</strong>：线程池和事件循环线程之间传递的数据，必须保证线程安全（比如用<code>std::shared_ptr</code>管理，或用无锁队列传递）。</p>
+<h3 id="总结-3">总结</h3>
+<p>核心原则是「<strong>耗时计算放线程池，IO 操作回事件循环</strong>」：</p>
+<ol>
+<li><strong>为什么需要线程池</strong>：libevent 的就绪事件回调默认在事件循环线程执行，如果回调有耗时操作（比如复杂计算、数据库查询），会阻塞整个事件循环，导致其他事件无法及时处理。</li>
+<li>具体实现方案：
+<ul>
+<li>初始化时启用 libevent 线程安全，创建 socketpair，把读端注册到 event_base；</li>
+<li>就绪事件回调中，把数据和耗时逻辑封装成任务，丢到线程池，立刻返回；</li>
+<li>线程池处理完任务后，向 socketpair 写端写入数据，或直接调用线程安全的<code>event_add()</code>，唤醒事件循环；</li>
+<li>socketpair 读端的回调中，在事件循环线程里执行后续的 IO 操作（比如<code>bufferevent_write</code>）。</li>
+</ul>
+</li>
+<li>核心注意事项：
+<ul>
+<li>必须在创建 event_base 之前启用线程安全；</li>
+<li>libevent 的 IO 操作（除了<code>event_add</code>）绝对不能在线程池线程中直接调用，必须回事件循环线程；</li>
+<li>注意线程间数据传递的线程安全。</li>
+</ul>
+</li>
+<li><strong>最佳实践</strong>：推荐一个线程一个 event_base，线程池处理纯计算任务，IO 操作全在事件循环线程，通过 socketpair 或<code>event_add</code>通信，性能最好。</li>
+</ol>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="http://example.com">WF</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="http://example.com/2025/08/16/libevent/">http://example.com/2025/08/16/libevent/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="http://example.com" target="_blank">WF的知识空间</a>！</span></div></div><div class="tag_share"><div class="post-share"><div class="social-share" data-image="/img/WF.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2025/08/16/%E7%AE%97%E6%B3%95/" title="数据结构与算法"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">数据结构与算法</div></div><div class="info-2"><div class="info-item-1">数据结构：让数据可以以一种手段或者一种规则组成起来的集合	方便管理和应用 集合结构：将一堆元素集合起来	数组 顺序结构：①唯一的头	②唯一的尾	③除了首节点，都有直接前驱节点	④除了尾节点，都有直接后继节点 树形结构： 图形结构： 对于算法来说：一般用最差情况下的时间复杂度O(n) 稳定性判断的方法：看起排序是否存在跳跃交换 一.线性表（顺序表+链表） 线性表概念：有且仅有一个开始节点和结束节点，并且除了开始（结束）节点之外，剩余所有节点都有前驱（后继）。 ①唯一的头	②唯一的尾	③除了首节点，都有直接前驱节点	④除了尾节点，都有直接尾驱节点 顺序表：物理地址连续的线性结构（数组 != 顺序表）	（物理连续） 线性表： 物理地址不连续，但通过保存下一个节点的地址，可以访问，形成了一个逻辑上面的连续，又符合线性结构的特征 （逻辑连续） 一个最基础的顺序表由 ① arr顺序表保存数据的空间主体 ② size记录顺序表中的元素的个数，为了更好的管理元素 ③ capacity记录顺序表中最大容量 123int arr[10];//保存数据的空间int size;//统计顺序表中的个数in...</div></div></div></a><a class="pagination-related" href="/2025/07/27/linux-%E7%B3%BB%E7%BB%9F/" title="linux 系统"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">linux 系统</div></div><div class="info-2"><div class="info-item-1">1.Linux系统基础文件 倒状的树 1./bin:基础用户命令目录(二进制可执行文件)存放普通用户以及管理员可执行的基本命令. 2./sbin:系统管理命令(超级用户二进制文件) 仅存放root用户的可执行命令 3./usr:用户共享资源 是系统中最大的目录之一，相当于windows中C盘中的&quot;C:\Program Files (x86) 4/etc:系统配置文件 存放的是系统和应用程序的配置文件,包含网络配置，用户配置，服务配置，系统启动 'etc/network 网络配置 5./dev 设备文件目录 块设备(读写，硬盘)，字符设备(键盘鼠标)，虚拟设备: 6.proc:进程与系统信息文件目录 存放虚拟目录，不占用磁盘空间，反映内核，进程，硬件的状态: 7.home 家目录 存放普通用户下的所有文件信息 '8./root 超级用户目录 ，存放超级用户下的所有文件信息 '9./boot系统启动相关文件 启动Lin脑ux系统必备文件 :10./lib /lib64 共享库文件 /lib存放共享库 /lib/libc.so,6C标准库 /linb64 64位系统库 '11...</div></div></div></a></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/WF.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">WF</div><div class="author-info-description"></div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">5</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">0</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/WF-git-code"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="//github.com/WF-git-code" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="/18628492787@163.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">一.I&#x2F;O框架</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%88%E7%AE%80%E5%8D%95%E4%BB%8B%E7%BB%8DProactor%E4%B8%8EReactor%E6%A8%A1%E5%BC%8F"><span class="toc-number">1.1.</span> <span class="toc-text">先简单介绍Proactor与Reactor模式</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Proactor%E6%A8%A1%E5%BC%8F%EF%BC%88%E4%B8%BB%E5%8A%A8%E5%99%A8%E6%A8%A1%E5%9E%8B%EF%BC%89"><span class="toc-number">1.1.0.1.</span> <span class="toc-text">Proactor模式（主动器模型）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Reactor%E6%A8%A1%E5%BC%8F%EF%BC%88%E5%8F%8D%E5%BA%94%E5%A0%86%E6%A8%A1%E5%9E%8B%EF%BC%89"><span class="toc-number">1.1.0.2.</span> <span class="toc-text">Reactor模式（反应堆模型）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%A0%B8%E5%BF%83%E5%8C%BA%E5%88%AB"><span class="toc-number">1.1.0.3.</span> <span class="toc-text">核心区别</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Libevent%E5%9C%A8windows%E5%92%8Clinux%E4%B8%8B%E7%9A%84%E5%B7%AE%E5%BC%82"><span class="toc-number">1.1.1.</span> <span class="toc-text">Libevent在windows和linux下的差异</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#windows"><span class="toc-number">1.1.1.1.</span> <span class="toc-text">windows</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#linux"><span class="toc-number">1.1.1.2.</span> <span class="toc-text">linux</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#macos"><span class="toc-number">1.1.1.3.</span> <span class="toc-text">macos</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-number">1.1.1.4.</span> <span class="toc-text">总结</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Reactor%E6%A8%A1%E5%BC%8F"><span class="toc-number">1.2.</span> <span class="toc-text">Reactor模式</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%8B%E4%BB%B6%E6%BA%90%EF%BC%88%E5%8F%A5%E6%9F%84%EF%BC%89"><span class="toc-number">1.2.1.</span> <span class="toc-text">事件源（句柄）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%8B%E4%BB%B6%E5%A4%9A%E8%B7%AF%E5%88%86%E5%8F%91%E5%99%A8"><span class="toc-number">1.2.2.</span> <span class="toc-text">事件多路分发器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%8B%E4%BB%B6%E5%A4%84%E7%90%86%E5%99%A8%E5%92%8C%E5%85%B7%E4%BD%93%E4%BA%8B%E4%BB%B6%E5%A4%84%E7%90%86%E5%99%A8"><span class="toc-number">1.2.3.</span> <span class="toc-text">事件处理器和具体事件处理器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Reactor"><span class="toc-number">1.2.4.</span> <span class="toc-text">Reactor</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Rector%E6%A8%A1%E5%BC%8F%E7%9A%84%E4%BC%98%E7%82%B9"><span class="toc-number">1.3.</span> <span class="toc-text">Rector模式的优点</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#I-O%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8"><span class="toc-number">1.4.</span> <span class="toc-text">I&#x2F;O多路复用</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#kueue%EF%BC%88%E4%BA%86%E8%A7%A3%EF%BC%89"><span class="toc-number">1.4.1.</span> <span class="toc-text">kueue（了解）</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">2.</span> <span class="toc-text">二.一个简单的事件循环</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%9A%E6%97%B6%E5%99%A8%E4%BA%8B%E4%BB%B6%E6%B5%81%E7%A8%8B%E7%A4%BA%E4%BE%8B"><span class="toc-number">2.1.</span> <span class="toc-text">定时器事件流程示例</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E7%A6%81%E7%94%A8%E6%A0%88%E4%B8%8Aevent"><span class="toc-number">2.2.</span> <span class="toc-text">为什么要禁用栈上event?</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%85%8D%E7%BD%AE%E4%BA%8B%E4%BB%B6%E5%BE%AA%E7%8E%AF"><span class="toc-number">2.3.</span> <span class="toc-text">配置事件循环</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%94%AF%E6%8C%81%E7%9A%84%E4%BA%8B%E4%BB%B6%E7%B1%BB%E5%9E%8B"><span class="toc-number">2.4.</span> <span class="toc-text">支持的事件类型</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8B%E4%BB%B6%E5%A4%84%E7%90%86%E6%B5%81%E7%A8%8B"><span class="toc-number">2.5.</span> <span class="toc-text">事件处理流程</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">3.</span> <span class="toc-text">三.核心API</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8B%E4%BB%B6%E5%BE%AA%E7%8E%AF%E6%A0%B8%E5%BF%83API"><span class="toc-number">3.1.</span> <span class="toc-text">事件循环核心API</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8B%E4%BB%B6%E6%93%8D%E4%BD%9C%E6%A0%B8%E5%BF%83API"><span class="toc-number">3.2.</span> <span class="toc-text">事件操作核心API</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#bufferevent%E6%A0%B8%E5%BF%83API"><span class="toc-number">3.3.</span> <span class="toc-text">bufferevent核心API</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">4.</span> <span class="toc-text">四.为什么需要缓冲事件（bufferevent）？</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#bufferevent"><span class="toc-number">4.1.</span> <span class="toc-text">bufferevent</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#bufferevent%E6%A0%B8%E5%BF%83%E7%BB%93%E6%9E%84"><span class="toc-number">4.2.</span> <span class="toc-text">bufferevent核心结构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#bufferevent%E7%9A%84%E6%A0%B8%E5%BF%83%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B"><span class="toc-number">4.3.</span> <span class="toc-text">bufferevent的核心工作流程</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A0%B8%E5%BF%83API"><span class="toc-number">4.3.1.</span> <span class="toc-text">核心API</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A0%B8%E5%BF%83%E9%97%AE%E9%A2%98%EF%BC%9A"><span class="toc-number">4.4.</span> <span class="toc-text">核心问题：</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#bufferevent%E5%92%8Cevent%E7%9A%84%E5%8C%BA%E5%88%AB%EF%BC%9F"><span class="toc-number">4.4.1.</span> <span class="toc-text">bufferevent和event的区别？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#bufferevent-%E5%A6%82%E4%BD%95%E5%A4%84%E7%90%86%E7%B2%98%E5%8C%85%EF%BC%9F"><span class="toc-number">4.4.2.</span> <span class="toc-text">bufferevent 如何处理粘包？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#bufferevent-%E7%9A%84%E8%BE%93%E5%87%BA%E7%BC%93%E5%86%B2%E5%8C%BA%E6%BB%A1%E4%BA%86%E6%80%8E%E4%B9%88%E5%8A%9E%EF%BC%9F"><span class="toc-number">4.4.3.</span> <span class="toc-text">bufferevent 的输出缓冲区满了怎么办？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BE%93%E5%87%BA-%E8%BE%93%E5%85%A5%E7%BC%93%E5%86%B2%E5%8C%BA%E6%BB%A1%E4%BA%86bufferevent%E5%88%B0%E5%BA%95%E5%81%9A%E4%BA%86%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="toc-number">4.4.4.</span> <span class="toc-text">输出&#x2F;输入缓冲区满了bufferevent到底做了什么？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#bufferevent%E6%80%8E%E4%B9%88%E7%9B%91%E5%90%ACsocket%E7%9A%84%E8%AF%BB%E4%BA%8B%E4%BB%B6%EF%BC%9F"><span class="toc-number">4.4.5.</span> <span class="toc-text">bufferevent怎么监听socket的读事件？</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">5.</span> <span class="toc-text">五.源码组织结构</span></a></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">6.</span> <span class="toc-text">六.event结构体</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#event%E7%BB%93%E6%9E%84%E4%BD%93%E5%A3%B0%E6%98%8E"><span class="toc-number">6.1.</span> <span class="toc-text">event结构体声明</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#libevent%E5%AF%B9event%E7%9A%84%E7%AE%A1%E7%90%86"><span class="toc-number">6.2.</span> <span class="toc-text">libevent对event的管理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8B%E4%BB%B6%E8%AE%BE%E7%BD%AE%E6%8E%A5%E5%8F%A3%E5%87%BD%E6%95%B0"><span class="toc-number">6.3.</span> <span class="toc-text">事件设置接口函数</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">7.</span> <span class="toc-text">七.事件处理框架</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AAevent-base%E5%AE%9E%E4%BE%8B"><span class="toc-number">7.1.</span> <span class="toc-text">创建一个event_base实例</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AE%A1%E7%90%86%E4%BA%8B%E4%BB%B6%E6%B7%BB%E5%8A%A0%EF%BC%88event-add%EF%BC%89"><span class="toc-number">7.2.</span> <span class="toc-text">管理事件添加（event_add）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AE%A1%E7%90%86%E4%BA%8B%E4%BB%B6%E5%88%A0%E9%99%A4%EF%BC%88event-del%EF%BC%89"><span class="toc-number">7.3.</span> <span class="toc-text">管理事件删除（event_del）</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">8.</span> <span class="toc-text">八.事件处理主循环</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#event-base-loop"><span class="toc-number">8.1.</span> <span class="toc-text">event_base_loop()</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#I-O%E5%92%8CTimer-Signal%E4%BA%8B%E4%BB%B6%E7%9A%84%E7%BB%9F%E4%B8%80"><span class="toc-number">8.2.</span> <span class="toc-text">I&#x2F;O和Timer  Signal事件的统一</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">9.</span> <span class="toc-text">九.信号处理</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#socket-pair"><span class="toc-number">9.1.</span> <span class="toc-text">socket pair</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%9B%86%E6%88%90%E5%88%B0event-base"><span class="toc-number">9.2.</span> <span class="toc-text">集成到event_base</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#signal%E4%BA%8B%E4%BB%B6%E7%9A%84%E7%AE%A1%E7%90%86"><span class="toc-number">9.3.</span> <span class="toc-text">signal事件的管理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%8C%E6%95%B4%E7%9A%84%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E6%B5%81%E7%A8%8B"><span class="toc-number">9.4.</span> <span class="toc-text">完整的信号处理流程</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">10.</span> <span class="toc-text">十.集成定时器事件</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%9B%86%E6%88%90%E5%88%B0%E4%B8%BB%E5%BE%AA%E7%8E%AF"><span class="toc-number">10.1.</span> <span class="toc-text">集成到主循环</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Timer%E5%B0%8F%E6%A0%B9%E5%A0%86"><span class="toc-number">10.2.</span> <span class="toc-text">Timer小根堆</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E4%B8%8D%E7%94%A8%E6%97%B6%E9%97%B4%E8%BD%AE%EF%BC%9F"><span class="toc-number">10.3.</span> <span class="toc-text">为什么不用时间轮？</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E6%97%B6%E9%97%B4%E8%BD%AE"><span class="toc-number">10.3.1.</span> <span class="toc-text">什么是时间轮</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%97%B6%E9%97%B4%E8%BD%AE%E5%88%86%E7%B1%BB"><span class="toc-number">10.3.2.</span> <span class="toc-text">时间轮分类</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9C%80%E5%B0%8F%E5%A0%86VS%E6%97%B6%E9%97%B4%E8%BD%AE"><span class="toc-number">10.3.3.</span> <span class="toc-text">最小堆VS时间轮</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88-libevent-%E9%BB%98%E8%AE%A4%E7%94%A8%E6%9C%80%E5%B0%8F%E5%A0%86%EF%BC%8C%E8%80%8C%E4%B8%8D%E7%94%A8%E6%97%B6%E9%97%B4%E8%BD%AE%EF%BC%9F"><span class="toc-number">10.3.4.</span> <span class="toc-text">为什么 libevent 默认用最小堆，而不用时间轮？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BB%93%E8%AE%BA"><span class="toc-number">10.3.5.</span> <span class="toc-text">结论</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">11.</span> <span class="toc-text">十一.支持I&#x2F;O多路复用</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#I-O%E7%BB%9F%E4%B8%80%E7%9A%84%E5%85%B3%E9%94%AE"><span class="toc-number">11.1.</span> <span class="toc-text">I&#x2F;O统一的关键</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#libevent-%E6%98%AF%E6%80%8E%E4%B9%88%E5%AE%9E%E7%8E%B0%E8%B7%A8%E5%B9%B3%E5%8F%B0%E7%9A%84%EF%BC%9F"><span class="toc-number">11.2.</span> <span class="toc-text">libevent 是怎么实现跨平台的？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#event-base-loop-%E4%B8%AD-evsel-dispatch-%E5%81%9A%E4%BA%86%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="toc-number">11.3.</span> <span class="toc-text">event_base_loop 中 evsel-&gt;dispatch 做了什么？</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">12.</span> <span class="toc-text">十二.时间管理</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%97%B6%E9%97%B4%E7%AE%A1%E7%90%86%E6%A8%A1%E5%9D%97"><span class="toc-number">12.1.</span> <span class="toc-text">时间管理模块</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%97%B6%E9%97%B4%E8%8E%B7%E5%8F%96%E4%B8%8E%E7%BC%93%E5%AD%98"><span class="toc-number">12.2.</span> <span class="toc-text">时间获取与缓存</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A0%B8%E5%BF%83%E7%97%9B%E7%82%B9"><span class="toc-number">12.2.1.</span> <span class="toc-text">核心痛点</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%9A%E6%97%B6%E5%99%A8%E7%AE%A1%E7%90%86%EF%BC%88%E6%9C%80%E5%B0%8F%E5%A0%86-%E5%85%AC%E5%85%B1%E8%B6%85%E6%97%B6%E9%98%9F%E5%88%97%EF%BC%89"><span class="toc-number">12.3.</span> <span class="toc-text">定时器管理（最小堆 + 公共超时队列）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%B6%85%E6%97%B6%E5%A4%84%E7%90%86%EF%BC%88%E6%A0%B8%E5%BF%83%E6%B5%81%E7%A8%8B%EF%BC%89"><span class="toc-number">12.4.</span> <span class="toc-text">超时处理（核心流程）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%BB%E7%BB%93-2"><span class="toc-number">12.5.</span> <span class="toc-text">总结</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">13.</span> <span class="toc-text">十三.libevent支持多线程</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A4%9A%E7%BA%BF%E7%A8%8B"><span class="toc-number">13.1.</span> <span class="toc-text">多线程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%8E%E7%BA%BF%E7%A8%8B%E6%B1%A0%E7%BB%93%E5%90%88"><span class="toc-number">13.2.</span> <span class="toc-text">与线程池结合</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%B7%E4%BD%93%E6%B5%81%E7%A8%8B"><span class="toc-number">13.2.1.</span> <span class="toc-text">具体流程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B3%A8%E6%84%8F%E7%82%B9"><span class="toc-number">13.2.2.</span> <span class="toc-text">注意点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%80%BB%E7%BB%93-3"><span class="toc-number">13.2.3.</span> <span class="toc-text">总结</span></a></li></ol></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/12/14/c++/" title="C++">C++</a><time datetime="2025-12-14T00:52:50.000Z" title="发表于 2025-12-14 08:52:50">2025-12-14</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/08/16/%E7%AE%97%E6%B3%95/" title="数据结构与算法">数据结构与算法</a><time datetime="2025-08-16T00:03:03.000Z" title="发表于 2025-08-16 08:03:03">2025-08-16</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/08/16/libevent/" title="Libevent源码剖析">Libevent源码剖析</a><time datetime="2025-08-16T00:02:00.000Z" title="发表于 2025-08-16 08:02:00">2025-08-16</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/07/27/%E2%80%98c%E8%AF%AD%E8%A8%80%E6%8C%87%E9%92%88%E2%80%99/" title="C语言">C语言</a><time datetime="2025-07-27T00:52:57.000Z" title="发表于 2025-07-27 08:52:57">2025-07-27</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/07/27/linux-%E7%B3%BB%E7%BB%9F/" title="linux 系统">linux 系统</a><time datetime="2025-07-27T00:52:57.000Z" title="发表于 2025-07-27 08:52:57">2025-07-27</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2025 - 2026 By WF</span><span class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.3.0</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.4.2</a></span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
