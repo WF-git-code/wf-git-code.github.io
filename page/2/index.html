@@ -1,0 +1,234 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>WF的知识空间</title><meta name="author" content="WF"><meta name="copyright" content="WF"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta property="og:type" content="website">
+<meta property="og:title" content="WF的知识空间">
+<meta property="og:url" content="http://example.com/page/2/index.html">
+<meta property="og:site_name" content="WF的知识空间">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/img/WF.png">
+<meta property="article:author" content="WF">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/img/WF.png"><script type="application/ld+json"></script><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://example.com/page/2/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":true},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'WF的知识空间',
+  isHighlightShrink: false,
+  isToc: false,
+  pageType: 'home'
+}</script><meta name="generator" content="Hexo 7.3.0"></head><body><div class="page" id="body-wrap"><header class="full_page" id="page-header" style="background-image: url(/img/index-bg.jpg);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">WF的知识空间</span></a></span><div id="menus"></div></nav><div id="site-info"><h1 id="site-title">WF的知识空间</h1><div id="site-subtitle"><span id="subtitle"></span></div><div id="site_social_icons"><a class="social-icon" href="//github.com/WF-git-code" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="/18628492787@163.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div id="scroll-down"><i class="fas fa-angle-down scroll-down-effects"></i></div></header><main class="layout" id="content-inner"><div class="recent-posts nc" id="recent-posts"><div class="recent-post-items"><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2025/07/27/%E7%A8%8B%E5%BA%8F%E8%BF%90%E8%A1%8C%E6%97%B6%E9%94%99%E8%AF%AF/" title="程序常见错误及处理">程序常见错误及处理</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2025-07-27T00:52:57.000Z" title="发表于 2025-07-27 08:52:57">2025-07-27</time></span></div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2025/07/27/%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86/" title="Linux进程管理">Linux进程管理</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2025-07-27T00:52:57.000Z" title="发表于 2025-07-27 08:52:57">2025-07-27</time></span></div><div class="content">进程与线程 windiows Windows 采用了严格的双轨制设计，进程和线程是两个完全不同的内核对象，有各自独立的内核数据结构： Windows 进程（EPROCESS 结构）  唯一身份：进程是资源分配的基本单位，拥有独立的虚拟地址空间 核心资源：  独立的页表和虚拟地址空间 独立的句柄表（管理文件、套接字、互斥量等内核对象） 独立的访问令牌（安全上下文） 独立的 PEB（进程环境块，用户态数据结构） 一个或多个线程   调度属性：进程本身不能被调度，它只是线程的容器  Windows 线程（ETHREAD 结构）  唯一身份：线程是CPU 调度的基本单位，必须依附于某个进程存在 私有资源：  独立的内核栈和用户栈 独立的寄存器上下文（程序计数器、栈指针等） 独立的 TLS（线程本地存储） 独立的 TEB（线程环境块，用户态数据结构） 线程优先级、调度状态等调度属性   共享资源：同一进程内的所有线程共享进程的所有资源  Windows 模型的特点  概念清晰：进程和线程的职责划分明确，符合大多数人的直觉 实现复杂：内核需要维护两套完全不同的对象体系和管理机制 调度开销大：...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2025/07/27/Redis/" title="Redis">Redis</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2025-07-27T00:52:57.000Z" title="发表于 2025-07-27 08:52:57">2025-07-27</time></span></div><div class="content">Redis常见数据结构 Redis是基于内存的Key-Value数据库，key通常是字符串，value类型非常丰富，可以是一下几种主要类型： 字符串（string）哈希表（Hash）列表（List) 集合（Set）有序集合（Sorted Set）位图（BitMap）HyperLogLog   地理空间索引 Redis通用命令 通用命令是不分数据类型的，都可以使用的指令 通过 1help 命令  可以查看一个命令具体用法 KEYS 1KEYS  key 查看符合模板的所有key,这个命令会扫描全表，效率并不高 DEL 1DEL key 删除一个或者多个key，返回数字则为删除的个数 EXISTS 1EXISTS key 判断key是否存在，返回1表示存在 EXPIRE 1EXPIRE key   设置key的过期时间，返回1代表设置成功 TTL 1TTL key 获取key的剩余过期时间 String命令 SET 设置一个键值对，如果键已存在则覆盖其值 1set key “value” GET 获取该键对应的值 1GET key MSET 1MSET key value key v...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2025/07/27/Mysql/" title="MySql">MySql</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2025-07-27T00:52:57.000Z" title="发表于 2025-07-27 08:52:57">2025-07-27</time></span></div><div class="content">SQL语句 一、基础 CRUD 1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950-- 基础查询SELECT id, name, age FROM user WHERE age &gt; 18 ORDER BY create_time DESC LIMIT 10;-- 去重查询SELECT DISTINCT age FROM user;-- 聚合查询SELECT   COUNT(*) AS total,   AVG(age) AS avg_age,   MAX(age) AS max_age FROM user;-- 分组查询SELECT age, COUNT(*) AS count FROM user WHERE age &gt; 18 GROUP BY age HAVING count &gt; 5;-- 插入单行INSERT INTO user(name, age, phone) VALUES(&#x27;张三&#x27;, 20, &#x27...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2025/07/27/%E2%80%98c%E8%AF%AD%E8%A8%80%E6%8C%87%E9%92%88%E2%80%99/" title="C语言">C语言</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2025-07-27T00:52:57.000Z" title="发表于 2025-07-27 08:52:57">2025-07-27</time></span></div><div class="content">1.什么是指针 描述:由来+描述 1TB=1024GB 1GB=1024MB 1MB=1024KB 1KB=1024Byte 1Byte=8bit  每一个Bit物理原件可以保存0或1 指针也就是内存地址，指针变量是用来存放地址的**变量,**必须在使用之前对其声明。 指针大小只与平台有关32位（x86系统）只有4B，64位（x64系统）8B,指针大小与指针类型，指针级数无关 为什么？ 在计算机内部存在32根地址线供计算机给每个字节（内存中的最小单元）都分配了地址和编号 每一根电线	正电荷1	负电荷0(不固定)					  十六进制（0X）    8bit的空间 第一块字节编号	00000000 00000000 00000000 00000000	0X 00 00 00 00	00000000 第二块字节编号	00000000 00000000 00000000 00000001	0X 00 00 00 01	00000001 第三块字节编号	00000000 00000000 00000000 00000010	0X 00 00 00 02	00000010 第四块字节编号	...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2025/07/27/linux-%E7%B3%BB%E7%BB%9F/" title="linux 系统">linux 系统</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2025-07-27T00:52:57.000Z" title="发表于 2025-07-27 08:52:57">2025-07-27</time></span></div><div class="content">1.Linux系统基础文件 倒状的树 1./bin:基础用户命令目录(二进制可执行文件)存放普通用户以及管理员可执行的基本命令. 2./sbin:系统管理命令(超级用户二进制文件) 仅存放root用户的可执行命令 3./usr:用户共享资源 是系统中最大的目录之一，相当于windows中C盘中的&quot;C:\Program Files (x86) 4/etc:系统配置文件 存放的是系统和应用程序的配置文件,包含网络配置，用户配置，服务配置，系统启动 'etc/network 网络配置 5./dev 设备文件目录 块设备(读写，硬盘)，字符设备(键盘鼠标)，虚拟设备: 6.proc:进程与系统信息文件目录 存放虚拟目录，不占用磁盘空间，反映内核，进程，硬件的状态: 7.home 家目录 存放普通用户下的所有文件信息 '8./root 超级用户目录 ，存放超级用户下的所有文件信息 '9./boot系统启动相关文件 启动Lin脑ux系统必备文件 :10./lib /lib64 共享库文件 /lib存放共享库 /lib/libc.so,6C标准库 /linb64 64位系统库 '11...</div></div></div></div><nav id="pagination"><div class="pagination"><a class="extend prev" rel="prev" href="/"><i class="fas fa-chevron-left fa-fw"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/WF.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">WF</div><div class="author-info-description"></div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">16</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">0</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/WF-git-code"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="//github.com/WF-git-code" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="/18628492787@163.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/06/05/mudu%E5%BA%93/" title="无标题">无标题</a><time datetime="2026-06-05T09:26:51.701Z" title="发表于 2026-06-05 17:26:51">2026-06-05</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/06/04/%E5%88%86%E5%B8%83%E5%BC%8F/" title="无标题">无标题</a><time datetime="2026-06-04T08:48:33.901Z" title="发表于 2026-06-04 16:48:33">2026-06-04</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/06/04/%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/" title="无标题">无标题</a><time datetime="2026-06-04T08:48:33.901Z" title="发表于 2026-06-04 16:48:33">2026-06-04</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/12/14/c++/" title="C++">C++</a><time datetime="2025-12-14T00:52:50.000Z" title="发表于 2025-12-14 08:52:50">2025-12-14</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/08/16/%E7%AE%97%E6%B3%95/" title="数据结构与算法">数据结构与算法</a><time datetime="2025-08-16T00:03:03.000Z" title="发表于 2025-08-16 08:03:03">2025-08-16</time></div></div></div></div><div class="card-widget card-archives">
+    <div class="item-headline">
+      <i class="fas fa-archive"></i>
+      <span>归档</span>
+      
+    </div>
+  
+    <ul class="card-archive-list">
+      
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2026/06/">
+            <span class="card-archive-list-date">
+              六月 2026
+            </span>
+            <span class="card-archive-list-count">3</span>
+          </a>
+        </li>
+      
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2025/12/">
+            <span class="card-archive-list-date">
+              十二月 2025
+            </span>
+            <span class="card-archive-list-count">1</span>
+          </a>
+        </li>
+      
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2025/08/">
+            <span class="card-archive-list-date">
+              八月 2025
+            </span>
+            <span class="card-archive-list-count">2</span>
+          </a>
+        </li>
+      
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2025/07/">
+            <span class="card-archive-list-date">
+              七月 2025
+            </span>
+            <span class="card-archive-list-count">10</span>
+          </a>
+        </li>
+      
+    </ul>
+  </div><div class="card-widget card-webinfo"><div class="item-headline"><i class="fas fa-chart-line"></i><span>网站信息</span></div><div class="webinfo"><div class="webinfo-item"><div class="item-name">文章数目 :</div><div class="item-count">16</div></div><div class="webinfo-item"><div class="item-name">本站访客数 :</div><div class="item-count" id="busuanzi_value_site_uv"><i class="fa-solid fa-spinner fa-spin"></i></div></div><div class="webinfo-item"><div class="item-name">本站总浏览量 :</div><div class="item-count" id="busuanzi_value_site_pv"><i class="fa-solid fa-spinner fa-spin"></i></div></div><div class="webinfo-item"><div class="item-name">最后更新时间 :</div><div class="item-count" id="last-push-date" data-lastPushDate="2026-06-07T02:55:21.839Z"><i class="fa-solid fa-spinner fa-spin"></i></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2025 - 2026 By WF</span><span class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.3.0</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.4.2</a></span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"><script>window.typedJSFn = {
+  init: str => {
+    window.typed = new Typed('#subtitle', Object.assign({
+      strings: str,
+      startDelay: 300,
+      typeSpeed: 150,
+      loop: true,
+      backSpeed: 50,
+    }, null))
+  },
+  run: subtitleType => {
+    if (true) {
+      if (typeof Typed === 'function') {
+        subtitleType()
+      } else {
+        btf.getScript('https://cdn.jsdelivr.net/npm/typed.js/dist/typed.umd.min.js').then(subtitleType)
+      }
+    } else {
+      subtitleType()
+    }
+  },
+  processSubtitle: (content, extraContents = []) => {
+    if (true) {
+      const sub = ["遗憾贯穿人生，我们要做的就是抓住时间。","Regret throughout life, we have to do is to seize the time."].slice()
+
+      if (extraContents.length > 0) {
+        sub.unshift(...extraContents)
+      }
+
+      if (typeof content === 'string') {
+        sub.unshift(content)
+      } else if (Array.isArray(content)) {
+        sub.unshift(...content)
+      }
+
+      sub.length > 0 && typedJSFn.init(sub)
+    } else {
+      document.getElementById('subtitle').textContent = typeof content === 'string' ? content :
+        (Array.isArray(content) && content.length > 0 ? content[0] : '')
+    }
+  }
+}
+btf.addGlobalFn('pjaxSendOnce', () => { typed.destroy() }, 'typedDestroy')
+</script><script>function subtitleType () {
+  typedJSFn.processSubtitle(["遗憾贯穿人生，我们要做的就是抓住时间。","Regret throughout life, we have to do is to seize the time."])
+}
+typedJSFn.run(subtitleType)</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
