@@ -1,13 +1,13 @@
-<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>汇编学习 | WF的知识空间</title><meta name="author" content="WF"><meta name="copyright" content="WF"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="X86 X64 ARM">
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>汇编学习 | WF的知识空间</title><meta name="author" content="WF"><meta name="copyright" content="WF"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="汇编 1. 汇编是什么 汇编语言是CPU 机器码的助记符，和机器指令一一对应。CPU 只认 0 和 1 组成的机器码，汇编只是给人看的易读版本。   Windows 逆向、IDA、x64dbg 全部使用 Intel 语法，格式为： 1指令 目标操作数, 源操作数 例： 1mov eax, 1 意思是把数字 1 存入 eax 寄存器   2. 三大核心存储区域    存储位置 速度 容量 用途">
 <meta property="og:type" content="article">
 <meta property="og:title" content="汇编学习">
 <meta property="og:url" content="http://example.com/2026/06/12/%E6%B1%87%E7%BC%96%E5%AD%A6%E4%B9%A0/index.html">
 <meta property="og:site_name" content="WF的知识空间">
-<meta property="og:description" content="X86 X64 ARM">
+<meta property="og:description" content="汇编 1. 汇编是什么 汇编语言是CPU 机器码的助记符，和机器指令一一对应。CPU 只认 0 和 1 组成的机器码，汇编只是给人看的易读版本。   Windows 逆向、IDA、x64dbg 全部使用 Intel 语法，格式为： 1指令 目标操作数, 源操作数 例： 1mov eax, 1 意思是把数字 1 存入 eax 寄存器   2. 三大核心存储区域    存储位置 速度 容量 用途">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://example.com/img/WF.png">
 <meta property="article:published_time" content="2026-06-12T00:52:57.000Z">
-<meta property="article:modified_time" content="2026-06-15T03:27:43.096Z">
+<meta property="article:modified_time" content="2026-06-15T07:13:02.949Z">
 <meta property="article:author" content="WF">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="http://example.com/img/WF.png"><script type="application/ld+json">{
@@ -17,7 +17,7 @@
   "url": "http://example.com/2026/06/12/%E6%B1%87%E7%BC%96%E5%AD%A6%E4%B9%A0/",
   "image": "http://example.com/img/WF.png",
   "datePublished": "2026-06-12T00:52:57.000Z",
-  "dateModified": "2026-06-15T03:27:43.096Z",
+  "dateModified": "2026-06-15T07:13:02.949Z",
   "author": [
     {
       "@type": "Person",
@@ -158,7 +158,384 @@
   isHighlightShrink: false,
   isToc: true,
   pageType: 'post'
-}</script><link rel="stylesheet" href="/css/custom.css"><meta name="generator" content="Hexo 7.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/WF.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">22</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">12</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fa-folder-open"></i><span> 分类</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(/img/index-bg.jpg);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">WF的知识空间</span></a><a class="nav-page-title" href="/"><span class="site-name">汇编学习</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fa-folder-open"></i><span> 分类</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">汇编学习</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2026-06-12T00:52:57.000Z" title="发表于 2026-06-12 08:52:57">2026-06-12</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-06-15T03:27:43.096Z" title="更新于 2026-06-15 11:27:43">2026-06-15</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/c-c/">c/c++</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h1>X86</h1>
-<h1>X64</h1>
-<h1>ARM</h1>
-</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="http://example.com">WF</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="http://example.com/2026/06/12/%E6%B1%87%E7%BC%96%E5%AD%A6%E4%B9%A0/">http://example.com/2026/06/12/%E6%B1%87%E7%BC%96%E5%AD%A6%E4%B9%A0/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="http://example.com" target="_blank">WF的知识空间</a>！</span></div></div><div class="tag_share"><div class="post-share"><div class="social-share" data-image="/img/WF.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related full-width" href="/2025/12/14/c++/" title="C++"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">C++</div></div><div class="info-2"><div class="info-item-1">c和c++本质区别 c语言：有空间即可操作 逻辑层面有类型的区分，但在物理层面可以存放任何东西 c++:面向对象族类 有空间不一定有对象              有对象一定有空间 12345678910111213class Complex&#123;private:    int real;    int image;public:&#125;;int main()&#123;//此时只有空间    Complex c1;//只是申请的一片类型大小的空间，但里面没有对象，作为占位符来标识对象    Complex c2;&#125; 必须通过构造函数创建对象 sizeof()关键字在编译的时候计算，此时代码还未执行 编译时（编译器仅根据「类型信息」推导大小，不执行任何代码、不访问内存） 123456789int main()&#123;    Complex* xp = (Complex*)malloc(sizeof(Complex)); // 1 malloc //new 1 2    new(xp) Complex(2,3);    xp-&gt;Print();    ...</div></div></div></a></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/WF.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">WF</div><div class="author-info-description"></div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">22</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">12</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/WF-git-code"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="//github.com/WF-git-code" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="/18628492787@163.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">X86</span></a></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">2.</span> <span class="toc-text">X64</span></a></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">3.</span> <span class="toc-text">ARM</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/06/12/%E6%B1%87%E7%BC%96%E5%AD%A6%E4%B9%A0/" title="汇编学习">汇编学习</a><time datetime="2026-06-12T00:52:57.000Z" title="发表于 2026-06-12 08:52:57">2026-06-12</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/12/14/c++/" title="C++">C++</a><time datetime="2025-12-14T00:52:50.000Z" title="发表于 2025-12-14 08:52:50">2025-12-14</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/08/16/libevent/" title="Libevent剖析">Libevent剖析</a><time datetime="2025-08-16T00:02:00.000Z" title="发表于 2025-08-16 08:02:00">2025-08-16</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/07/27/CMake/" title="CMake">CMake</a><time datetime="2025-07-27T00:52:57.000Z" title="发表于 2025-07-27 08:52:57">2025-07-27</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/07/27/Docker%E5%AE%B9%E5%99%A8/" title="Docker容器">Docker容器</a><time datetime="2025-07-27T00:52:57.000Z" title="发表于 2025-07-27 08:52:57">2025-07-27</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2025 - 2026 By WF</span><span class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.3.0</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.4.2</a></span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
+}</script><link rel="stylesheet" href="/css/custom.css"><meta name="generator" content="Hexo 7.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/WF.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">23</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">13</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fa-folder-open"></i><span> 分类</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(/img/index-bg.jpg);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">WF的知识空间</span></a><a class="nav-page-title" href="/"><span class="site-name">汇编学习</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fa-folder-open"></i><span> 分类</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">汇编学习</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2026-06-12T00:52:57.000Z" title="发表于 2026-06-12 08:52:57">2026-06-12</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-06-15T07:13:02.949Z" title="更新于 2026-06-15 15:13:02">2026-06-15</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/c-c/">c/c++</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h2 id="汇编">汇编</h2>
+<h3 id="1-汇编是什么">1. 汇编是什么</h3>
+<p>汇编语言是<strong>CPU 机器码的助记符</strong>，和机器指令一一对应。CPU 只认 0 和 1 组成的机器码，汇编只是给人看的易读版本。</p>
+<ul>
+<li>
+<p>Windows 逆向、IDA、x64dbg 全部使用 Intel 语法，格式为：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">指令 目标操作数, 源操作数</span><br></pre></td></tr></table></figure>
+<p>例：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mov eax, 1</span><br></pre></td></tr></table></figure>
+<p>意思是把数字 1 存入 eax 寄存器</p>
+</li>
+</ul>
+<h3 id="2-三大核心存储区域">2. 三大核心存储区域</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">存储位置</th>
+<th style="text-align:center">速度</th>
+<th style="text-align:center">容量</th>
+<th style="text-align:center">用途</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">寄存器</td>
+<td style="text-align:center">极快</td>
+<td style="text-align:center">极小（几十个）</td>
+<td style="text-align:center">暂存运算数据、栈指针、指令指针</td>
+</tr>
+<tr>
+<td style="text-align:center">栈内存</td>
+<td style="text-align:center">快</td>
+<td style="text-align:center">有限（几 MB）</td>
+<td style="text-align:center">函数参数、局部变量、返回地址</td>
+</tr>
+<tr>
+<td style="text-align:center">全局堆内存</td>
+<td style="text-align:center">慢</td>
+<td style="text-align:center">极大</td>
+<td style="text-align:center">动态分配的数据、全局变量</td>
+</tr>
+</tbody>
+</table>
+<h3 id="3-指令执行流程">3. 指令执行流程</h3>
+<p>CPU 不断重复三步：</p>
+<ol>
+<li><strong>取指</strong>：从指令指针指向的内存读取机器码</li>
+<li><strong>译码</strong>：翻译这条指令要做什么</li>
+<li><strong>执行</strong>：运算、读写内存、跳转等</li>
+</ol>
+<ul>
+<li>指令指针寄存器（X86 叫 EIP，X64 叫 RIP，ARM 叫 PC）永远指向<strong>下一条即将执行的指令</strong>，程序运行时它自动向前移动。</li>
+</ul>
+<h3 id="4-标志位">4. 标志位</h3>
+<p>CPU 运算后会自动更新标志位寄存器，条件跳转指令靠标志位判断是否跳转，是所有 if/else、循环的底层基础。</p>
+<hr>
+<h2 id="X86（32-位）汇编基础">X86（32 位）汇编基础</h2>
+<p>32 位是汇编入门的最佳起点，逻辑规整、栈帧清晰，学会后再看 64 位会非常轻松。</p>
+<h3 id="一、寄存器体系">一、寄存器体系</h3>
+<p>X86 有 8 个通用 32 位寄存器，每个都有约定俗成的用途：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">寄存器</th>
+<th style="text-align:center">全称</th>
+<th style="text-align:center">核心用途（逆向必记）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center"><strong>EAX</strong></td>
+<td style="text-align:center">累加寄存器</td>
+<td style="text-align:center"><strong>函数返回值默认存在这里</strong>；乘除运算默认使用</td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>ECX</strong></td>
+<td style="text-align:center">计数寄存器</td>
+<td style="text-align:center">循环计数器；fastcall 约定下传第 1 个参数</td>
+</tr>
+<tr>
+<td style="text-align:center">EDX</td>
+<td style="text-align:center">数据寄存器</td>
+<td style="text-align:center">乘除扩展；fastcall 约定下传第 2 个参数</td>
+</tr>
+<tr>
+<td style="text-align:center">EBX</td>
+<td style="text-align:center">基址寄存器</td>
+<td style="text-align:center">保存全局变量基址，函数内一般不修改</td>
+</tr>
+<tr>
+<td style="text-align:center">ESI</td>
+<td style="text-align:center">源索引寄存器</td>
+<td style="text-align:center">字符串 / 内存拷贝的源地址</td>
+</tr>
+<tr>
+<td style="text-align:center">EDI</td>
+<td style="text-align:center">目标索引寄存器</td>
+<td style="text-align:center">字符串 / 内存拷贝的目标地址</td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>EBP</strong></td>
+<td style="text-align:center">栈基址寄存器</td>
+<td style="text-align:center">指向当前栈帧底部，用来寻址局部变量和参数</td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>ESP</strong></td>
+<td style="text-align:center">栈顶指针寄存器</td>
+<td style="text-align:center">永远指向当前栈顶，push/pop 会自动改变它的值</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>补充：EIP（指令指针）不能直接修改，只能通过 call、jmp、ret 这类跳转指令间接改变。</p>
+</blockquote>
+<h3 id="二、标志寄存器-EFLAGS">二、标志寄存器 EFLAGS</h3>
+<p>逆向只需要重点记住 4 个最常用的：</p>
+<ul>
+<li><strong>ZF（零标志）</strong>：运算结果为 0 时置 1。<code>cmp a,b</code> 相等则 ZF=1，对应 <code>je / jz</code> 跳转</li>
+<li><strong>CF（进位标志）</strong>：无符号数运算溢出 / 借位时置 1</li>
+<li><strong>SF（符号标志）</strong>：运算结果为负时置 1</li>
+<li><strong>OF（溢出标志）</strong>：有符号数运算溢出时置 1</li>
+</ul>
+<h3 id="三、高频核心指令（逆向-90-都在这）">三、高频核心指令（逆向 90% 都在这）</h3>
+<h4 id="1-数据传送类">1. 数据传送类</h4>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">mov 目标, 源    ; 把源的数据复制到目标，源不变</span><br><span class="line">lea 目标, 地址  ; 加载有效地址，计算地址存入目标，常用于计算数组偏移</span><br><span class="line">push 操作数     ; 压栈：ESP减4，把操作数存入栈顶</span><br><span class="line">pop  目标       ; 出栈：把栈顶数据存入目标，ESP加4</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>注意：<code>mov eax, [addr]</code> 是取 addr 地址里的内容；<code>lea eax, [addr]</code> 是把 addr 地址本身存进去。</p>
+</blockquote>
+<h4 id="2-算术运算类">2. 算术运算类</h4>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">add 目标, 源    ; 目标 = 目标 + 源</span><br><span class="line">sub 目标, 源    ; 目标 = 目标 - 源</span><br><span class="line">inc 操作数      ; 自增1</span><br><span class="line">dec 操作数      ; 自减1</span><br><span class="line">cmp  a, b       ; 计算 a-b，只改标志位不存结果，永远配合跳转指令使用</span><br></pre></td></tr></table></figure>
+<h4 id="3-逻辑运算类">3. 逻辑运算类</h4>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">and 目标, 源    ; 按位与</span><br><span class="line">or   目标, 源    ; 按位或</span><br><span class="line">xor 目标, 源    ; 按位异或；xor eax,eax 是经典的清零操作</span><br><span class="line">test a, b       ; 按位与，只改标志位不存结果，常用于判断是否为0</span><br></pre></td></tr></table></figure>
+<h4 id="4-控制转移类">4. 控制转移类</h4>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">jmp 地址        ; 无条件跳转</span><br><span class="line">je  / jz  地址  ; 相等/结果为0则跳转（ZF=1）</span><br><span class="line">jne / jnz 地址  ; 不相等/结果不为0则跳转（ZF=0）</span><br><span class="line">jg  地址        ; 有符号数 大于 则跳转</span><br><span class="line">jl  地址        ; 有符号数 小于 则跳转</span><br><span class="line">ja  地址        ; 无符号数 大于 则跳转</span><br><span class="line">jb  地址        ; 无符号数 小于 则跳转</span><br></pre></td></tr></table></figure>
+<h4 id="5-函数调用类">5. 函数调用类</h4>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">call 函数地址   ; 两步：1.把下一条指令地址压栈  2.跳转到函数地址</span><br><span class="line">ret             ; 两步：1.把栈顶弹出到EIP  2.回到调用处继续执行</span><br></pre></td></tr></table></figure>
+<h3 id="四、栈与函数栈帧">四、栈与函数栈帧</h3>
+<h4 id="1-栈的特性">1. 栈的特性</h4>
+<ul>
+<li>栈从<strong>高地址向低地址</strong>生长，越压栈地址越小</li>
+<li>ESP 永远指向栈顶，EBP 指向当前栈帧底部</li>
+<li>先进后出（FILO）</li>
+</ul>
+<h4 id="2-标准函数栈帧结构">2. 标准函数栈帧结构</h4>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">; 函数入口（栈帧建立）</span><br><span class="line">push ebp        ; 保存上一层的ebp</span><br><span class="line">mov  ebp, esp   ; ebp = esp，当前栈底就是现在的栈顶</span><br><span class="line">sub  esp, 40    ; 给局部变量分配空间，esp向下移动</span><br><span class="line"></span><br><span class="line">; ... 函数体逻辑 ...</span><br><span class="line"></span><br><span class="line">; 函数出口（栈帧恢复）</span><br><span class="line">mov  esp, ebp   ; 回收局部变量空间</span><br><span class="line">pop  ebp        ; 恢复上一层的ebp</span><br><span class="line">ret             ; 返回</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>逆向里看到这固定的开头结尾，就可以确定这是一个函数。</p>
+</blockquote>
+<h3 id="五、32-位常见调用约定">五、32 位常见调用约定</h3>
+<p>调用约定就是「函数参数怎么传、谁来清理栈」的规则，逆向识别函数参数的核心依据。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">约定</th>
+<th style="text-align:center">参数传递</th>
+<th style="text-align:center">栈清理</th>
+<th style="text-align:center">常见场景</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">cdecl</td>
+<td style="text-align:center">从右往左全部压栈</td>
+<td style="text-align:center">调用者清理</td>
+<td style="text-align:center">C 语言默认，支持可变参数</td>
+</tr>
+<tr>
+<td style="text-align:center">stdcall</td>
+<td style="text-align:center">从右往左全部压栈</td>
+<td style="text-align:center">被调用者清理</td>
+<td style="text-align:center">Windows API 标准约定</td>
+</tr>
+<tr>
+<td style="text-align:center">fastcall</td>
+<td style="text-align:center">前 2 个放 ECX、EDX，其余压栈</td>
+<td style="text-align:center">被调用者清理</td>
+<td style="text-align:center">性能优化场景</td>
+</tr>
+</tbody>
+</table>
+<h3 id="六、C-代码对应汇编示例">六、C 代码对应汇编示例</h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">// C代码</span><br><span class="line">int add(int a, int b) &#123;</span><br><span class="line">    return a + b;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">int main() &#123;</span><br><span class="line">    int res = add(3, 5);</span><br><span class="line">    return 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>对应 32 位 stdcall 汇编：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">; 调用处</span><br><span class="line">push 5          ; 参数b从右往左压栈</span><br><span class="line">push 3          ; 参数a</span><br><span class="line">call add        ; 调用函数</span><br><span class="line">add esp, 8      ; cdecl才需要这行清理栈，stdcall不用</span><br><span class="line"></span><br><span class="line">; add函数</span><br><span class="line">push ebp</span><br><span class="line">mov ebp, esp</span><br><span class="line">mov eax, [ebp+8]    ; 取第一个参数a</span><br><span class="line">add eax, [ebp+12]   ; 加第二个参数b，结果放eax当返回值</span><br><span class="line">pop ebp</span><br><span class="line">ret 8               ; stdcall：返回并清理8字节栈</span><br></pre></td></tr></table></figure>
+<hr>
+<h2 id="X64（64-位）汇编基础">X64（64 位）汇编基础</h2>
+<p>Windows 逆向当前的主力架构，也是你面试的核心重点。和 32 位差异很大，最核心的变化是<strong>寄存器更多、调用约定完全重构</strong>。</p>
+<h3 id="一、核心变化">一、核心变化</h3>
+<ol>
+<li>所有 32 位寄存器扩展为 64 位，前缀从 E 变 R：EAX→RAX，ESP→RSP，以此类推</li>
+<li>新增 8 个通用寄存器：<strong>R8 ~ R15</strong></li>
+<li>取消了多种调用约定，Windows 全平台统一使用 <strong>Microsoft x64 调用约定</strong></li>
+<li>绝大多数编译器默认省略栈帧指针（EBP/RBP），直接用 RSP 寻址</li>
+</ol>
+<h3 id="二、寄存器体系">二、寄存器体系</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">寄存器</th>
+<th style="text-align:center">核心约定用途（逆向必背）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center"><strong>RAX</strong></td>
+<td style="text-align:center">函数返回值；乘除运算默认寄存器</td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>RCX</strong></td>
+<td style="text-align:center">第 1 个整型 / 指针参数</td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>RDX</strong></td>
+<td style="text-align:center">第 2 个整型 / 指针参数</td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>R8</strong></td>
+<td style="text-align:center">第 3 个整型 / 指针参数</td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>R9</strong></td>
+<td style="text-align:center">第 4 个整型 / 指针参数</td>
+</tr>
+<tr>
+<td style="text-align:center">R10、R11</td>
+<td style="text-align:center">临时寄存器，函数内可随意修改（易失）</td>
+</tr>
+<tr>
+<td style="text-align:center">R12~R15、RBX、RDI、RSI</td>
+<td style="text-align:center">非易失寄存器，函数要用必须先保存、返回前恢复</td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>RSP</strong></td>
+<td style="text-align:center">栈顶指针，永远指向栈顶</td>
+</tr>
+<tr>
+<td style="text-align:center">RBP</td>
+<td style="text-align:center">可选栈基址，Release 版通常不用</td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>RIP</strong></td>
+<td style="text-align:center">指令指针，指向下一条指令</td>
+</tr>
+</tbody>
+</table>
+<h3 id="三、Microsoft-x64-调用约定（面试核心考点）">三、Microsoft x64 调用约定（面试核心考点）</h3>
+<p>这是 Windows x64 唯一的标准调用约定，所有系统 API、编译器生成代码都遵守它。</p>
+<h4 id="1-参数传递规则">1. 参数传递规则</h4>
+<ul>
+<li><strong>前 4 个整型 / 指针参数</strong>：依次放入 <strong>RCX、RDX、R8、R9</strong></li>
+<li><strong>第 5 个及以后的参数</strong>：从右往左压入栈中</li>
+<li>浮点参数对应放入 XMM0 ~ XMM3</li>
+</ul>
+<h4 id="2-影子空间（Shadow-Space）">2. 影子空间（Shadow Space）</h4>
+<p>这是 x64 最特殊、新手最懵的知识点：</p>
+<ul>
+<li><strong>定义</strong>：调用函数前，调用者必须在栈上预留 <strong>32 字节（4 个 8 字节）</strong> 的空间</li>
+<li><strong>位置</strong>：紧跟在返回地址的下方</li>
+<li><strong>用途</strong>：给被调用函数临时存放 4 个寄存器参数，方便调试、变参函数使用</li>
+<li><strong>规则</strong>：哪怕函数只有 1 个参数，也必须预留完整的 32 字节；由调用者分配、调用者回收</li>
+</ul>
+<h4 id="3-栈-16-字节对齐">3. 栈 16 字节对齐</h4>
+<p>调用 <code>call</code> 指令前，RSP 必须是 16 字节对齐的，否则调用系统 API 会直接崩溃。</p>
+<h4 id="4-返回值规则">4. 返回值规则</h4>
+<ul>
+<li>普通整型 / 指针返回值放在 <strong>RAX</strong></li>
+<li>64 位以上的大返回值，由调用者传指针当第一个参数（RCX）</li>
+</ul>
+<h3 id="四、x64-函数调用完整栈布局">四、x64 函数调用完整栈布局</h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">高地址</span><br><span class="line">┌───────────────────────┐</span><br><span class="line">│   调用者的栈帧内容     │</span><br><span class="line">├───────────────────────┤</span><br><span class="line">│   第5个及以后的参数    │  ← 参数5、参数6...从右往左压</span><br><span class="line">├───────────────────────┤</span><br><span class="line">│   影子空间 32字节      │  ← 对应R9、R8、RDX、RCX的预留位</span><br><span class="line">├───────────────────────┤</span><br><span class="line">│      返回地址          │  ← call指令自动压入</span><br><span class="line">├───────────────────────┤  ← 进入函数后RSP指向这里</span><br><span class="line">│   被调用者局部变量     │</span><br><span class="line">│   保存的非易失寄存器   │</span><br><span class="line">└───────────────────────┘</span><br><span class="line">低地址</span><br></pre></td></tr></table></figure>
+<h3 id="五、x64-函数调用示例">五、x64 函数调用示例</h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">// C代码</span><br><span class="line">int test_func(int a, int b, int c, int d, int e) &#123;</span><br><span class="line">    return a + b + c + d + e;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>调用处汇编逻辑：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">; 准备参数</span><br><span class="line">mov ecx, 1      ; 参数a = 1</span><br><span class="line">mov edx, 2      ; 参数b = 2</span><br><span class="line">mov r8d, 3      ; 参数c = 3</span><br><span class="line">mov r9d, 4      ; 参数d = 4</span><br><span class="line">push 5          ; 参数e = 5，第5个参数压栈</span><br><span class="line"></span><br><span class="line">sub rsp, 32     ; 预留32字节影子空间</span><br><span class="line">call test_func  ; 调用函数</span><br><span class="line">add rsp, 40     ; 调用结束，回收32字节影子空间+8字节参数5</span><br><span class="line">; 返回值在eax里</span><br></pre></td></tr></table></figure>
+<h3 id="六、Release-版特点">六、Release 版特点</h3>
+<ul>
+<li>绝大多数情况<strong>省略 RBP 栈帧</strong>，所有局部变量、参数都用 <code>RSP+偏移</code> 寻址</li>
+<li>大量函数内联，看不到明显的 call 调用</li>
+<li>寄存器优化充分，变量尽量放寄存器不存栈</li>
+</ul>
+<hr>
+<h2 id="ARM-汇编基础">ARM 汇编基础</h2>
+<p>多用于安卓逆向、嵌入式、IoT 设备逆向，属于拓展内容，掌握核心差异即可。</p>
+<h3 id="一、架构核心特点">一、架构核心特点</h3>
+<ol>
+<li><strong>RISC 精简指令集</strong>：指令数量少、格式规整，单条指令固定长度（32 位 ARM 状态 / 16 位 Thumb 状态）</li>
+<li><strong>加载 - 存储架构</strong>：运算指令只能操作寄存器，不能直接读写内存；内存读写必须用专门的 LDR/STR 指令</li>
+<li>指令支持条件执行，几乎所有指令都可以加条件后缀</li>
+</ol>
+<h3 id="二、寄存器体系（32-位-ARM）">二、寄存器体系（32 位 ARM）</h3>
+<p>共 16 个通用寄存器，其中 3 个有特殊功能：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">寄存器</th>
+<th style="text-align:center">别名</th>
+<th style="text-align:center">核心作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">R0 ~ R3</td>
+<td style="text-align:center">A1~A4</td>
+<td style="text-align:center">前 4 个函数参数；返回值放 R0</td>
+</tr>
+<tr>
+<td style="text-align:center">R4 ~ R11</td>
+<td style="text-align:center">V1~V8</td>
+<td style="text-align:center">局部变量寄存器，函数要用必须先保存</td>
+</tr>
+<tr>
+<td style="text-align:center">R12</td>
+<td style="text-align:center">IP</td>
+<td style="text-align:center">临时寄存器</td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>R13</strong></td>
+<td style="text-align:center"><strong>SP</strong></td>
+<td style="text-align:center">栈顶指针，和 x86 的 ESP 功能一样</td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>R14</strong></td>
+<td style="text-align:center"><strong>LR</strong></td>
+<td style="text-align:center">链接寄存器，保存函数返回地址（和 x86 最大的区别）</td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>R15</strong></td>
+<td style="text-align:center"><strong>PC</strong></td>
+<td style="text-align:center">程序计数器，等于当前指令地址 + 8（流水线特性）</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>核心差异：x86 的返回地址是压在栈里的，ARM 的返回地址默认存在 LR 寄存器里，只有函数嵌套调用时才需要把 LR 压栈保存。</p>
+</blockquote>
+<h3 id="三、核心高频指令">三、核心高频指令</h3>
+<h4 id="1-数据处理指令">1. 数据处理指令</h4>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">MOV 目标, 源        ; 寄存器之间、立即数到寄存器传送</span><br><span class="line">ADD 目标, 源1, 源2  ; 加法：目标 = 源1 + 源2</span><br><span class="line">SUB 目标, 源1, 源2  ; 减法</span><br><span class="line">CMP  a, b           ; 比较，只改标志位</span><br><span class="line">AND/ORR/EOR         ; 与、或、异或</span><br></pre></td></tr></table></figure>
+<h4 id="2-内存读写指令（ARM-特色，重点）">2. 内存读写指令（ARM 特色，重点）</h4>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">LDR R0, [R1]        ; 把R1指向的内存里的数据，加载到R0</span><br><span class="line">STR R0, [R1]        ; 把R0的值，存储到R1指向的内存中</span><br><span class="line">LDR R0, [R1, #4]    ; 基址+偏移寻址：读取 R1+4 地址处的值</span><br></pre></td></tr></table></figure>
+<h4 id="3-分支跳转指令">3. 分支跳转指令</h4>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">B   地址            ; 无条件跳转，类似x86的jmp</span><br><span class="line">BL  函数地址        ; 带返回跳转：1.把下条指令地址存LR  2.跳转到函数（等价x86的call）</span><br><span class="line">BX  LR              ; 跳转到LR里的地址，函数返回（等价x86的ret）</span><br></pre></td></tr></table></figure>
+<h3 id="四、AAPCS-调用约定（ARM-标准）">四、AAPCS 调用约定（ARM 标准）</h3>
+<ol>
+<li><strong>参数传递</strong>：前 4 个参数放 R0~R3，第 5 个及以后压栈</li>
+<li><strong>返回值</strong>：32 位返回值放 R0，64 位放 R0+R1</li>
+<li><strong>寄存器保护</strong>：R4~R11、SP 是被调用者保护，用了必须恢复；R0~R3、R12、LR 调用者保护</li>
+<li><strong>函数返回</strong>：通过 <code>BX LR</code> 返回，嵌套函数需要先把 LR 压栈</li>
+</ol>
+<h3 id="五、ARM64（AArch64）简介">五、ARM64（AArch64）简介</h3>
+<ul>
+<li>寄存器扩展为 X0~X30（64 位），W0~W30 是低 32 位</li>
+<li>X0~X7 传前 8 个参数，返回值放 X0</li>
+<li>X30 是 LR（链接寄存器），SP 是栈指针</li>
+<li>指令集全面升级，兼容 32 位但差异较大</li>
+</ul>
+<hr>
+<h2 id="C-逻辑的汇编识别">C 逻辑的汇编识别</h2>
+<p>拿到一段反汇编，按下面的方法可以快速对应回高级语言逻辑。</p>
+<h3 id="1-if-else-分支">1. if-else 分支</h3>
+<p><strong>特征</strong>：<code>cmp/test</code> + 条件跳转，跳转走 else 分支，不跳转走 if 分支</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">cmp eax, 10</span><br><span class="line">jne else_block</span><br><span class="line">; if分支代码</span><br><span class="line">jmp end_if</span><br><span class="line">else_block:</span><br><span class="line">; else分支代码</span><br><span class="line">end_if:</span><br></pre></td></tr></table></figure>
+<h3 id="2-for-循环">2. for 循环</h3>
+<p><strong>特征</strong>：初始化 → 条件判断 → 循环体 → 增量 → 跳回判断</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">mov ecx, 0      ; i=0 初始化</span><br><span class="line">loop_start:</span><br><span class="line">cmp ecx, 10     ; 判断 i&lt;10</span><br><span class="line">jge loop_end</span><br><span class="line">; 循环体代码</span><br><span class="line">inc ecx         ; i++</span><br><span class="line">jmp loop_start</span><br><span class="line">loop_end:</span><br></pre></td></tr></table></figure>
+<h3 id="3-函数调用">3. 函数调用</h3>
+<p><strong>特征</strong>：先传参 → call 函数 → 取返回值</p>
+<ul>
+<li>x86：看到连续 push 就是在传参</li>
+<li>x64：看到给 RCX/RDX/R8/R9 赋值就是在传参</li>
+<li>返回值永远看 EAX/RAX</li>
+</ul>
+<h3 id="4-读汇编通用步骤">4. 读汇编通用步骤</h3>
+<ol>
+<li>先看函数开头，确定是 32 位还是 64 位、调用约定</li>
+<li>找 <code>cmp/test</code> 和跳转，先把分支结构画出来</li>
+<li>根据调用约定，识别参数和返回值</li>
+<li>结合字符串、API 调用，反推函数功能</li>
+<li>重命名关键变量、函数，逐步还原逻辑</li>
+</ol>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="http://example.com">WF</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="http://example.com/2026/06/12/%E6%B1%87%E7%BC%96%E5%AD%A6%E4%B9%A0/">http://example.com/2026/06/12/%E6%B1%87%E7%BC%96%E5%AD%A6%E4%B9%A0/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="http://example.com" target="_blank">WF的知识空间</a>！</span></div></div><div class="tag_share"><div class="post-share"><div class="social-share" data-image="/img/WF.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related  no-desc" href="/2026/06/15/%E6%B1%87%E7%BC%96%E5%B1%82%E9%9D%A2%E7%90%86%E8%A7%A3%E5%87%BD%E6%95%B0%E8%B0%83%E7%94%A8/" title="汇编层面理解函数调用"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">汇编层面理解函数调用</div></div></div></a><a class="pagination-related" href="/2025/12/14/c++/" title="C++"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">C++</div></div><div class="info-2"><div class="info-item-1">c和c++本质区别 c语言：有空间即可操作 逻辑层面有类型的区分，但在物理层面可以存放任何东西 c++:面向对象族类 有空间不一定有对象              有对象一定有空间 12345678910111213class Complex&#123;private:    int real;    int image;public:&#125;;int main()&#123;//此时只有空间    Complex c1;//只是申请的一片类型大小的空间，但里面没有对象，作为占位符来标识对象    Complex c2;&#125; 必须通过构造函数创建对象 sizeof()关键字在编译的时候计算，此时代码还未执行 编译时（编译器仅根据「类型信息」推导大小，不执行任何代码、不访问内存） 123456789int main()&#123;    Complex* xp = (Complex*)malloc(sizeof(Complex)); // 1 malloc //new 1 2    new(xp) Complex(2,3);    xp-&gt;Print();    ...</div></div></div></a></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/WF.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">WF</div><div class="author-info-description"></div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">23</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">13</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/WF-git-code"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="//github.com/WF-git-code" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="/18628492787@163.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B1%87%E7%BC%96"><span class="toc-number">1.</span> <span class="toc-text">汇编</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E6%B1%87%E7%BC%96%E6%98%AF%E4%BB%80%E4%B9%88"><span class="toc-number">1.1.</span> <span class="toc-text">1. 汇编是什么</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E4%B8%89%E5%A4%A7%E6%A0%B8%E5%BF%83%E5%AD%98%E5%82%A8%E5%8C%BA%E5%9F%9F"><span class="toc-number">1.2.</span> <span class="toc-text">2. 三大核心存储区域</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E6%8C%87%E4%BB%A4%E6%89%A7%E8%A1%8C%E6%B5%81%E7%A8%8B"><span class="toc-number">1.3.</span> <span class="toc-text">3. 指令执行流程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-%E6%A0%87%E5%BF%97%E4%BD%8D"><span class="toc-number">1.4.</span> <span class="toc-text">4. 标志位</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#X86%EF%BC%8832-%E4%BD%8D%EF%BC%89%E6%B1%87%E7%BC%96%E5%9F%BA%E7%A1%80"><span class="toc-number">2.</span> <span class="toc-text">X86（32 位）汇编基础</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E5%AF%84%E5%AD%98%E5%99%A8%E4%BD%93%E7%B3%BB"><span class="toc-number">2.1.</span> <span class="toc-text">一、寄存器体系</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E6%A0%87%E5%BF%97%E5%AF%84%E5%AD%98%E5%99%A8-EFLAGS"><span class="toc-number">2.2.</span> <span class="toc-text">二、标志寄存器 EFLAGS</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E9%AB%98%E9%A2%91%E6%A0%B8%E5%BF%83%E6%8C%87%E4%BB%A4%EF%BC%88%E9%80%86%E5%90%91-90-%E9%83%BD%E5%9C%A8%E8%BF%99%EF%BC%89"><span class="toc-number">2.3.</span> <span class="toc-text">三、高频核心指令（逆向 90% 都在这）</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-%E6%95%B0%E6%8D%AE%E4%BC%A0%E9%80%81%E7%B1%BB"><span class="toc-number">2.3.1.</span> <span class="toc-text">1. 数据传送类</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-%E7%AE%97%E6%9C%AF%E8%BF%90%E7%AE%97%E7%B1%BB"><span class="toc-number">2.3.2.</span> <span class="toc-text">2. 算术运算类</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-%E9%80%BB%E8%BE%91%E8%BF%90%E7%AE%97%E7%B1%BB"><span class="toc-number">2.3.3.</span> <span class="toc-text">3. 逻辑运算类</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-%E6%8E%A7%E5%88%B6%E8%BD%AC%E7%A7%BB%E7%B1%BB"><span class="toc-number">2.3.4.</span> <span class="toc-text">4. 控制转移类</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#5-%E5%87%BD%E6%95%B0%E8%B0%83%E7%94%A8%E7%B1%BB"><span class="toc-number">2.3.5.</span> <span class="toc-text">5. 函数调用类</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E6%A0%88%E4%B8%8E%E5%87%BD%E6%95%B0%E6%A0%88%E5%B8%A7"><span class="toc-number">2.4.</span> <span class="toc-text">四、栈与函数栈帧</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-%E6%A0%88%E7%9A%84%E7%89%B9%E6%80%A7"><span class="toc-number">2.4.1.</span> <span class="toc-text">1. 栈的特性</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-%E6%A0%87%E5%87%86%E5%87%BD%E6%95%B0%E6%A0%88%E5%B8%A7%E7%BB%93%E6%9E%84"><span class="toc-number">2.4.2.</span> <span class="toc-text">2. 标准函数栈帧结构</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%94%E3%80%8132-%E4%BD%8D%E5%B8%B8%E8%A7%81%E8%B0%83%E7%94%A8%E7%BA%A6%E5%AE%9A"><span class="toc-number">2.5.</span> <span class="toc-text">五、32 位常见调用约定</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%AD%E3%80%81C-%E4%BB%A3%E7%A0%81%E5%AF%B9%E5%BA%94%E6%B1%87%E7%BC%96%E7%A4%BA%E4%BE%8B"><span class="toc-number">2.6.</span> <span class="toc-text">六、C 代码对应汇编示例</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#X64%EF%BC%8864-%E4%BD%8D%EF%BC%89%E6%B1%87%E7%BC%96%E5%9F%BA%E7%A1%80"><span class="toc-number">3.</span> <span class="toc-text">X64（64 位）汇编基础</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E6%A0%B8%E5%BF%83%E5%8F%98%E5%8C%96"><span class="toc-number">3.1.</span> <span class="toc-text">一、核心变化</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E5%AF%84%E5%AD%98%E5%99%A8%E4%BD%93%E7%B3%BB"><span class="toc-number">3.2.</span> <span class="toc-text">二、寄存器体系</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%89%E3%80%81Microsoft-x64-%E8%B0%83%E7%94%A8%E7%BA%A6%E5%AE%9A%EF%BC%88%E9%9D%A2%E8%AF%95%E6%A0%B8%E5%BF%83%E8%80%83%E7%82%B9%EF%BC%89"><span class="toc-number">3.3.</span> <span class="toc-text">三、Microsoft x64 调用约定（面试核心考点）</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-%E5%8F%82%E6%95%B0%E4%BC%A0%E9%80%92%E8%A7%84%E5%88%99"><span class="toc-number">3.3.1.</span> <span class="toc-text">1. 参数传递规则</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-%E5%BD%B1%E5%AD%90%E7%A9%BA%E9%97%B4%EF%BC%88Shadow-Space%EF%BC%89"><span class="toc-number">3.3.2.</span> <span class="toc-text">2. 影子空间（Shadow Space）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-%E6%A0%88-16-%E5%AD%97%E8%8A%82%E5%AF%B9%E9%BD%90"><span class="toc-number">3.3.3.</span> <span class="toc-text">3. 栈 16 字节对齐</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-%E8%BF%94%E5%9B%9E%E5%80%BC%E8%A7%84%E5%88%99"><span class="toc-number">3.3.4.</span> <span class="toc-text">4. 返回值规则</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9B%9B%E3%80%81x64-%E5%87%BD%E6%95%B0%E8%B0%83%E7%94%A8%E5%AE%8C%E6%95%B4%E6%A0%88%E5%B8%83%E5%B1%80"><span class="toc-number">3.4.</span> <span class="toc-text">四、x64 函数调用完整栈布局</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%94%E3%80%81x64-%E5%87%BD%E6%95%B0%E8%B0%83%E7%94%A8%E7%A4%BA%E4%BE%8B"><span class="toc-number">3.5.</span> <span class="toc-text">五、x64 函数调用示例</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%AD%E3%80%81Release-%E7%89%88%E7%89%B9%E7%82%B9"><span class="toc-number">3.6.</span> <span class="toc-text">六、Release 版特点</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ARM-%E6%B1%87%E7%BC%96%E5%9F%BA%E7%A1%80"><span class="toc-number">4.</span> <span class="toc-text">ARM 汇编基础</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E6%9E%B6%E6%9E%84%E6%A0%B8%E5%BF%83%E7%89%B9%E7%82%B9"><span class="toc-number">4.1.</span> <span class="toc-text">一、架构核心特点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E5%AF%84%E5%AD%98%E5%99%A8%E4%BD%93%E7%B3%BB%EF%BC%8832-%E4%BD%8D-ARM%EF%BC%89"><span class="toc-number">4.2.</span> <span class="toc-text">二、寄存器体系（32 位 ARM）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E6%A0%B8%E5%BF%83%E9%AB%98%E9%A2%91%E6%8C%87%E4%BB%A4"><span class="toc-number">4.3.</span> <span class="toc-text">三、核心高频指令</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86%E6%8C%87%E4%BB%A4"><span class="toc-number">4.3.1.</span> <span class="toc-text">1. 数据处理指令</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-%E5%86%85%E5%AD%98%E8%AF%BB%E5%86%99%E6%8C%87%E4%BB%A4%EF%BC%88ARM-%E7%89%B9%E8%89%B2%EF%BC%8C%E9%87%8D%E7%82%B9%EF%BC%89"><span class="toc-number">4.3.2.</span> <span class="toc-text">2. 内存读写指令（ARM 特色，重点）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-%E5%88%86%E6%94%AF%E8%B7%B3%E8%BD%AC%E6%8C%87%E4%BB%A4"><span class="toc-number">4.3.3.</span> <span class="toc-text">3. 分支跳转指令</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9B%9B%E3%80%81AAPCS-%E8%B0%83%E7%94%A8%E7%BA%A6%E5%AE%9A%EF%BC%88ARM-%E6%A0%87%E5%87%86%EF%BC%89"><span class="toc-number">4.4.</span> <span class="toc-text">四、AAPCS 调用约定（ARM 标准）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%94%E3%80%81ARM64%EF%BC%88AArch64%EF%BC%89%E7%AE%80%E4%BB%8B"><span class="toc-number">4.5.</span> <span class="toc-text">五、ARM64（AArch64）简介</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#C-%E9%80%BB%E8%BE%91%E7%9A%84%E6%B1%87%E7%BC%96%E8%AF%86%E5%88%AB"><span class="toc-number">5.</span> <span class="toc-text">C 逻辑的汇编识别</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-if-else-%E5%88%86%E6%94%AF"><span class="toc-number">5.1.</span> <span class="toc-text">1. if-else 分支</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-for-%E5%BE%AA%E7%8E%AF"><span class="toc-number">5.2.</span> <span class="toc-text">2. for 循环</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E5%87%BD%E6%95%B0%E8%B0%83%E7%94%A8"><span class="toc-number">5.3.</span> <span class="toc-text">3. 函数调用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-%E8%AF%BB%E6%B1%87%E7%BC%96%E9%80%9A%E7%94%A8%E6%AD%A5%E9%AA%A4"><span class="toc-number">5.4.</span> <span class="toc-text">4. 读汇编通用步骤</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/06/15/%E6%B1%87%E7%BC%96%E5%B1%82%E9%9D%A2%E7%90%86%E8%A7%A3%E5%87%BD%E6%95%B0%E8%B0%83%E7%94%A8/" title="汇编层面理解函数调用">汇编层面理解函数调用</a><time datetime="2026-06-15T07:14:14.000Z" title="发表于 2026-06-15 15:14:14">2026-06-15</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/06/12/%E6%B1%87%E7%BC%96%E5%AD%A6%E4%B9%A0/" title="汇编学习">汇编学习</a><time datetime="2026-06-12T00:52:57.000Z" title="发表于 2026-06-12 08:52:57">2026-06-12</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/12/14/c++/" title="C++">C++</a><time datetime="2025-12-14T00:52:50.000Z" title="发表于 2025-12-14 08:52:50">2025-12-14</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/08/16/libevent/" title="Libevent剖析">Libevent剖析</a><time datetime="2025-08-16T00:02:00.000Z" title="发表于 2025-08-16 08:02:00">2025-08-16</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/07/27/CMake/" title="CMake">CMake</a><time datetime="2025-07-27T00:52:57.000Z" title="发表于 2025-07-27 08:52:57">2025-07-27</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2025 - 2026 By WF</span><span class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.3.0</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.4.2</a></span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
