@@ -1,13 +1,13 @@
-<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>程序常见错误及处理 | WF的知识空间</title><meta name="author" content="WF"><meta name="copyright" content="WF"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="程序运行时错误本质与分类 编译错误分类与解决 死锁分析与排查 权限错误">
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>程序常见错误及处理 | WF的知识空间</title><meta name="author" content="WF"><meta name="copyright" content="WF"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="整体错误类型与排查思路 错误分类 1234567891011系统问题├─ 编译构建错误├─ 程序运行时错误│  ├─ 程序自身错误（段错误、浮点异常等）│  ├─ 资源耗尽错误（内存、CPU、文件句柄等）│  └─ 同步错误（死锁、竞态条件等）├─ 系统级错误│  ├─ 权限错误│  ├─ 内核错误（OOM、panic等）│  └─ 硬件错误└─ 网络错误 通用排查思路 先看日志：系统日志&#x2F;var">
 <meta property="og:type" content="article">
 <meta property="og:title" content="程序常见错误及处理">
 <meta property="og:url" content="http://example.com/2025/07/27/%E7%A8%8B%E5%BA%8F%E8%BF%90%E8%A1%8C%E6%97%B6%E9%94%99%E8%AF%AF/index.html">
 <meta property="og:site_name" content="WF的知识空间">
-<meta property="og:description" content="程序运行时错误本质与分类 编译错误分类与解决 死锁分析与排查 权限错误">
+<meta property="og:description" content="整体错误类型与排查思路 错误分类 1234567891011系统问题├─ 编译构建错误├─ 程序运行时错误│  ├─ 程序自身错误（段错误、浮点异常等）│  ├─ 资源耗尽错误（内存、CPU、文件句柄等）│  └─ 同步错误（死锁、竞态条件等）├─ 系统级错误│  ├─ 权限错误│  ├─ 内核错误（OOM、panic等）│  └─ 硬件错误└─ 网络错误 通用排查思路 先看日志：系统日志&#x2F;var">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://example.com/img/WF.png">
 <meta property="article:published_time" content="2025-07-27T00:52:57.000Z">
-<meta property="article:modified_time" content="2026-06-07T03:07:14.842Z">
+<meta property="article:modified_time" content="2026-06-15T03:20:27.384Z">
 <meta property="article:author" content="WF">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="http://example.com/img/WF.png"><script type="application/ld+json">{
@@ -17,7 +17,7 @@
   "url": "http://example.com/2025/07/27/%E7%A8%8B%E5%BA%8F%E8%BF%90%E8%A1%8C%E6%97%B6%E9%94%99%E8%AF%AF/",
   "image": "http://example.com/img/WF.png",
   "datePublished": "2025-07-27T00:52:57.000Z",
-  "dateModified": "2026-06-07T03:07:14.842Z",
+  "dateModified": "2026-06-15T03:20:27.384Z",
   "author": [
     {
       "@type": "Person",
@@ -158,8 +158,863 @@
   isHighlightShrink: false,
   isToc: true,
   pageType: 'post'
-}</script><meta name="generator" content="Hexo 7.3.0"></head><body><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(/img/index-bg.jpg);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">WF的知识空间</span></a><a class="nav-page-title" href="/"><span class="site-name">程序常见错误及处理</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"></div></nav><div id="post-info"><h1 class="post-title">程序常见错误及处理</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2025-07-27T00:52:57.000Z" title="发表于 2025-07-27 08:52:57">2025-07-27</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-06-07T03:07:14.842Z" title="更新于 2026-06-07 11:07:14">2026-06-07</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h1>程序运行时错误本质与分类</h1>
+}</script><meta name="generator" content="Hexo 7.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/WF.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">22</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">12</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fa-folder-open"></i><span> 分类</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(/img/index-bg.jpg);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">WF的知识空间</span></a><a class="nav-page-title" href="/"><span class="site-name">程序常见错误及处理</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fa-folder-open"></i><span> 分类</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">程序常见错误及处理</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2025-07-27T00:52:57.000Z" title="发表于 2025-07-27 08:52:57">2025-07-27</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-06-15T03:20:27.384Z" title="更新于 2026-06-15 11:20:27">2026-06-15</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E5%BC%80%E5%8F%91%E7%BB%8F%E9%AA%8C/">开发经验</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h1>整体错误类型与排查思路</h1>
+<h2 id="错误分类">错误分类</h2>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">系统问题</span><br><span class="line">├─ 编译构建错误</span><br><span class="line">├─ 程序运行时错误</span><br><span class="line">│  ├─ 程序自身错误（段错误、浮点异常等）</span><br><span class="line">│  ├─ 资源耗尽错误（内存、CPU、文件句柄等）</span><br><span class="line">│  └─ 同步错误（死锁、竞态条件等）</span><br><span class="line">├─ 系统级错误</span><br><span class="line">│  ├─ 权限错误</span><br><span class="line">│  ├─ 内核错误（OOM、panic等）</span><br><span class="line">│  └─ 硬件错误</span><br><span class="line">└─ 网络错误</span><br></pre></td></tr></table></figure>
+<h2 id="通用排查思路">通用排查思路</h2>
+<p><strong>先看日志</strong>：系统日志<code>/var/log/</code>、应用日志、内核日志<code>dmesg</code></p>
+<p><strong>复现问题</strong>：确定触发条件和频率</p>
+<p><strong>分层排查</strong>：从应用层→系统层→硬件层</p>
+<p><strong>对比正常状态</strong>：找出异常指标</p>
+<p><strong>隔离变量</strong>：逐步排除可能的原因</p>
+<p><strong>保留现场</strong>：在修复前保存错误信息和系统状态</p>
+<p>小程序采用GDB调试</p>
+<h1>Core Dump</h1>
+<p><strong>Core 文件 = 程序崩溃瞬间的完整内存镜像 + 所有 CPU 寄存器状态</strong></p>
+<p>当程序因为严重错误（如段错误、总线错误）崩溃时，操作系统会将程序崩溃瞬间的<strong>完整内存状态</strong>保存到一个文件中，这个文件就叫 core 文件</p>
+<p><strong>gdb 只是调试工具，而 core 文件是</strong>程序崩溃瞬间的完整 “尸体”**。没有 core 文件，你只能调试 “活的” 正在运行的程序；有了 core 文件，你可以调试 “死的” 已经崩溃的程序，完美还原它死亡前的最后一刻。</p>
+<p>它记录了：</p>
+<ul>
+<li>程序崩溃时的调用栈（哪行代码出的错）</li>
+<li>所有寄存器的值</li>
+<li>所有变量的当前值</li>
+<li>内存的完整内容</li>
+<li>线程状态</li>
+</ul>
+<h2 id="基础配置">基础配置</h2>
+<h3 id="临时配置">临时配置</h3>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 查看当前core文件大小限制（默认是0，不生成core）</span></span><br><span class="line"><span class="built_in">ulimit</span> -c</span><br><span class="line"><span class="comment"># 输出：0</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 启用core dump，不限制大小</span></span><br><span class="line"><span class="built_in">ulimit</span> -c unlimited</span><br><span class="line"></span><br><span class="line"><span class="comment"># 再次确认</span></span><br><span class="line"><span class="built_in">ulimit</span> -c</span><br><span class="line"><span class="comment"># 输出：unlimited</span></span><br></pre></td></tr></table></figure>
+<p><img src="https://gitee.com/WFWFWFWFG/image-bed/raw/master/img/20260608090543374.png" alt="image-20260608090543315"></p>
+<h3 id="永久启用">永久启用</h3>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> <span class="built_in">tee</span> -a /etc/security/limits.conf &lt;&lt; <span class="string">EOF</span></span><br><span class="line"><span class="string">* soft core unlimited</span></span><br><span class="line"><span class="string">* hard core unlimited</span></span><br><span class="line"><span class="string">EOF</span></span><br></pre></td></tr></table></figure>
+<p><img src="https://gitee.com/WFWFWFWFG/image-bed/raw/master/img/20260608090644351.png" alt="image-20260608090644299"></p>
+<h3 id="配置-core-文件生成路径和命名">配置 core 文件生成路径和命名</h3>
+<p>默认 core 文件生成在程序运行目录，名字就是<code>core</code>，会被覆盖。配置成带进程名、PID、时间的格式：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> <span class="built_in">tee</span> /proc/sys/kernel/core_pattern &lt;&lt; <span class="string">EOF</span></span><br><span class="line"><span class="string">/tmp/core-%e-%p-%t</span></span><br><span class="line"><span class="string">EOF</span></span><br><span class="line">tmp文件夹会自动定期清理，tmp文件体积过大</span><br><span class="line">%e：程序名</span><br><span class="line">%p：进程 PID</span><br><span class="line">%t：崩溃时间戳</span><br></pre></td></tr></table></figure>
+<p><img src="https://gitee.com/WFWFWFWFG/image-bed/raw/master/img/20260608090842567.png" alt="image-20260608090842528"></p>
+<h2 id="为什么没生成-core-文件？">为什么没生成 core 文件？</h2>
+<ol>
+<li><code>ulimit -c</code>不是<code>unlimited</code></li>
+<li>运行程序的用户对 core 文件目录没有写权限</li>
+<li>程序是 setuid/setgid 程序（如 sudo 运行的程序）</li>
+<li>内核参数<code>core_pattern</code>被设置为管道（如<code>|/usr/lib/systemd/systemd-coredump %P %u %g %s %t %c %h</code>）</li>
+<li>磁盘空间不足</li>
+</ol>
+<h3 id="问题-1：core-文件太大">问题 1：core 文件太大</h3>
+<p>如果程序占用了几 GB 内存，core 文件也会有几 GB，gdb 打开会很慢。</p>
+<p><strong>解决方法</strong>：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># 限制core文件的最大大小（只保留必要的信息）</span><br><span class="line">ulimit -c 102400  # 限制为100MB</span><br></pre></td></tr></table></figure>
+<h3 id="问题-2：“core-file-may-not-match”-错误">问题 2：“core file may not match” 错误</h3>
+<p>这是因为 core 文件是由旧版本的程序生成的，现在的程序已经重新编译过了。</p>
+<p><strong>解决方法</strong>：</p>
+<ul>
+<li>找到崩溃时对应的程序版本</li>
+<li>或者重新运行程序，生成新的 core 文件</li>
+</ul>
+<h3 id="问题-3：“No-such-file-or-directory”-错误">问题 3：“No such file or directory” 错误</h3>
+<p>这是因为 gdb 找不到程序的动态链接库。</p>
+<p><strong>解决方法</strong>：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># 在gdb中设置动态链接库路径</span><br><span class="line">set solib-search-path /path/to/libs</span><br></pre></td></tr></table></figure>
+<h1>程序运行时错误本质与分类</h1>
+<h3 id="本质">本质</h3>
+<p>程序执行过程中违反了操作系统或硬件的规则，导致 CPU 产生异常，内核向进程发送信号终止执行。</p>
+<h3 id="段错误（核心已转储）">段错误（核心已转储）</h3>
+<p><strong>SIGSEGV (11) 段错误</strong></p>
+<p><strong>空指针解引用（最常见）</strong></p>
+<p><strong>野指针（未初始化的指针）</strong></p>
+<p><strong>访问已释放的内存（use-after-free）</strong></p>
+<p><strong>数组越界访问</strong></p>
+<p><strong>栈溢出</strong></p>
+<p><strong>向只读内存写入</strong></p>
+<p><strong>错误的指针运算</strong></p>
+<p>例如：空指针解引用</p>
+<p><img src="https://gitee.com/WFWFWFWFG/image-bed/raw/master/img/20260608091206182.png" alt="image-20260608091206111"></p>
+<p><strong>必须加-g保留调试信息</strong></p>
+<p><img src="https://gitee.com/WFWFWFWFG/image-bed/raw/master/img/20260608091524368.png" alt="image-20260608091524310"></p>
+<p><img src="https://gitee.com/WFWFWFWFG/image-bed/raw/master/img/20260608091308400.png" alt="image-20260608091308364"></p>
+<h4 id="排查思路">排查思路</h4>
+<p>确认 core 文件已生成</p>
+<p>用 gdb 打开程序和 core 文件</p>
+<p><img src="https://gitee.com/WFWFWFWFG/image-bed/raw/master/img/20260608092438052.png" alt="image-20260608092437985"></p>
+<p><strong>根本原因</strong>：空指针解引用，向内存地址 0 写入数据，这是操作系统禁止的操作。</p>
+<h3 id="总线错误">总线错误</h3>
+<p><strong>SIGBUS (7) 总线错误</strong></p>
+<p><strong>本质</strong>：CPU 访问内存时违反了<strong>硬件级别的内存访问规则</strong>，比段错误更底层。</p>
+<p><strong>典型现象</strong>：程序直接崩溃，输出 “总线错误 (核心已转储)”</p>
+<h4 id="1-未对齐的内存访问（最常见）">1. 未对齐的内存访问（最常见）</h4>
+<p><strong>说明</strong>：大多数 CPU 要求基本数据类型的地址必须是其大小的倍数（如 int 需要 4 字节对齐，long long 需要 8 字节对齐）。</p>
+<p><strong>注意</strong>：x86_64 架构对未对齐访问有硬件支持（但性能差），ARM 架构会<strong>直接触发总线错误</strong>。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">// bus_align.c</span><br><span class="line">#include &lt;stdio.h&gt;</span><br><span class="line">#include &lt;stdlib.h&gt;</span><br><span class="line"></span><br><span class="line">int main() &#123;</span><br><span class="line">    char *buf = malloc(10);</span><br><span class="line">    // 错误：将char*偏移1字节后强制转换为int*</span><br><span class="line">    int *ptr = (int *)(buf + 1);</span><br><span class="line">    *ptr = 0x12345678; // ARM上必现SIGBUS，x86_64上可能正常</span><br><span class="line">    free(buf);</span><br><span class="line">    return 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="2-mmap-映射文件被截断">2. mmap 映射文件被截断</h4>
+<p><strong>说明</strong>：使用 mmap 映射一个文件后，文件被其他进程截断，访问超出文件大小的部分会触发总线错误。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">// bus_mmap.c</span><br><span class="line">#include &lt;stdio.h&gt;</span><br><span class="line">#include &lt;stdlib.h&gt;</span><br><span class="line">#include &lt;sys/mman.h&gt;</span><br><span class="line">#include &lt;fcntl.h&gt;</span><br><span class="line">#include &lt;unistd.h&gt;</span><br><span class="line"></span><br><span class="line">int main() &#123;</span><br><span class="line">    int fd = open(&quot;testfile&quot;, O_RDWR | O_CREAT, 0644);</span><br><span class="line">    ftruncate(fd, 4096); // 创建一个4KB的文件</span><br><span class="line">    </span><br><span class="line">    // 映射整个文件到内存</span><br><span class="line">    char *ptr = mmap(NULL, 4096, PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);</span><br><span class="line">    </span><br><span class="line">    // 截断文件为0字节</span><br><span class="line">    ftruncate(fd, 0);</span><br><span class="line">    </span><br><span class="line">    // 访问已被截断的内存区域</span><br><span class="line">    ptr[0] = &#x27;a&#x27;; // 触发SIGBUS</span><br><span class="line">    </span><br><span class="line">    munmap(ptr, 4096);</span><br><span class="line">    close(fd);</span><br><span class="line">    return 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="3-访问不存在的物理地址">3. 访问不存在的物理地址</h4>
+<p><strong>说明</strong>：访问的虚拟地址没有映射到任何物理内存页。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">// bus_nopage.c</span><br><span class="line">#include &lt;stdio.h&gt;</span><br><span class="line">#include &lt;sys/mman.h&gt;</span><br><span class="line"></span><br><span class="line">int main() &#123;</span><br><span class="line">    // 映射一个匿名内存区域，但不提交物理内存</span><br><span class="line">    char *ptr = mmap(NULL, 4096, PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANONYMOUS | MAP_NORESERVE, -1, 0);</span><br><span class="line">    </span><br><span class="line">    // 访问该地址，此时内核无法分配物理内存</span><br><span class="line">    ptr[0] = &#x27;a&#x27;; // 可能触发SIGBUS</span><br><span class="line">    </span><br><span class="line">    munmap(ptr, 4096);</span><br><span class="line">    return 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="4-访问已被-munmap-的内存区域">4. 访问已被 munmap 的内存区域</h4>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">// bus_unmap.c</span><br><span class="line">#include &lt;stdio.h&gt;</span><br><span class="line">#include &lt;sys/mman.h&gt;</span><br><span class="line"></span><br><span class="line">int main() &#123;</span><br><span class="line">    char *ptr = mmap(NULL, 4096, PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);</span><br><span class="line">    munmap(ptr, 4096); // 释放内存映射</span><br><span class="line">    </span><br><span class="line">    ptr[0] = &#x27;a&#x27;; // 访问已释放的映射区域，触发SIGBUS</span><br><span class="line">    return 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>快速排查要点</strong>：</p>
+<ul>
+<li>检查所有强制类型转换，特别是 char * 转其他类型指针</li>
+<li>检查 mmap 映射文件的大小是否在访问过程中发生变化</li>
+<li>使用 gdb 查看崩溃时的指针地址，判断是否对齐</li>
+</ul>
+<h3 id="浮点异常">浮点异常</h3>
+<p><strong>SIGFPE (8) 浮点异常</strong></p>
+<p><strong>本质</strong>：CPU 执行算术运算时发生了<strong>非法的数学操作</strong>。</p>
+<p><strong>典型现象</strong>：程序直接崩溃，输出 “浮点异常 (核心已转储)”</p>
+<h4 id="1-整数除以零（最常见）">1. 整数除以零（最常见）</h4>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">// fpe_divzero.c</span><br><span class="line">int main() &#123;</span><br><span class="line">    int a = 5;</span><br><span class="line">    int b = 0;</span><br><span class="line">    int c = a / b; // 触发SIGFPE</span><br><span class="line">    return 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="2-整数对零取模">2. 整数对零取模</h4>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">// fpe_modzero.c</span><br><span class="line">int main() &#123;</span><br><span class="line">    int a = 5;</span><br><span class="line">    int b = 0;</span><br><span class="line">    int c = a % b; // 触发SIGFPE</span><br><span class="line">    return 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="3-浮点除以零">3. 浮点除以零</h4>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">// fpe_floatdiv.c</span><br><span class="line">#include &lt;stdio.h&gt;</span><br><span class="line">#include &lt;fenv.h&gt;</span><br><span class="line"></span><br><span class="line">int main() &#123;</span><br><span class="line">    // 启用浮点异常捕获（默认情况下浮点除以零不会触发SIGFPE）</span><br><span class="line">    feenableexcept(FE_DIVBYZERO);</span><br><span class="line">    </span><br><span class="line">    double a = 5.0;</span><br><span class="line">    double b = 0.0;</span><br><span class="line">    double c = a / b; // 触发SIGFPE</span><br><span class="line">    return 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="4-浮点溢出">4. 浮点溢出</h4>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">// fpe_overflow.c</span><br><span class="line">#include &lt;stdio.h&gt;</span><br><span class="line">#include &lt;fenv.h&gt;</span><br><span class="line">#include &lt;math.h&gt;</span><br><span class="line"></span><br><span class="line">int main() &#123;</span><br><span class="line">    feenableexcept(FE_OVERFLOW);</span><br><span class="line">    </span><br><span class="line">    double a = 1e308;</span><br><span class="line">    double b = a * 10; // 超出double的表示范围，触发SIGFPE</span><br><span class="line">    return 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="5-无效浮点运算">5. 无效浮点运算</h4>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">// fpe_invalid.c</span><br><span class="line">#include &lt;stdio.h&gt;</span><br><span class="line">#include &lt;fenv.h&gt;</span><br><span class="line">#include &lt;math.h&gt;</span><br><span class="line"></span><br><span class="line">int main() &#123;</span><br><span class="line">    feenableexcept(FE_INVALID);</span><br><span class="line">    </span><br><span class="line">    double a = sqrt(-1.0); // 负数开平方，触发SIGFPE</span><br><span class="line">    return 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>快速排查要点</strong>：</p>
+<ul>
+<li>检查所有除法和取模运算，确保除数不为零</li>
+<li>浮点运算默认不会触发 SIGFPE，需要显式启用异常捕获</li>
+<li>gdb 中查看崩溃时的运算数，确认是否有零或非法值</li>
+</ul>
+<h3 id="非法指令">非法指令</h3>
+<p><strong>SIGILL (4) 非法指令</strong></p>
+<p><strong>本质</strong>：CPU 尝试执行<strong>不存在或无效的机器指令</strong>。</p>
+<p><strong>典型现象</strong>：程序直接崩溃，输出 “非法指令 (核心已转储)”</p>
+<h4 id="1-执行了无效的机器指令">1. 执行了无效的机器指令</h4>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">// ill_invalid.c</span><br><span class="line">int main() &#123;</span><br><span class="line">    // 定义一个无效的机器指令（0x0000是无效指令）</span><br><span class="line">    unsigned char insn[] = &#123;0x00, 0x00&#125;;</span><br><span class="line">    </span><br><span class="line">    // 将函数指针指向无效指令</span><br><span class="line">    void (*func)() = (void (*)())insn;</span><br><span class="line">    </span><br><span class="line">    func(); // 执行无效指令，触发SIGILL</span><br><span class="line">    return 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="2-栈破坏导致跳转到错误地址">2. 栈破坏导致跳转到错误地址</h4>
+<p><strong>说明</strong>：缓冲区溢出覆盖了栈上的返回地址，导致函数返回时跳转到错误的地址执行。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">// ill_stack.c</span><br><span class="line">#include &lt;string.h&gt;</span><br><span class="line"></span><br><span class="line">int main() &#123;</span><br><span class="line">    char buf[8];</span><br><span class="line">    // 缓冲区溢出，覆盖返回地址</span><br><span class="line">    strcpy(buf, &quot;aaaaaaaaaaaaaaaaaaaaaaaa&quot;);</span><br><span class="line">    return 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="3-编译器生成了不支持的指令集">3. 编译器生成了不支持的指令集</h4>
+<p><strong>说明</strong>：在旧 CPU 上运行使用新指令集（如 AVX-512）编译的程序。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"># 编译时使用AVX-512指令集</span><br><span class="line">gcc -mavx512f program.c -o program</span><br><span class="line"></span><br><span class="line"># 在不支持AVX-512的CPU上运行</span><br><span class="line">./program</span><br><span class="line"># 输出：非法指令 (核心已转储)</span><br></pre></td></tr></table></figure>
+<h4 id="4-动态链接库版本不兼容">4. 动态链接库版本不兼容</h4>
+<p><strong>说明</strong>：程序链接的动态库版本与运行时的版本不一致，导致跳转到错误的函数地址。</p>
+<h4 id="5-代码段被破坏">5. 代码段被破坏</h4>
+<p><strong>说明</strong>：程序错误地修改了代码段的内容（代码段默认是只读的，通常会先触发 SIGSEGV）。</p>
+<p><strong>快速排查要点</strong>：</p>
+<ul>
+<li>检查是否有缓冲区溢出或栈破坏</li>
+<li>确认程序编译时使用的指令集是否与运行 CPU 兼容</li>
+<li>检查动态链接库版本是否正确</li>
+<li>gdb 中查看崩溃时的指令指针 rip 的值，判断是否指向有效代码</li>
+</ul>
+<h3 id="异常中止">异常中止</h3>
+<p><strong>SIGABRT (6)异常中止</strong></p>
+<p><strong>本质</strong>：程序<strong>主动请求终止</strong>，通常是因为检测到了不可恢复的错误。</p>
+<p><strong>典型现象</strong>：程序崩溃前会输出错误信息，如 “Assertion failed”、“stack smashing detected”</p>
+<h4 id="1-assert-断言失败（最常见）">1. assert 断言失败（最常见）</h4>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">// abort_assert.c</span><br><span class="line">#include &lt;assert.h&gt;</span><br><span class="line"></span><br><span class="line">int main() &#123;</span><br><span class="line">    int age = -5;</span><br><span class="line">    assert(age &gt;= 0); // 断言失败，调用abort()</span><br><span class="line">    return 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="2-显式调用-abort-函数">2. 显式调用 abort () 函数</h4>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">// abort_explicit.c</span><br><span class="line">#include &lt;stdlib.h&gt;</span><br><span class="line"></span><br><span class="line">int main() &#123;</span><br><span class="line">    abort(); // 直接调用abort()终止程序</span><br><span class="line">    return 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="3-C-未捕获的异常">3. C++ 未捕获的异常</h4>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">// abort_exception.cpp</span><br><span class="line">int main() &#123;</span><br><span class="line">    throw &quot;未捕获的异常&quot;; // 没有try-catch块，调用terminate()</span><br><span class="line">    return 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="4-glibc-检测到堆损坏">4. glibc 检测到堆损坏</h4>
+<p><strong>说明</strong>：glibc 的内存分配器检测到堆内存结构被破坏，如 double-free、堆溢出。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">// abort_doublefree.c</span><br><span class="line">#include &lt;stdlib.h&gt;</span><br><span class="line"></span><br><span class="line">int main() &#123;</span><br><span class="line">    char *buf = malloc(10);</span><br><span class="line">    free(buf);</span><br><span class="line">    free(buf); // 重复释放内存，glibc检测到后调用abort()</span><br><span class="line">    return 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="5-栈溢出检测（stack-smashing-detected）">5. 栈溢出检测（stack smashing detected）</h4>
+<p><strong>说明</strong>：gcc 默认启用了栈保护机制，检测到栈溢出时会终止程序。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">// abort_stacksmash.c</span><br><span class="line">#include &lt;string.h&gt;</span><br><span class="line"></span><br><span class="line">int main() &#123;</span><br><span class="line">    char buf[8];</span><br><span class="line">    strcpy(buf, &quot;aaaaaaaaaaaaaaaa&quot;); // 栈溢出，触发栈保护机制</span><br><span class="line">    return 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>快速排查要点</strong>：</p>
+<ul>
+<li>查看程序的标准错误输出，通常会有明确的错误信息</li>
+<li>gdb 中查看调用栈，会显示在 abort () 或__assert_fail () 处崩溃</li>
+<li>对于堆损坏，使用 valgrind --tool=memcheck 检测</li>
+</ul>
+<h3 id="被强制杀死">被强制杀死</h3>
+<p><strong>SIGKILL (9) 被强制杀死</strong></p>
+<p><strong>本质</strong>：<strong>内核强制终止</strong>进程，进程无法捕获、忽略或阻塞这个信号。</p>
+<p><strong>典型现象</strong>：程序直接退出，输出 “已杀死”，<strong>不会生成 core 文件</strong></p>
+<h4 id="1-OOM-Killer-杀死进程（最常见）">1. OOM Killer 杀死进程（最常见）</h4>
+<p><strong>说明</strong>：系统物理内存和 Swap 都耗尽时，内核的 OOM Killer 机制会自动杀死内存占用最高的进程。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">// kill_oom.c</span><br><span class="line">#include &lt;stdlib.h&gt;</span><br><span class="line">#include &lt;unistd.h&gt;</span><br><span class="line"></span><br><span class="line">int main() &#123;</span><br><span class="line">    while (1) &#123;</span><br><span class="line">        char *buf = malloc(1024 * 1024);</span><br><span class="line">        if (buf == NULL) break;</span><br><span class="line">        for (int i = 0; i &lt; 1024 * 1024; i += 4096) &#123;</span><br><span class="line">            buf[i] = 0;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    return 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="2-管理员手动执行-kill-9">2. 管理员手动执行 kill -9</h4>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"># 终端1：运行一个程序</span><br><span class="line">sleep 3600</span><br><span class="line"></span><br><span class="line"># 终端2：强制杀死该进程</span><br><span class="line">kill -9 $(pgrep sleep)</span><br><span class="line"></span><br><span class="line"># 终端1输出：已杀死</span><br></pre></td></tr></table></figure>
+<h4 id="3-cgroups-资源限制触发">3. cgroups 资源限制触发</h4>
+<p><strong>说明</strong>：进程超过了 cgroups 设置的内存或 CPU 使用限制，被 cgroups 杀死。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"># 创建一个内存限制为100MB的cgroup</span><br><span class="line">sudo cgcreate -g memory:/limited</span><br><span class="line">sudo cgset -r memory.limit_in_bytes=104857600 /limited</span><br><span class="line"></span><br><span class="line"># 在该cgroup中运行一个占用200MB内存的程序</span><br><span class="line">sudo cgexec -g memory:/limited ./memory_hungry_program</span><br><span class="line"># 程序会被强制杀死</span><br></pre></td></tr></table></figure>
+<h4 id="4-系统-panic-前清理进程">4. 系统 panic 前清理进程</h4>
+<p><strong>说明</strong>：系统发生严重错误即将 panic 时，会杀死所有用户进程。</p>
+<h4 id="5-父进程退出时杀死子进程">5. 父进程退出时杀死子进程</h4>
+<p><strong>说明</strong>：父进程退出时，会向所有子进程发送 SIGHUP 信号，如果子进程没有处理 SIGHUP，会被杀死。</p>
+<p><strong>快速排查要点</strong>：</p>
+<ul>
+<li>首先查看内核日志：<code>dmesg | grep -i &quot;killed process&quot;</code></li>
+<li>检查是否有 OOM 日志，这是最常见的原因</li>
+<li>检查 cgroups 资源限制</li>
+<li>检查系统日志中是否有管理员操作记录</li>
+</ul>
 <h1>编译错误分类与解决</h1>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">项目源码</span><br><span class="line">   ↓</span><br><span class="line">CMakeLists.txt → cmake . → 生成Makefile 【第一阶段：CMake错误】</span><br><span class="line">   ↓</span><br><span class="line">Makefile → make → 调用gcc/g++ 【第二阶段：Make错误】</span><br><span class="line">   ↓</span><br><span class="line">源码文件 → gcc/g++ → 预处理→编译→汇编→链接 【第三阶段：GCC错误】</span><br><span class="line">   ↓</span><br><span class="line">可执行文件</span><br></pre></td></tr></table></figure>
+<p>错误信息开头是<code>CMake Error</code>：属于 CMake 错误</p>
+<p>错误信息开头是<code>make: ***</code>：属于 Make 错误</p>
+<p>错误信息开头是<code>gcc:</code>或<code>g++:</code>或<code>ld:</code>：属于 GCC 错误</p>
+<p><strong>具体问题具体分析，具体请看CMake篇章</strong></p>
 <h1>死锁分析与排查</h1>
+<h2 id="确认是不是死锁">确认是不是死锁</h2>
+<p><strong>查看进程状态</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ps aux | grep 程序名/pid</span><br></pre></td></tr></table></figure>
+<p>死锁进程的状态是<strong>S（睡眠）</strong>，不是 R（运行）或 D（不可中断睡眠）</p>
+<p><strong>查看进程 CPU 使用率</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">top -p &lt;pid&gt;</span><br></pre></td></tr></table></figure>
+<p><strong>死锁</strong>：CPU 使用率接近<strong>0%</strong>（所有线程都在等待锁）</p>
+<p><strong>死循环</strong>：CPU 使用率接近<strong>100%</strong>（一个或多个线程在疯狂运行）</p>
+<p><strong>阻塞 IO</strong>：CPU 使用率接近 0%，但通常会在 IO 完成后自动恢复</p>
+<p><strong>查看线程状态</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ps -T -p &lt;pid&gt;</span><br></pre></td></tr></table></figure>
+<p>所有线程的状态都是<strong>S（睡眠）</strong></p>
+<p>没有线程在运行</p>
+<h2 id="工具">工具</h2>
+<table>
+<thead>
+<tr>
+<th>工具</th>
+<th>用途</th>
+<th>优点</th>
+<th>缺点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>pstack</code></td>
+<td>打印所有线程的调用栈</td>
+<td>最简单、最快</td>
+<td>只能看到调用栈，看不到锁的持有关系</td>
+</tr>
+<tr>
+<td><code>gdb</code></td>
+<td>附加到进程详细分析</td>
+<td>功能最强大，能看到所有变量和锁状态</td>
+<td>需要一定的 gdb 使用经验</td>
+</tr>
+<tr>
+<td><code>gcore</code></td>
+<td>生成正在运行的进程的 core 文件</td>
+<td>可以离线分析，不影响运行中的进程</td>
+<td>生成的 core 文件可能很大</td>
+</tr>
+<tr>
+<td><code>valgrind --tool=helgrind</code></td>
+<td>检测潜在的死锁和数据竞争</td>
+<td>能在死锁发生前检测到问题</td>
+<td>运行速度慢，不适合生产环境</td>
+</tr>
+<tr>
+<td><code>pstack + gdb</code></td>
+<td>组合使用</td>
+<td>兼顾速度和功能</td>
+<td>无</td>
+</tr>
+</tbody>
+</table>
+<h2 id="排查">排查</h2>
+<h3 id="步骤-1：找到死锁进程">步骤 1：找到死锁进程</h3>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ps aux | grep 程序名/pid</span><br></pre></td></tr></table></figure>
+<p><img src="https://gitee.com/WFWFWFWFG/image-bed/raw/master/img/20260608101644701.png" alt="image-20260608101644601"></p>
+<p>可以看到进程状态是s</p>
+<h3 id="第二步：用-pstack-快速定位阻塞位置">第二步：用 pstack 快速定位阻塞位置</h3>
+<p>pstack内部是shell脚本，封装了GDB调用，如果不行</p>
+<p>则使用</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> gdb -p 2903 -batch -ex <span class="string">&quot;set pagination off&quot;</span> -ex <span class="string">&quot;thread apply all bt&quot;</span></span><br></pre></td></tr></table></figure>
+<p><code>-batch</code>：批处理模式，执行完命令自动退出，不会进入 gdb 交互界面</p>
+<p><code>-ex &quot;set pagination off&quot;</code>：关闭分页，一次性输出所有内容</p>
+<p><code>-ex &quot;thread apply all bt&quot;</code>：对所有线程执行<code>bt</code>命令，打印每个线程的调用栈</p>
+<p><img src="https://gitee.com/WFWFWFWFG/image-bed/raw/master/img/20260608142814049.png" alt="image-20260608142813898"></p>
+<p>重要部分</p>
+<p><img src="https://gitee.com/WFWFWFWFG/image-bed/raw/master/img/20260608142843467.png" alt="image-20260608142843318"></p>
+<p>三个线程，线程LWP2904</p>
+<table>
+<thead>
+<tr>
+<th>线程 ID</th>
+<th>线程名</th>
+<th>卡在哪个函数</th>
+<th>代码行号</th>
+<th>正在等待哪个锁</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>LWP 2904</td>
+<td>线程 2</td>
+<td><code>thread1_func</code></td>
+<td><code>main.c:13</code></td>
+<td><code>lock2</code> (地址: 0x5619576ec080)</td>
+</tr>
+<tr>
+<td>LWP 2905</td>
+<td>线程 3</td>
+<td><code>thread2_func</code></td>
+<td><code>main.c:24</code></td>
+<td><code>lock1</code> (地址: 0x5619576ec040)</td>
+</tr>
+<tr>
+<td>LWP 2903</td>
+<td>主线程</td>
+<td><code>pthread_join</code></td>
+<td><code>main.c:35</code></td>
+<td>等待两个子线程结束</td>
+</tr>
+</tbody>
+</table>
+<p>一般来说pstack查看栈信息只能看到存在死锁，但不能确定谁持有该锁</p>
+<h3 id="第三步">第三步</h3>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">gdb -p 进程ID</span><br><span class="line">进入调试该进程</span><br></pre></td></tr></table></figure>
+<p><img src="https://gitee.com/WFWFWFWFG/image-bed/raw/master/img/20260608144100097.png" alt="image-20260608144059973"></p>
+<p>打印所有线程</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">info threads</span><br></pre></td></tr></table></figure>
+<p>进入死锁线程</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">thread 线程ID</span><br></pre></td></tr></table></figure>
+<p><img src="https://gitee.com/WFWFWFWFG/image-bed/raw/master/img/20260608144201226.png" alt="image-20260608144201124"></p>
+<p>打印锁信息</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">print</span> 锁名称</span><br></pre></td></tr></table></figure>
+<img src="https://gitee.com/WFWFWFWFG/image-bed/raw/master/img/20260608144422516.png" alt="image-20260608144422398" style="zoom: 200%;">
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$1</span> = &#123;__data = &#123;__lock = 2, __count = 0, __owner = 2905, __nusers = 1, __kind = 0, __spins = 0, __elision = 0, __list = &#123;__prev = 0x0, __next = 0x0&#125;&#125;, __size = <span class="string">&quot;\002\000\000\000\000\000\000\000Y\v\000\000\001&quot;</span>, <span class="string">&#x27;\000&#x27;</span> &lt;repeats 26 <span class="built_in">times</span>&gt;, </span><br><span class="line">  __align = 2&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>__owne字段表明该锁的拥有者线程ID</p>
+<p>进入该线程</p>
+<p><img src="https://gitee.com/WFWFWFWFG/image-bed/raw/master/img/20260608145045474.png" alt="image-20260608145045370"></p>
+<p>查看该线程持有锁并在等待哪个锁</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$3</span> = &#123;__data = &#123;__lock = 2, __count = 0, __owner = 2904, __nusers = 1, __kind = 0, __spins = 0, __elision = 0, __list = &#123;__prev = 0x0, __next = 0x0&#125;&#125;, __size = <span class="string">&quot;\002\000\000\000\000\000\000\000X\v\000\000\001&quot;</span>, <span class="string">&#x27;\000&#x27;</span> &lt;repeats 26 <span class="built_in">times</span>&gt;, </span><br><span class="line">  __align = 2&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>可以看到两个锁互相持有等待</p>
+<p>分析问题定位到代码，解决问题</p>
+<p>如果是生产环境，则生成离线core文件</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 1. 先生成core文件保存现场（gdb中执行）</span></span><br><span class="line">gcore core.12345</span><br><span class="line"><span class="comment"># 输出：Saved corefile core.12345</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 2. 退出gdb</span></span><br><span class="line">quit</span><br><span class="line"></span><br><span class="line"><span class="comment"># 3. 重启服务恢复业务</span></span><br><span class="line">systemctl restart your_service</span><br><span class="line"></span><br><span class="line"><span class="comment"># 4. 离线分析core文件</span></span><br><span class="line">gdb ./your_program core.12345</span><br><span class="line"><span class="comment"># 然后重复第三步的gdb命令</span></span><br></pre></td></tr></table></figure>
+<h3 id="1-不知道锁变量的名字怎么办？">1. 不知道锁变量的名字怎么办？</h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"># 在gdb中查看所有全局变量</span><br><span class="line">info variables</span><br><span class="line"># 搜索包含mutex或lock的变量</span><br><span class="line">info variables mutex</span><br><span class="line">info variables lock</span><br></pre></td></tr></table></figure>
+<h3 id="2-锁是局部变量怎么办？">2. 锁是局部变量怎么办？</h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># 查看当前栈帧的局部变量</span><br><span class="line">info locals</span><br></pre></td></tr></table></figure>
+<h3 id="3-pstack-命令不存在怎么办？">3. pstack 命令不存在怎么办？</h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"># Ubuntu/Debian安装</span><br><span class="line">sudo apt-get install pstack</span><br><span class="line"></span><br><span class="line"># CentOS/RHEL安装</span><br><span class="line">sudo yum install pstack</span><br><span class="line"></span><br><span class="line"># 或者用gdb代替</span><br><span class="line">gdb -p 12345 -ex &quot;thread apply all bt&quot; -ex &quot;quit&quot;</span><br></pre></td></tr></table></figure>
+<h3 id="4-有多个锁怎么办？">4. 有多个锁怎么办？</h3>
+<p>重复第三步的操作，把每个线程等待的锁和持有的锁都列出来，画一个简单的图，就能找到循环等待链。</p>
 <h1>权限错误</h1>
-</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="http://example.com">WF</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="http://example.com/2025/07/27/%E7%A8%8B%E5%BA%8F%E8%BF%90%E8%A1%8C%E6%97%B6%E9%94%99%E8%AF%AF/">http://example.com/2025/07/27/%E7%A8%8B%E5%BA%8F%E8%BF%90%E8%A1%8C%E6%97%B6%E9%94%99%E8%AF%AF/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="http://example.com" target="_blank">WF的知识空间</a>！</span></div></div><div class="tag_share"><div class="post-share"><div class="social-share" data-image="/img/WF.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related  no-desc" href="/2025/07/27/%E6%96%B0%E5%BB%BA%E6%96%87%E4%BB%B6%E5%A4%B9/%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/" title="消息队列（kafka）"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">消息队列（kafka）</div></div></div></a><a class="pagination-related  no-desc" href="/2025/07/27/%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/" title="Linux内存管理"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">Linux内存管理</div></div></div></a></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/WF.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">WF</div><div class="author-info-description"></div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">19</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">0</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/WF-git-code"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="//github.com/WF-git-code" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="/18628492787@163.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">程序运行时错误本质与分类</span></a></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">2.</span> <span class="toc-text">编译错误分类与解决</span></a></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">3.</span> <span class="toc-text">死锁分析与排查</span></a></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">4.</span> <span class="toc-text">权限错误</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/12/14/c++/" title="C++">C++</a><time datetime="2025-12-14T00:52:50.000Z" title="发表于 2025-12-14 08:52:50">2025-12-14</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/08/16/%E6%96%B0%E5%BB%BA%E6%96%87%E4%BB%B6%E5%A4%B9/%E7%AE%97%E6%B3%95/" title="数据结构与算法">数据结构与算法</a><time datetime="2025-08-16T00:03:03.000Z" title="发表于 2025-08-16 08:03:03">2025-08-16</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/08/16/libevent/" title="Libevent剖析">Libevent剖析</a><time datetime="2025-08-16T00:02:00.000Z" title="发表于 2025-08-16 08:02:00">2025-08-16</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/07/27/Docker%E5%AE%B9%E5%99%A8/" title="Docker容器">Docker容器</a><time datetime="2025-07-27T00:52:57.000Z" title="发表于 2025-07-27 08:52:57">2025-07-27</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/07/27/Git/" title="Git的使用">Git的使用</a><time datetime="2025-07-27T00:52:57.000Z" title="发表于 2025-07-27 08:52:57">2025-07-27</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2025 - 2026 By WF</span><span class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.3.0</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.4.2</a></span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
+<h2 id="检查流程">检查流程</h2>
+<p><strong>确认你是谁</strong>：<code>whoami</code> 查看当前用户，<code>id</code> 查看用户 ID 和所属组</p>
+<p><strong>确认资源归谁</strong>：<code>ls -l 目标文件/目录</code> 查看所有者和权限位</p>
+<p><strong>确认路径权限</strong>：<code>namei -l 完整路径</code> 检查所有父目录的执行权限（最容易被忽略）</p>
+<p><strong>确认是否被安全模块拦截</strong>：检查 SELinux/AppArmor 日志</p>
+<h2 id="常见错误类型">常见错误类型</h2>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Permission denied: ./a.out</span><br><span class="line">cannot open file &#x27;test.txt&#x27;: Permission denied</span><br><span class="line">mkdir: cannot create directory &#x27;test&#x27;: Permission denied</span><br></pre></td></tr></table></figure>
+<p><img src="https://gitee.com/WFWFWFWFG/image-bed/raw/master/img/20260608150825922.png" alt="image-20260608150825796"></p>
+<h2 id="排查解决">排查解决</h2>
+<h3 id="查看文件权限："><strong>查看文件权限</strong>：</h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ls -l main</span><br><span class="line"># 输出：-rw-r--r-- 1 root root 100 Jun  8 16:00 test.txt</span><br></pre></td></tr></table></figure>
+<p><img src="https://gitee.com/WFWFWFWFG/image-bed/raw/master/img/20260608150920711.png" alt="image-20260608150920595"></p>
+<p>权限位解读：<code>- rw- r-- r--</code></p>
+<ul>
+<li>第一位：文件类型（- 普通文件，d 目录，l 符号链接）</li>
+<li>第 2-4 位：所有者权限（rw-：可读可写不可执行）</li>
+<li>第 5-7 位：组权限（r–：只读）</li>
+<li>第 8-10 位：其他用户权限（r–：只读）</li>
+</ul>
+<h3 id="检查父目录权限："><strong>检查父目录权限</strong>：</h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># 检查所有父目录的执行权限（x权限对目录是进入权限）</span><br><span class="line">namei -l /home/wf/test/test.txt</span><br></pre></td></tr></table></figure>
+<p><strong>注意</strong>：要访问一个文件，必须拥有该文件<strong>所有父目录</strong>的执行权限（x）。</p>
+<h2 id="解决">解决</h2>
+<h4 id="方法-1：修改文件权限">方法 1：修改文件权限</h4>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 给所有者添加执行权限</span></span><br><span class="line"><span class="built_in">chmod</span> u+x a.out</span><br><span class="line"></span><br><span class="line"><span class="comment"># 给所有用户添加读权限</span></span><br><span class="line"><span class="built_in">chmod</span> a+r test.txt</span><br><span class="line"></span><br><span class="line"><span class="comment"># 给所有者和组添加写权限</span></span><br><span class="line"><span class="built_in">chmod</span> ug+w test.txt</span><br><span class="line"></span><br><span class="line"><span class="comment"># 递归修改目录权限</span></span><br><span class="line"><span class="built_in">chmod</span> -R 755 test_dir</span><br></pre></td></tr></table></figure>
+<h4 id="方法-2：修改文件所有者">方法 2：修改文件所有者</h4>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 将文件所有者改为当前用户</span></span><br><span class="line"><span class="built_in">sudo</span> <span class="built_in">chown</span> <span class="variable">$USER</span>:<span class="variable">$USER</span> test.txt</span><br><span class="line"></span><br><span class="line"><span class="comment"># 递归修改目录所有者</span></span><br><span class="line"><span class="built_in">sudo</span> <span class="built_in">chown</span> -R <span class="variable">$USER</span>:<span class="variable">$USER</span> test_dir</span><br></pre></td></tr></table></figure>
+<h3 id="常见坑">常见坑</h3>
+<ul>
+<li><strong>不要随便用 chmod 777</strong>：这会给所有用户读写执行权限，存在严重安全隐患</li>
+<li><strong>目录必须有 x 权限才能进入</strong>：即使有 r 权限，没有 x 权限也无法访问目录内容</li>
+<li><strong>符号链接的权限永远是 777</strong>：实际权限由指向的文件决定</li>
+</ul>
+<h1>Linux资源占用排查</h1>
+<h2 id="看现象找问题">看现象找问题</h2>
+<table>
+<thead>
+<tr>
+<th>问题现象</th>
+<th>优先排查的资源</th>
+<th>核心工具</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>系统卡顿，鼠标键盘反应慢</td>
+<td>CPU</td>
+<td><code>top</code>, <code>htop</code>, <code>perf</code></td>
+</tr>
+<tr>
+<td>程序被杀死，输出 “已杀死”</td>
+<td>内存</td>
+<td><code>free</code>, <code>dmesg</code>, <code>valgrind</code></td>
+</tr>
+<tr>
+<td>程序写入慢，日志不输出</td>
+<td>磁盘 IO</td>
+<td><code>iostat</code>, <code>iotop</code>, <code>df</code></td>
+</tr>
+<tr>
+<td>网络请求慢，连接超时</td>
+<td>网络</td>
+<td><code>ss</code>, <code>iftop</code>, <code>nethogs</code></td>
+</tr>
+<tr>
+<td>服务无法建立新连接，提示 “Too many open files”</td>
+<td>文件描述符</td>
+<td><code>lsof</code>, <code>ulimit</code></td>
+</tr>
+</tbody>
+</table>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">htop</span><br></pre></td></tr></table></figure>
+<p><img src="https://gitee.com/WFWFWFWFG/image-bed/raw/master/img/20260608152717271.png" alt="image-20260608152717088"></p>
+<h3 id="1-CPU-核心使用率条">1. CPU 核心使用率条</h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">1 [||        1.9%]  5 [|         0.6%]  9 [|         0.6%]  13 [          0.0%]</span><br><span class="line">2 [|         0.6%]  6 [||        1.9%] 10 [|         1.3%]  14 [          0.0%]</span><br><span class="line">3 [|||       4.5%]  7 [          0.0%] 11 [||        1.9%]  15 [          0.0%]</span><br><span class="line">4 [          0.0%]  8 [||        1.2%] 12 [          0.0%]  16 [          0.0%]</span><br></pre></td></tr></table></figure>
+<ul>
+<li>每个数字代表一个 CPU 核心（你的系统有<strong>16 个 CPU 核心</strong>）</li>
+<li>进度条长度代表该核心的使用率</li>
+<li>百分比是该核心的总使用率</li>
+<li>颜色含义：
+<ul>
+<li>绿色：用户态 CPU 使用率（普通程序消耗）</li>
+<li>红色：内核态 CPU 使用率（系统调用消耗）</li>
+<li>蓝色：低优先级进程 CPU 使用率</li>
+</ul>
+</li>
+</ul>
+<h3 id="2-内存和交换空间使用条">2. 内存和交换空间使用条</h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Mem[|||||||||||||||||||||||  2.89G/11.0G]</span><br><span class="line">Swp[                         0K/1.64G]</span><br></pre></td></tr></table></figure>
+<ul>
+<li>
+<p>Mem</p>
+<p>：物理内存使用情况</p>
+<ul>
+<li>左边：已使用的物理内存（2.89GB）</li>
+<li>右边：总物理内存（11.0GB）</li>
+<li>你的系统内存使用率约 26%，非常健康</li>
+</ul>
+</li>
+<li>
+<p>Swp</p>
+<p>：交换空间使用情况</p>
+<ul>
+<li>你的系统交换空间完全没有使用，说明内存充足</li>
+</ul>
+</li>
+</ul>
+<h3 id="3-系统状态信息">3. 系统状态信息</h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Tasks: 108, 379 thr; 1 running</span><br><span class="line">Load average: 0.29 0.13 0.09</span><br><span class="line">Uptime: 07:08:59</span><br></pre></td></tr></table></figure>
+<ul>
+<li>
+<p>Tasks</p>
+<p>：任务统计</p>
+<ul>
+<li>108：总进程数</li>
+<li>379：总线程数（很多进程是多线程的）</li>
+<li>1 running：当前正在运行的进程数（只有 htop 自己在运行）</li>
+</ul>
+</li>
+<li>
+<p>Load average</p>
+<p>：系统平均负载（最重要的指标之一）</p>
+<ul>
+<li>
+<p>三个值分别代表<strong>1 分钟、5 分钟、15 分钟</strong>的平均负载</p>
+</li>
+<li>
+<p>对于 16 核 CPU 来说：</p>
+<ul>
+<li>
+<p>&lt; 4：非常空闲</p>
+</li>
+<li>
+<p>4-8：正常负载</p>
+</li>
+<li>
+<p>8-16：高负载</p>
+</li>
+<li>
+<blockquote>
+<p>16：过载</p>
+</blockquote>
+</li>
+</ul>
+</li>
+<li>
+<p>你的系统负载 0.29，<strong>极其空闲</strong></p>
+</li>
+</ul>
+</li>
+<li>
+<p>Uptime</p>
+<p>：系统连续运行时间</p>
+<ul>
+<li>你的系统已经连续运行了 7 小时 8 分钟 59 秒</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3 id="底部进程列表区">底部进程列表区</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">列名</th>
+<th style="text-align:center">含义</th>
+<th style="text-align:center">你的截图示例</th>
+<th style="text-align:center">关键说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center"><strong>PID</strong></td>
+<td style="text-align:center">进程 ID</td>
+<td style="text-align:center">4586, 2834, 1102</td>
+<td style="text-align:center">每个进程的唯一标识符</td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>USER</strong></td>
+<td style="text-align:center">运行进程的用户</td>
+<td style="text-align:center">wf, mysql, redis, root</td>
+<td style="text-align:center">哪个用户启动了这个进程</td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>PRI</strong></td>
+<td style="text-align:center">进程优先级</td>
+<td style="text-align:center">20</td>
+<td style="text-align:center">数值越小优先级越高，默认 20</td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>NI</strong></td>
+<td style="text-align:center">进程 nice 值</td>
+<td style="text-align:center">0</td>
+<td style="text-align:center">调整进程优先级的参数，范围 - 20 到 19，负数表示高优先级</td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>VIRT</strong></td>
+<td style="text-align:center">虚拟内存大小</td>
+<td style="text-align:center">1546M, 338M, 9398M</td>
+<td style="text-align:center">进程的全部虚拟内存空间，包括代码、数据、共享库、交换空间等<strong>⚠️ 这个值很大，不代表实际占用的物理内存</strong></td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>RES</strong></td>
+<td style="text-align:center">常驻内存大小</td>
+<td style="text-align:center">5744K, 82288K, 656M</td>
+<td style="text-align:center">✅ <strong>最重要的内存指标</strong>进程实际占用的物理内存（不包含交换出去的部分）</td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>SHR</strong></td>
+<td style="text-align:center">共享内存大小</td>
+<td style="text-align:center">3168K, 41844K, 22896K</td>
+<td style="text-align:center">多个进程可以共享的内存部分，如共享库、共享数据</td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>S</strong></td>
+<td style="text-align:center">进程状态</td>
+<td style="text-align:center">R, S</td>
+<td style="text-align:center">进程的当前状态：- R：运行中- S：睡眠中（等待事件）- D：不可中断睡眠（通常是等待 IO）- Z：僵尸进程- T：停止或跟踪状态</td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>CPU%</strong></td>
+<td style="text-align:center">CPU 使用率</td>
+<td style="text-align:center">5.7%, 3.8%, 1.3%</td>
+<td style="text-align:center">进程占用的 CPU 百分比你的系统中没有 CPU 密集型进程</td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>MEM%</strong></td>
+<td style="text-align:center">内存使用率</td>
+<td style="text-align:center">0.0%, 0.7%, 5.8%</td>
+<td style="text-align:center">进程占用的物理内存百分比</td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>TIME+</strong></td>
+<td style="text-align:center">累计 CPU 时间</td>
+<td style="text-align:center">0:02.37, 8:46.62, 8:40.90</td>
+<td style="text-align:center">进程从启动到现在累计使用的 CPU 时间</td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>Command</strong></td>
+<td style="text-align:center">进程命令</td>
+<td style="text-align:center">htop, /usr/lib/xorg/Xorg, java</td>
+<td style="text-align:center">启动进程的完整命令行</td>
+</tr>
+</tbody>
+</table>
+<p><img src="https://gitee.com/WFWFWFWFG/image-bed/raw/master/img/20260608152329125.png" alt="image-20260608152328982"></p>
+<p><strong>先看 CPU</strong>：<code>top</code> 查看<code>id</code>和<code>wa</code></p>
+<ul>
+<li>如果<code>wa</code>高 → 是磁盘 IO 问题</li>
+<li>如果<code>us</code>或<code>sy</code>高 → 是 CPU 问题</li>
+</ul>
+<p><strong>再看内存</strong>：<code>free -h</code> 查看<code>available</code></p>
+<ul>
+<li>如果<code>available</code>低 → 是内存问题</li>
+</ul>
+<p><strong>再看磁盘</strong>：<code>df -h</code> 和 <code>iostat -x 1</code></p>
+<ul>
+<li>如果<code>%util</code>高 → 是磁盘 IO 问题</li>
+</ul>
+<p><strong>再看网络</strong>：<code>iftop</code> 和 <code>ss</code></p>
+<ul>
+<li>如果流量异常 → 是网络问题</li>
+</ul>
+<p><strong>最后看文件句柄</strong>：<code>lsof</code> 和 <code>ulimit</code></p>
+<ul>
+<li>如果文件句柄数接近限制 → 是文件句柄问题</li>
+</ul>
+<h2 id="资源问题">资源问题</h2>
+<p>遇到资源问题时，按照这个顺序排查和解决：</p>
+<ol>
+<li><strong>先看系统全局限制</strong>：用<code>sysctl</code>查看系统级的总闸门是否足够</li>
+<li><strong>再看进程级限制</strong>：用<code>prlimit --pid &lt;pid&gt;</code>查看进程的实际限制</li>
+<li><strong>临时解决</strong>：用<code>prlimit</code>动态修改运行中进程的限制</li>
+<li>永久解决：
+<ul>
+<li>系统级：修改<code>/etc/sysctl.d/</code>下的配置文件</li>
+<li>服务级：在 systemd 的 service 文件中设置<code>Limit*</code>参数</li>
+</ul>
+</li>
+</ol>
+<h2 id="ulimit">ulimit</h2>
+<p><code>ulimit</code>是 Linux 内核提供的<strong>进程级资源限制机制</strong>，用于防止单个进程耗尽系统所有资源导致整体崩溃</p>
+<h3 id="软限制与硬限制">软限制与硬限制</h3>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>含义</th>
+<th>修改权限</th>
+<th>特性</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>软限制 (soft)</strong></td>
+<td>当前生效的警告阈值</td>
+<td>任何用户都可以修改，但不能超过硬限制</td>
+<td>超过时系统会发出警告，但通常不会立即终止进程</td>
+</tr>
+<tr>
+<td><strong>硬限制 (hard)</strong></td>
+<td>资源使用的绝对上限</td>
+<td>只有 root 用户可以提升</td>
+<td>超过时系统会强制阻止并可能终止进程</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>含义</th>
+<th>默认值</th>
+<th>常见问题</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>-c</code></td>
+<td>core 文件最大大小 (KB)</td>
+<td>0（不生成 core 文件）</td>
+<td>程序崩溃只输出 “核心已转储” 但没有 core 文件</td>
+</tr>
+<tr>
+<td><code>-n</code></td>
+<td>单个进程可打开的最大文件描述符数</td>
+<td>1024</td>
+<td>“Too many open files” 错误</td>
+</tr>
+<tr>
+<td><code>-u</code></td>
+<td>单个用户可创建的最大进程数</td>
+<td>4096</td>
+<td>“fork: Resource temporarily unavailable” 错误</td>
+</tr>
+<tr>
+<td><code>-s</code></td>
+<td>栈大小 (KB)</td>
+<td>8192</td>
+<td>递归过深导致栈溢出</td>
+</tr>
+<tr>
+<td><code>-m</code></td>
+<td>最大常驻内存大小 (KB)</td>
+<td>unlimited</td>
+<td></td>
+</tr>
+<tr>
+<td><code>-v</code></td>
+<td>最大虚拟内存大小 (KB)</td>
+<td>unlimited</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h2 id="其他工具">其他工具</h2>
+<table>
+<thead>
+<tr>
+<th>工具</th>
+<th>限制级别</th>
+<th>限制范围</th>
+<th>支持的资源</th>
+<th>生效时间</th>
+<th>典型使用场景</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ulimit</td>
+<td>进程级</td>
+<td>当前 shell 及其子进程</td>
+<td>10 余种</td>
+<td>仅对新进程生效</td>
+<td>临时测试、简单脚本</td>
+</tr>
+<tr>
+<td>prlimit</td>
+<td>进程级</td>
+<td>任意进程</td>
+<td>10 余种</td>
+<td>立即生效</td>
+<td>动态修改运行中服务的限制</td>
+</tr>
+<tr>
+<td>sysctl</td>
+<td>系统级</td>
+<td>整个系统</td>
+<td>所有系统资源</td>
+<td>立即生效</td>
+<td>全局系统调优</td>
+</tr>
+<tr>
+<td>systemd+cgroups</td>
+<td>进程组级</td>
+<td>一组进程</td>
+<td>CPU、内存、IO、网络等</td>
+<td>重启服务生效</td>
+<td>服务级资源隔离、容器</td>
+</tr>
+<tr>
+<td>quota</td>
+<td>用户级</td>
+<td>单个用户 / 组</td>
+<td>磁盘空间</td>
+<td>立即生效</td>
+<td>多用户系统磁盘管理</td>
+</tr>
+<tr>
+<td>tc</td>
+<td>网络级</td>
+<td>端口 / IP / 进程</td>
+<td>网络带宽</td>
+<td>立即生效</td>
+<td>网络流量控制</td>
+</tr>
+<tr>
+<td>ionice</td>
+<td>进程级</td>
+<td>单个进程</td>
+<td>磁盘 IO 优先级</td>
+<td>立即生效</td>
+<td>防止 IO 密集型进程拖慢系统</td>
+</tr>
+<tr>
+<td>nice</td>
+<td>进程级</td>
+<td>单个进程</td>
+<td>CPU 优先级</td>
+<td>立即生效</td>
+<td>后台任务优先级调整</td>
+</tr>
+</tbody>
+</table>
+<h2 id="prlimit">prlimit</h2>
+<p><code>prlimit</code>是 Linux 内核 2.6.36 + 引入的标准工具，<strong>100% 兼容并替代 ulimit</strong>，专门解决 ulimit 的三大致命缺陷：</p>
+<ul>
+<li>是独立二进制文件，支持<code>sudo</code>，不会出现<code>sudo ulimit -n</code>无效的问题</li>
+<li>可以<strong>动态修改任意正在运行的进程</strong>的限制，不需要重启服务</li>
+<li>可以在启动程序时一次性设置所有限制，不需要修改配置文件</li>
+</ul>
+<h3 id="1-核心语法">1. 核心语法</h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># 通用格式</span><br><span class="line">prlimit [选项] [--资源=软限制:硬限制] [--pid &lt;pid&gt;] [命令]</span><br></pre></td></tr></table></figure>
+<table>
+<thead>
+<tr>
+<th>prlimit 参数</th>
+<th>ulimit 参数</th>
+<th>含义</th>
+<th>单位</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--core</code></td>
+<td><code>-c</code></td>
+<td>core 文件最大大小</td>
+<td>bytes</td>
+</tr>
+<tr>
+<td><code>--nofile</code></td>
+<td><code>-n</code></td>
+<td>单个进程可打开的最大文件描述符数</td>
+<td>个数</td>
+</tr>
+<tr>
+<td><code>--nproc</code></td>
+<td><code>-u</code></td>
+<td>单个用户可创建的最大进程 / 线程数</td>
+<td>个数</td>
+</tr>
+<tr>
+<td><code>--stack</code></td>
+<td><code>-s</code></td>
+<td>进程栈大小</td>
+<td>bytes</td>
+</tr>
+<tr>
+<td><code>--rss</code></td>
+<td><code>-m</code></td>
+<td>最大常驻内存大小</td>
+<td>bytes</td>
+</tr>
+<tr>
+<td><code>--as</code></td>
+<td><code>-v</code></td>
+<td>最大虚拟内存大小</td>
+<td>bytes</td>
+</tr>
+<tr>
+<td><code>--cpu</code></td>
+<td><code>-t</code></td>
+<td>最大 CPU 时间</td>
+<td>seconds</td>
+</tr>
+<tr>
+<td><code>--fsize</code></td>
+<td><code>-f</code></td>
+<td>单个进程可创建的最大文件大小</td>
+<td>bytes</td>
+</tr>
+</tbody>
+</table>
+<h2 id="sysctl">sysctl</h2>
+<p><code>sysctl</code>是 Linux 内核提供的<strong>系统级参数配置工具</strong>，用于查看和修改内核运行时参数。它控制着整个系统的所有核心行为，从内存管理、网络协议到进程调度。</p>
+<p><strong>和 prlimit 的本质区别</strong>：</p>
+<ul>
+<li><code>prlimit</code>：给<strong>单个进程</strong>设置 “天花板”</li>
+<li><code>sysctl</code>：给<strong>整个系统</strong>设置 “总闸门”</li>
+</ul>
+<p><strong>用的时候再查</strong></p>
+<h1>工具集</h1>
+<h3 id="1-GNU-Binutils-工具集">1. GNU Binutils 工具集</h3>
+<p><strong>用途</strong>：二进制文件处理工具集，是所有编译和链接工作的基础</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">GNU Binutils</span><br><span class="line">├─ ld：链接器（将目标文件链接成可执行文件）</span><br><span class="line">├─ as：汇编器（将汇编代码转换成目标文件）</span><br><span class="line">├─ nm：查看目标文件中的符号</span><br><span class="line">├─ objdump：反汇编工具</span><br><span class="line">├─ readelf：查看ELF文件格式信息</span><br><span class="line">├─ strip：去除可执行文件中的调试信息</span><br><span class="line">├─ ar：创建和修改静态库</span><br><span class="line">└─ ranlib：生成静态库的索引</span><br></pre></td></tr></table></figure>
+<h3 id="2-GCC-工具集">2. GCC 工具集</h3>
+<p><strong>用途</strong>：编译器工具集，支持多种编程语言</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">GCC工具集</span><br><span class="line">├─ gcc：C语言编译器</span><br><span class="line">├─ g++：C++语言编译器</span><br><span class="line">├─ gfortran：Fortran语言编译器</span><br><span class="line">├─ gcj：Java语言编译器</span><br><span class="line">├─ gdb：调试器（虽然现在是独立项目，但历史上属于GCC）</span><br><span class="line">└─ libstdc++：C++标准库</span><br></pre></td></tr></table></figure>
+<h3 id="3-Linux-性能工具集">3. Linux 性能工具集</h3>
+<p><strong>用途</strong>：系统和程序性能分析</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">Linux性能工具集</span><br><span class="line">├─ perf：Linux内核内置的性能分析工具</span><br><span class="line">├─ top/htop：进程CPU和内存使用监控</span><br><span class="line">├─ vmstat：系统虚拟内存统计</span><br><span class="line">├─ iostat：磁盘IO统计</span><br><span class="line">├─ mpstat：CPU统计</span><br><span class="line">├─ pidstat：进程统计</span><br><span class="line">└─ sar：系统活动报告</span><br></pre></td></tr></table></figure>
+<h3 id="4-网络工具集">4. 网络工具集</h3>
+<p><strong>用途</strong>：网络问题排查和分析</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">网络工具集</span><br><span class="line">├─ ip：网络接口和路由管理</span><br><span class="line">├─ ss/netstat：网络连接查看</span><br><span class="line">├─ tcpdump：网络抓包工具</span><br><span class="line">├─ ping：网络连通性测试</span><br><span class="line">├─ traceroute：路由跟踪</span><br><span class="line">├─ nslookup/dig：DNS查询</span><br><span class="line">└─ iptables：防火墙配置</span><br></pre></td></tr></table></figure>
+<h3 id="5-Git-工具集">5. Git 工具集</h3>
+<p><strong>用途</strong>：版本控制</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">Git工具集</span><br><span class="line">├─ git add：添加文件到暂存区</span><br><span class="line">├─ git commit：提交更改</span><br><span class="line">├─ git push：推送到远程仓库</span><br><span class="line">├─ git pull：从远程仓库拉取</span><br><span class="line">├─ git branch：分支管理</span><br><span class="line">├─ git merge：合并分支</span><br><span class="line">└─ git log：查看提交历史</span><br></pre></td></tr></table></figure>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="http://example.com">WF</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="http://example.com/2025/07/27/%E7%A8%8B%E5%BA%8F%E8%BF%90%E8%A1%8C%E6%97%B6%E9%94%99%E8%AF%AF/">http://example.com/2025/07/27/%E7%A8%8B%E5%BA%8F%E8%BF%90%E8%A1%8C%E6%97%B6%E9%94%99%E8%AF%AF/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="http://example.com" target="_blank">WF的知识空间</a>！</span></div></div><div class="tag_share"><div class="post-share"><div class="social-share" data-image="/img/WF.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2025/07/27/Mysql/" title="MySql"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">MySql</div></div><div class="info-2"><div class="info-item-1">SQL语句 一、基础 CRUD 1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950-- 基础查询SELECT id, name, age FROM user WHERE age &gt; 18 ORDER BY create_time DESC LIMIT 10;-- 去重查询SELECT DISTINCT age FROM user;-- 聚合查询SELECT   COUNT(*) AS total,   AVG(age) AS avg_age,   MAX(age) AS max_age FROM user;-- 分组查询SELECT age, COUNT(*) AS count FROM user WHERE age &gt; 18 GROUP BY age HAVING count &gt; 5;-- 插入单行INSERT INTO user(name, age, phone) VALUES(&#x27;张三&#x27;, 20, &#x27...</div></div></div></a><a class="pagination-related" href="/2025/07/27/%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86/" title="Linux进程管理"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">Linux进程管理</div></div><div class="info-2"><div class="info-item-1">进程与线程 windiows Windows 采用了严格的双轨制设计，进程和线程是两个完全不同的内核对象，有各自独立的内核数据结构： Windows 进程（EPROCESS 结构）  唯一身份：进程是资源分配的基本单位，拥有独立的虚拟地址空间 核心资源：  独立的页表和虚拟地址空间 独立的句柄表（管理文件、套接字、互斥量等内核对象） 独立的访问令牌（安全上下文） 独立的 PEB（进程环境块，用户态数据结构） 一个或多个线程   调度属性：进程本身不能被调度，它只是线程的容器  Windows 线程（ETHREAD 结构）  唯一身份：线程是CPU 调度的基本单位，必须依附于某个进程存在 私有资源：  独立的内核栈和用户栈 独立的寄存器上下文（程序计数器、栈指针等） 独立的 TLS（线程本地存储） 独立的 TEB（线程环境块，用户态数据结构） 线程优先级、调度状态等调度属性   共享资源：同一进程内的所有线程共享进程的所有资源  Windows 模型的特点  概念清晰：进程和线程的职责划分明确，符合大多数人的直觉 实现复杂：内核需要维护两套完全不同的对象体系和管理机制 调度开销大：...</div></div></div></a></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/WF.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">WF</div><div class="author-info-description"></div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">22</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">12</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/WF-git-code"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="//github.com/WF-git-code" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="/18628492787@163.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">整体错误类型与排查思路</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%94%99%E8%AF%AF%E5%88%86%E7%B1%BB"><span class="toc-number">1.1.</span> <span class="toc-text">错误分类</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%80%9A%E7%94%A8%E6%8E%92%E6%9F%A5%E6%80%9D%E8%B7%AF"><span class="toc-number">1.2.</span> <span class="toc-text">通用排查思路</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">2.</span> <span class="toc-text">Core Dump</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9F%BA%E7%A1%80%E9%85%8D%E7%BD%AE"><span class="toc-number">2.1.</span> <span class="toc-text">基础配置</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%B4%E6%97%B6%E9%85%8D%E7%BD%AE"><span class="toc-number">2.1.1.</span> <span class="toc-text">临时配置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B0%B8%E4%B9%85%E5%90%AF%E7%94%A8"><span class="toc-number">2.1.2.</span> <span class="toc-text">永久启用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%85%8D%E7%BD%AE-core-%E6%96%87%E4%BB%B6%E7%94%9F%E6%88%90%E8%B7%AF%E5%BE%84%E5%92%8C%E5%91%BD%E5%90%8D"><span class="toc-number">2.1.3.</span> <span class="toc-text">配置 core 文件生成路径和命名</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E6%B2%A1%E7%94%9F%E6%88%90-core-%E6%96%87%E4%BB%B6%EF%BC%9F"><span class="toc-number">2.2.</span> <span class="toc-text">为什么没生成 core 文件？</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%97%AE%E9%A2%98-1%EF%BC%9Acore-%E6%96%87%E4%BB%B6%E5%A4%AA%E5%A4%A7"><span class="toc-number">2.2.1.</span> <span class="toc-text">问题 1：core 文件太大</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%97%AE%E9%A2%98-2%EF%BC%9A%E2%80%9Ccore-file-may-not-match%E2%80%9D-%E9%94%99%E8%AF%AF"><span class="toc-number">2.2.2.</span> <span class="toc-text">问题 2：“core file may not match” 错误</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%97%AE%E9%A2%98-3%EF%BC%9A%E2%80%9CNo-such-file-or-directory%E2%80%9D-%E9%94%99%E8%AF%AF"><span class="toc-number">2.2.3.</span> <span class="toc-text">问题 3：“No such file or directory” 错误</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">3.</span> <span class="toc-text">程序运行时错误本质与分类</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9C%AC%E8%B4%A8"><span class="toc-number">3.0.1.</span> <span class="toc-text">本质</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%AE%B5%E9%94%99%E8%AF%AF%EF%BC%88%E6%A0%B8%E5%BF%83%E5%B7%B2%E8%BD%AC%E5%82%A8%EF%BC%89"><span class="toc-number">3.0.2.</span> <span class="toc-text">段错误（核心已转储）</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%8E%92%E6%9F%A5%E6%80%9D%E8%B7%AF"><span class="toc-number">3.0.2.1.</span> <span class="toc-text">排查思路</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%80%BB%E7%BA%BF%E9%94%99%E8%AF%AF"><span class="toc-number">3.0.3.</span> <span class="toc-text">总线错误</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-%E6%9C%AA%E5%AF%B9%E9%BD%90%E7%9A%84%E5%86%85%E5%AD%98%E8%AE%BF%E9%97%AE%EF%BC%88%E6%9C%80%E5%B8%B8%E8%A7%81%EF%BC%89"><span class="toc-number">3.0.3.1.</span> <span class="toc-text">1. 未对齐的内存访问（最常见）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-mmap-%E6%98%A0%E5%B0%84%E6%96%87%E4%BB%B6%E8%A2%AB%E6%88%AA%E6%96%AD"><span class="toc-number">3.0.3.2.</span> <span class="toc-text">2. mmap 映射文件被截断</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-%E8%AE%BF%E9%97%AE%E4%B8%8D%E5%AD%98%E5%9C%A8%E7%9A%84%E7%89%A9%E7%90%86%E5%9C%B0%E5%9D%80"><span class="toc-number">3.0.3.3.</span> <span class="toc-text">3. 访问不存在的物理地址</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-%E8%AE%BF%E9%97%AE%E5%B7%B2%E8%A2%AB-munmap-%E7%9A%84%E5%86%85%E5%AD%98%E5%8C%BA%E5%9F%9F"><span class="toc-number">3.0.3.4.</span> <span class="toc-text">4. 访问已被 munmap 的内存区域</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B5%AE%E7%82%B9%E5%BC%82%E5%B8%B8"><span class="toc-number">3.0.4.</span> <span class="toc-text">浮点异常</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-%E6%95%B4%E6%95%B0%E9%99%A4%E4%BB%A5%E9%9B%B6%EF%BC%88%E6%9C%80%E5%B8%B8%E8%A7%81%EF%BC%89"><span class="toc-number">3.0.4.1.</span> <span class="toc-text">1. 整数除以零（最常见）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-%E6%95%B4%E6%95%B0%E5%AF%B9%E9%9B%B6%E5%8F%96%E6%A8%A1"><span class="toc-number">3.0.4.2.</span> <span class="toc-text">2. 整数对零取模</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-%E6%B5%AE%E7%82%B9%E9%99%A4%E4%BB%A5%E9%9B%B6"><span class="toc-number">3.0.4.3.</span> <span class="toc-text">3. 浮点除以零</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-%E6%B5%AE%E7%82%B9%E6%BA%A2%E5%87%BA"><span class="toc-number">3.0.4.4.</span> <span class="toc-text">4. 浮点溢出</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#5-%E6%97%A0%E6%95%88%E6%B5%AE%E7%82%B9%E8%BF%90%E7%AE%97"><span class="toc-number">3.0.4.5.</span> <span class="toc-text">5. 无效浮点运算</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%9D%9E%E6%B3%95%E6%8C%87%E4%BB%A4"><span class="toc-number">3.0.5.</span> <span class="toc-text">非法指令</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-%E6%89%A7%E8%A1%8C%E4%BA%86%E6%97%A0%E6%95%88%E7%9A%84%E6%9C%BA%E5%99%A8%E6%8C%87%E4%BB%A4"><span class="toc-number">3.0.5.1.</span> <span class="toc-text">1. 执行了无效的机器指令</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-%E6%A0%88%E7%A0%B4%E5%9D%8F%E5%AF%BC%E8%87%B4%E8%B7%B3%E8%BD%AC%E5%88%B0%E9%94%99%E8%AF%AF%E5%9C%B0%E5%9D%80"><span class="toc-number">3.0.5.2.</span> <span class="toc-text">2. 栈破坏导致跳转到错误地址</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-%E7%BC%96%E8%AF%91%E5%99%A8%E7%94%9F%E6%88%90%E4%BA%86%E4%B8%8D%E6%94%AF%E6%8C%81%E7%9A%84%E6%8C%87%E4%BB%A4%E9%9B%86"><span class="toc-number">3.0.5.3.</span> <span class="toc-text">3. 编译器生成了不支持的指令集</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-%E5%8A%A8%E6%80%81%E9%93%BE%E6%8E%A5%E5%BA%93%E7%89%88%E6%9C%AC%E4%B8%8D%E5%85%BC%E5%AE%B9"><span class="toc-number">3.0.5.4.</span> <span class="toc-text">4. 动态链接库版本不兼容</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#5-%E4%BB%A3%E7%A0%81%E6%AE%B5%E8%A2%AB%E7%A0%B4%E5%9D%8F"><span class="toc-number">3.0.5.5.</span> <span class="toc-text">5. 代码段被破坏</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BC%82%E5%B8%B8%E4%B8%AD%E6%AD%A2"><span class="toc-number">3.0.6.</span> <span class="toc-text">异常中止</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-assert-%E6%96%AD%E8%A8%80%E5%A4%B1%E8%B4%A5%EF%BC%88%E6%9C%80%E5%B8%B8%E8%A7%81%EF%BC%89"><span class="toc-number">3.0.6.1.</span> <span class="toc-text">1. assert 断言失败（最常见）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-%E6%98%BE%E5%BC%8F%E8%B0%83%E7%94%A8-abort-%E5%87%BD%E6%95%B0"><span class="toc-number">3.0.6.2.</span> <span class="toc-text">2. 显式调用 abort () 函数</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-C-%E6%9C%AA%E6%8D%95%E8%8E%B7%E7%9A%84%E5%BC%82%E5%B8%B8"><span class="toc-number">3.0.6.3.</span> <span class="toc-text">3. C++ 未捕获的异常</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-glibc-%E6%A3%80%E6%B5%8B%E5%88%B0%E5%A0%86%E6%8D%9F%E5%9D%8F"><span class="toc-number">3.0.6.4.</span> <span class="toc-text">4. glibc 检测到堆损坏</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#5-%E6%A0%88%E6%BA%A2%E5%87%BA%E6%A3%80%E6%B5%8B%EF%BC%88stack-smashing-detected%EF%BC%89"><span class="toc-number">3.0.6.5.</span> <span class="toc-text">5. 栈溢出检测（stack smashing detected）</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%A2%AB%E5%BC%BA%E5%88%B6%E6%9D%80%E6%AD%BB"><span class="toc-number">3.0.7.</span> <span class="toc-text">被强制杀死</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-OOM-Killer-%E6%9D%80%E6%AD%BB%E8%BF%9B%E7%A8%8B%EF%BC%88%E6%9C%80%E5%B8%B8%E8%A7%81%EF%BC%89"><span class="toc-number">3.0.7.1.</span> <span class="toc-text">1. OOM Killer 杀死进程（最常见）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-%E7%AE%A1%E7%90%86%E5%91%98%E6%89%8B%E5%8A%A8%E6%89%A7%E8%A1%8C-kill-9"><span class="toc-number">3.0.7.2.</span> <span class="toc-text">2. 管理员手动执行 kill -9</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-cgroups-%E8%B5%84%E6%BA%90%E9%99%90%E5%88%B6%E8%A7%A6%E5%8F%91"><span class="toc-number">3.0.7.3.</span> <span class="toc-text">3. cgroups 资源限制触发</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-%E7%B3%BB%E7%BB%9F-panic-%E5%89%8D%E6%B8%85%E7%90%86%E8%BF%9B%E7%A8%8B"><span class="toc-number">3.0.7.4.</span> <span class="toc-text">4. 系统 panic 前清理进程</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#5-%E7%88%B6%E8%BF%9B%E7%A8%8B%E9%80%80%E5%87%BA%E6%97%B6%E6%9D%80%E6%AD%BB%E5%AD%90%E8%BF%9B%E7%A8%8B"><span class="toc-number">3.0.7.5.</span> <span class="toc-text">5. 父进程退出时杀死子进程</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">4.</span> <span class="toc-text">编译错误分类与解决</span></a></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">5.</span> <span class="toc-text">死锁分析与排查</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%A1%AE%E8%AE%A4%E6%98%AF%E4%B8%8D%E6%98%AF%E6%AD%BB%E9%94%81"><span class="toc-number">5.1.</span> <span class="toc-text">确认是不是死锁</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B7%A5%E5%85%B7"><span class="toc-number">5.2.</span> <span class="toc-text">工具</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8E%92%E6%9F%A5"><span class="toc-number">5.3.</span> <span class="toc-text">排查</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%AD%A5%E9%AA%A4-1%EF%BC%9A%E6%89%BE%E5%88%B0%E6%AD%BB%E9%94%81%E8%BF%9B%E7%A8%8B"><span class="toc-number">5.3.1.</span> <span class="toc-text">步骤 1：找到死锁进程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AC%AC%E4%BA%8C%E6%AD%A5%EF%BC%9A%E7%94%A8-pstack-%E5%BF%AB%E9%80%9F%E5%AE%9A%E4%BD%8D%E9%98%BB%E5%A1%9E%E4%BD%8D%E7%BD%AE"><span class="toc-number">5.3.2.</span> <span class="toc-text">第二步：用 pstack 快速定位阻塞位置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AC%AC%E4%B8%89%E6%AD%A5"><span class="toc-number">5.3.3.</span> <span class="toc-text">第三步</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E4%B8%8D%E7%9F%A5%E9%81%93%E9%94%81%E5%8F%98%E9%87%8F%E7%9A%84%E5%90%8D%E5%AD%97%E6%80%8E%E4%B9%88%E5%8A%9E%EF%BC%9F"><span class="toc-number">5.3.4.</span> <span class="toc-text">1. 不知道锁变量的名字怎么办？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E9%94%81%E6%98%AF%E5%B1%80%E9%83%A8%E5%8F%98%E9%87%8F%E6%80%8E%E4%B9%88%E5%8A%9E%EF%BC%9F"><span class="toc-number">5.3.5.</span> <span class="toc-text">2. 锁是局部变量怎么办？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-pstack-%E5%91%BD%E4%BB%A4%E4%B8%8D%E5%AD%98%E5%9C%A8%E6%80%8E%E4%B9%88%E5%8A%9E%EF%BC%9F"><span class="toc-number">5.3.6.</span> <span class="toc-text">3. pstack 命令不存在怎么办？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-%E6%9C%89%E5%A4%9A%E4%B8%AA%E9%94%81%E6%80%8E%E4%B9%88%E5%8A%9E%EF%BC%9F"><span class="toc-number">5.3.7.</span> <span class="toc-text">4. 有多个锁怎么办？</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">6.</span> <span class="toc-text">权限错误</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A3%80%E6%9F%A5%E6%B5%81%E7%A8%8B"><span class="toc-number">6.1.</span> <span class="toc-text">检查流程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B8%B8%E8%A7%81%E9%94%99%E8%AF%AF%E7%B1%BB%E5%9E%8B"><span class="toc-number">6.2.</span> <span class="toc-text">常见错误类型</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8E%92%E6%9F%A5%E8%A7%A3%E5%86%B3"><span class="toc-number">6.3.</span> <span class="toc-text">排查解决</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9F%A5%E7%9C%8B%E6%96%87%E4%BB%B6%E6%9D%83%E9%99%90%EF%BC%9A"><span class="toc-number">6.3.1.</span> <span class="toc-text">查看文件权限：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A3%80%E6%9F%A5%E7%88%B6%E7%9B%AE%E5%BD%95%E6%9D%83%E9%99%90%EF%BC%9A"><span class="toc-number">6.3.2.</span> <span class="toc-text">检查父目录权限：</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%A7%A3%E5%86%B3"><span class="toc-number">6.4.</span> <span class="toc-text">解决</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%96%B9%E6%B3%95-1%EF%BC%9A%E4%BF%AE%E6%94%B9%E6%96%87%E4%BB%B6%E6%9D%83%E9%99%90"><span class="toc-number">6.4.0.1.</span> <span class="toc-text">方法 1：修改文件权限</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%96%B9%E6%B3%95-2%EF%BC%9A%E4%BF%AE%E6%94%B9%E6%96%87%E4%BB%B6%E6%89%80%E6%9C%89%E8%80%85"><span class="toc-number">6.4.0.2.</span> <span class="toc-text">方法 2：修改文件所有者</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B8%B8%E8%A7%81%E5%9D%91"><span class="toc-number">6.4.1.</span> <span class="toc-text">常见坑</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">7.</span> <span class="toc-text">Linux资源占用排查</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%9C%8B%E7%8E%B0%E8%B1%A1%E6%89%BE%E9%97%AE%E9%A2%98"><span class="toc-number">7.1.</span> <span class="toc-text">看现象找问题</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-CPU-%E6%A0%B8%E5%BF%83%E4%BD%BF%E7%94%A8%E7%8E%87%E6%9D%A1"><span class="toc-number">7.1.1.</span> <span class="toc-text">1. CPU 核心使用率条</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E5%86%85%E5%AD%98%E5%92%8C%E4%BA%A4%E6%8D%A2%E7%A9%BA%E9%97%B4%E4%BD%BF%E7%94%A8%E6%9D%A1"><span class="toc-number">7.1.2.</span> <span class="toc-text">2. 内存和交换空间使用条</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E7%B3%BB%E7%BB%9F%E7%8A%B6%E6%80%81%E4%BF%A1%E6%81%AF"><span class="toc-number">7.1.3.</span> <span class="toc-text">3. 系统状态信息</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BA%95%E9%83%A8%E8%BF%9B%E7%A8%8B%E5%88%97%E8%A1%A8%E5%8C%BA"><span class="toc-number">7.1.4.</span> <span class="toc-text">底部进程列表区</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%B5%84%E6%BA%90%E9%97%AE%E9%A2%98"><span class="toc-number">7.2.</span> <span class="toc-text">资源问题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ulimit"><span class="toc-number">7.3.</span> <span class="toc-text">ulimit</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BD%AF%E9%99%90%E5%88%B6%E4%B8%8E%E7%A1%AC%E9%99%90%E5%88%B6"><span class="toc-number">7.3.1.</span> <span class="toc-text">软限制与硬限制</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%B6%E4%BB%96%E5%B7%A5%E5%85%B7"><span class="toc-number">7.4.</span> <span class="toc-text">其他工具</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#prlimit"><span class="toc-number">7.5.</span> <span class="toc-text">prlimit</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E6%A0%B8%E5%BF%83%E8%AF%AD%E6%B3%95"><span class="toc-number">7.5.1.</span> <span class="toc-text">1. 核心语法</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#sysctl"><span class="toc-number">7.6.</span> <span class="toc-text">sysctl</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">8.</span> <span class="toc-text">工具集</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-GNU-Binutils-%E5%B7%A5%E5%85%B7%E9%9B%86"><span class="toc-number">8.0.1.</span> <span class="toc-text">1. GNU Binutils 工具集</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-GCC-%E5%B7%A5%E5%85%B7%E9%9B%86"><span class="toc-number">8.0.2.</span> <span class="toc-text">2. GCC 工具集</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-Linux-%E6%80%A7%E8%83%BD%E5%B7%A5%E5%85%B7%E9%9B%86"><span class="toc-number">8.0.3.</span> <span class="toc-text">3. Linux 性能工具集</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-%E7%BD%91%E7%BB%9C%E5%B7%A5%E5%85%B7%E9%9B%86"><span class="toc-number">8.0.4.</span> <span class="toc-text">4. 网络工具集</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-Git-%E5%B7%A5%E5%85%B7%E9%9B%86"><span class="toc-number">8.0.5.</span> <span class="toc-text">5. Git 工具集</span></a></li></ol></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/06/12/%E6%B1%87%E7%BC%96%E5%AD%A6%E4%B9%A0/" title="汇编学习">汇编学习</a><time datetime="2026-06-12T00:52:57.000Z" title="发表于 2026-06-12 08:52:57">2026-06-12</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/12/14/c++/" title="C++">C++</a><time datetime="2025-12-14T00:52:50.000Z" title="发表于 2025-12-14 08:52:50">2025-12-14</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/08/16/libevent/" title="Libevent剖析">Libevent剖析</a><time datetime="2025-08-16T00:02:00.000Z" title="发表于 2025-08-16 08:02:00">2025-08-16</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/07/27/CMake/" title="CMake">CMake</a><time datetime="2025-07-27T00:52:57.000Z" title="发表于 2025-07-27 08:52:57">2025-07-27</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/07/27/Docker%E5%AE%B9%E5%99%A8/" title="Docker容器">Docker容器</a><time datetime="2025-07-27T00:52:57.000Z" title="发表于 2025-07-27 08:52:57">2025-07-27</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2025 - 2026 By WF</span><span class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.3.0</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.4.2</a></span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

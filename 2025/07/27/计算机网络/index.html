@@ -1,11 +1,13 @@
-<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>计算机网络框架 | WF的知识空间</title><meta name="author" content="WF"><meta name="copyright" content="WF"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta property="og:type" content="article">
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>计算机网络框架 | WF的知识空间</title><meta name="author" content="WF"><meta name="copyright" content="WF"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="一、前置核心：为什么网络要分层？ 1. 分层设计的本质思想 计算机网络采用协议栈分层架构，和软件设计里「模块化、解耦、单一职责」思想完全一致。 2. 分层的五大核心目的（标准答案 + 深度原理）   解耦、降低复杂度 网络通信逻辑极复杂（寻址、差错、路由、传输、应用交互等），拆分成多层后， 每层只做一件事 ，不用一次性处理所有逻辑。   独立演进、互不影响 下层协议改动，上层无需修改；上层换应用，">
+<meta property="og:type" content="article">
 <meta property="og:title" content="计算机网络框架">
 <meta property="og:url" content="http://example.com/2025/07/27/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/index.html">
 <meta property="og:site_name" content="WF的知识空间">
+<meta property="og:description" content="一、前置核心：为什么网络要分层？ 1. 分层设计的本质思想 计算机网络采用协议栈分层架构，和软件设计里「模块化、解耦、单一职责」思想完全一致。 2. 分层的五大核心目的（标准答案 + 深度原理）   解耦、降低复杂度 网络通信逻辑极复杂（寻址、差错、路由、传输、应用交互等），拆分成多层后， 每层只做一件事 ，不用一次性处理所有逻辑。   独立演进、互不影响 下层协议改动，上层无需修改；上层换应用，">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://example.com/img/WF.png">
 <meta property="article:published_time" content="2025-07-27T00:52:57.000Z">
-<meta property="article:modified_time" content="2026-06-07T03:12:52.240Z">
+<meta property="article:modified_time" content="2026-06-15T03:20:28.095Z">
 <meta property="article:author" content="WF">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="http://example.com/img/WF.png"><script type="application/ld+json">{
@@ -15,7 +17,7 @@
   "url": "http://example.com/2025/07/27/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/",
   "image": "http://example.com/img/WF.png",
   "datePublished": "2025-07-27T00:52:57.000Z",
-  "dateModified": "2026-06-07T03:12:52.240Z",
+  "dateModified": "2026-06-15T03:20:28.095Z",
   "author": [
     {
       "@type": "Person",
@@ -154,6 +156,542 @@
 }</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
   title: '计算机网络框架',
   isHighlightShrink: false,
-  isToc: false,
+  isToc: true,
   pageType: 'post'
-}</script><meta name="generator" content="Hexo 7.3.0"></head><body><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(/img/index-bg.jpg);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">WF的知识空间</span></a><a class="nav-page-title" href="/"><span class="site-name">计算机网络框架</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"></div></nav><div id="post-info"><h1 class="post-title">计算机网络框架</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2025-07-27T00:52:57.000Z" title="发表于 2025-07-27 08:52:57">2025-07-27</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-06-07T03:12:52.240Z" title="更新于 2026-06-07 11:12:52">2026-06-07</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="http://example.com">WF</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="http://example.com/2025/07/27/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">http://example.com/2025/07/27/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="http://example.com" target="_blank">WF的知识空间</a>！</span></div></div><div class="tag_share"><div class="post-share"><div class="social-share" data-image="/img/WF.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2025/07/27/%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86/" title="Linux进程管理"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">Linux进程管理</div></div><div class="info-2"><div class="info-item-1">进程与线程 windiows Windows 采用了严格的双轨制设计，进程和线程是两个完全不同的内核对象，有各自独立的内核数据结构： Windows 进程（EPROCESS 结构）  唯一身份：进程是资源分配的基本单位，拥有独立的虚拟地址空间 核心资源：  独立的页表和虚拟地址空间 独立的句柄表（管理文件、套接字、互斥量等内核对象） 独立的访问令牌（安全上下文） 独立的 PEB（进程环境块，用户态数据结构） 一个或多个线程   调度属性：进程本身不能被调度，它只是线程的容器  Windows 线程（ETHREAD 结构）  唯一身份：线程是CPU 调度的基本单位，必须依附于某个进程存在 私有资源：  独立的内核栈和用户栈 独立的寄存器上下文（程序计数器、栈指针等） 独立的 TLS（线程本地存储） 独立的 TEB（线程环境块，用户态数据结构） 线程优先级、调度状态等调度属性   共享资源：同一进程内的所有线程共享进程的所有资源  Windows 模型的特点  概念清晰：进程和线程的职责划分明确，符合大多数人的直觉 实现复杂：内核需要维护两套完全不同的对象体系和管理机制 调度开销大：...</div></div></div></a><a class="pagination-related  no-desc" href="/2025/07/27/%E6%96%B0%E5%BB%BA%E6%96%87%E4%BB%B6%E5%A4%B9/%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/" title="消息队列（kafka）"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">消息队列（kafka）</div></div></div></a></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/WF.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">WF</div><div class="author-info-description"></div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">19</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">0</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/WF-git-code"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="//github.com/WF-git-code" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="/18628492787@163.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/12/14/c++/" title="C++">C++</a><time datetime="2025-12-14T00:52:50.000Z" title="发表于 2025-12-14 08:52:50">2025-12-14</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/08/16/%E6%96%B0%E5%BB%BA%E6%96%87%E4%BB%B6%E5%A4%B9/%E7%AE%97%E6%B3%95/" title="数据结构与算法">数据结构与算法</a><time datetime="2025-08-16T00:03:03.000Z" title="发表于 2025-08-16 08:03:03">2025-08-16</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/08/16/libevent/" title="Libevent剖析">Libevent剖析</a><time datetime="2025-08-16T00:02:00.000Z" title="发表于 2025-08-16 08:02:00">2025-08-16</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/07/27/Docker%E5%AE%B9%E5%99%A8/" title="Docker容器">Docker容器</a><time datetime="2025-07-27T00:52:57.000Z" title="发表于 2025-07-27 08:52:57">2025-07-27</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/07/27/Git/" title="Git的使用">Git的使用</a><time datetime="2025-07-27T00:52:57.000Z" title="发表于 2025-07-27 08:52:57">2025-07-27</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2025 - 2026 By WF</span><span class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.3.0</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.4.2</a></span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
+}</script><meta name="generator" content="Hexo 7.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/WF.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">22</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">12</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fa-folder-open"></i><span> 分类</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(/img/index-bg.jpg);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">WF的知识空间</span></a><a class="nav-page-title" href="/"><span class="site-name">计算机网络框架</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fa-folder-open"></i><span> 分类</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">计算机网络框架</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2025-07-27T00:52:57.000Z" title="发表于 2025-07-27 08:52:57">2025-07-27</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-06-15T03:20:28.095Z" title="更新于 2026-06-15 11:20:28">2026-06-15</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">计算机网络</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h1>一、前置核心：为什么网络要分层？</h1>
+<h2 id="1-分层设计的本质思想">1. 分层设计的本质思想</h2>
+<p>计算机网络采用<strong>协议栈分层架构</strong>，和软件设计里「模块化、解耦、单一职责」思想完全一致。</p>
+<h2 id="2-分层的五大核心目的（标准答案-深度原理）">2. 分层的五大核心目的（标准答案 + 深度原理）</h2>
+<ol>
+<li>
+<p>解耦、降低复杂度</p>
+<p>网络通信逻辑极复杂（寻址、差错、路由、传输、应用交互等），拆分成多层后，</p>
+<p>每层只做一件事</p>
+<p>，不用一次性处理所有逻辑。</p>
+</li>
+<li>
+<p>独立演进、互不影响</p>
+<p>下层协议改动，上层无需修改；上层换应用，下层传输逻辑不变。</p>
+<p>例：手机用 Wi‑Fi、电脑用以太网（二层 / 一层不同），但上层 TCP/IP、HTTP 完全不用改。</p>
+</li>
+<li>
+<p>标准化、互通性</p>
+<p>全球设备遵循同一套分层标准，不同厂商、不同系统的设备可以正常通信。</p>
+</li>
+<li>
+<p>便于排错、定位问题</p>
+<p>网络故障可以逐层排查：物理层不通 → 二层帧异常 → 三层路由问题 → 四层端口问题 → 应用层协议错误。</p>
+</li>
+<li>
+<p>复用性</p>
+<p>底层通信能力被所有上层应用共享，不用每个应用单独实现寻址、差错校验、重传等逻辑。</p>
+</li>
+</ol>
+<h2 id="3-两大主流分层模型（面试必区分）">3. 两大主流分层模型（面试必区分）</h2>
+<p>业界两套标准，面试必考对比：<strong>OSI 七层模型</strong>、<strong>TCP/IP 五层（四层）模型</strong></p>
+<p>后端 / 开发 / 运维 主流使用 <strong>TCP/IP 五层模型</strong>（实际互联网在用）；OSI 是理论标准。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">层级</th>
+<th style="text-align:center">OSI 七层</th>
+<th style="text-align:center">TCP/IP 五层（工业主流）</th>
+<th style="text-align:center">TCP/IP 四层（简化叫法）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">7</td>
+<td style="text-align:center">应用层</td>
+<td style="text-align:center">应用层</td>
+<td style="text-align:center">应用层</td>
+</tr>
+<tr>
+<td style="text-align:center">6</td>
+<td style="text-align:center">表示层</td>
+<td style="text-align:center">——（合并到应用层）</td>
+<td style="text-align:center">——</td>
+</tr>
+<tr>
+<td style="text-align:center">5</td>
+<td style="text-align:center">会话层</td>
+<td style="text-align:center">——（合并到应用层）</td>
+<td style="text-align:center">——</td>
+</tr>
+<tr>
+<td style="text-align:center">4</td>
+<td style="text-align:center">传输层</td>
+<td style="text-align:center">传输层</td>
+<td style="text-align:center">传输层</td>
+</tr>
+<tr>
+<td style="text-align:center">3</td>
+<td style="text-align:center">网络层</td>
+<td style="text-align:center">网络层</td>
+<td style="text-align:center">网际层（互联网层）</td>
+</tr>
+<tr>
+<td style="text-align:center">2</td>
+<td style="text-align:center">数据链路层</td>
+<td style="text-align:center">数据链路层</td>
+<td style="text-align:center">网络接口层</td>
+</tr>
+<tr>
+<td style="text-align:center">1</td>
+<td style="text-align:center">物理层</td>
+<td style="text-align:center">物理层</td>
+<td style="text-align:center">网络接口层</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>统一约定：下文全部以 <strong>TCP/IP 五层模型</strong> 讲解（后端面试、实际工作唯一标准）。</p>
+</blockquote>
+<hr>
+<h1>二、整体数据流：封装 &amp; 解封装</h1>
+<p>这是分层模型<strong>最核心的运行机制</strong>，所有层的工作都围绕「封装 / 解封装」展开，面试高频追问。</p>
+<h2 id="1-核心概念">1. 核心概念</h2>
+<ul>
+<li>
+<p>封装（Encapsulation）</p>
+<p>：发送数据时，</p>
+<p>从上到下逐层加头部首部。</p>
+<p>上层数据 = 下层的数据载荷（Payload）。</p>
+</li>
+<li>
+<p><strong>解封装（Decapsulation）</strong>：接收数据时，<strong>从下到上逐层拆掉首部</strong>，交给上层。</p>
+</li>
+</ul>
+<h2 id="2-完整流转流程（客户端-→-服务器）">2. 完整流转流程（客户端 → 服务器）</h2>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">应用层数据</span><br><span class="line"> ↓ 加上 传输层首部 → 传输层报文</span><br><span class="line"> ↓ 加上 网络层首部 → 网络层数据包</span><br><span class="line"> ↓ 加上 数据链路层首部+尾部 → 数据链路层帧</span><br><span class="line"> ↓ 转为比特流 → 物理层传输</span><br><span class="line"></span><br><span class="line">到达对端后反向解封装：</span><br><span class="line">比特流 → 剥掉帧头帧尾 → 剥掉IP首部 → 剥掉传输层首部 → 原始应用数据</span><br></pre></td></tr></table></figure>
+<h2 id="3-每层数据单元名称（面试填空题-口述考点）">3. 每层数据单元名称（面试填空题 / 口述考点）</h2>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">层级</th>
+<th style="text-align:center">数据单元专业名称</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">应用层</td>
+<td style="text-align:center">报文 / 应用数据</td>
+</tr>
+<tr>
+<td style="text-align:center">传输层</td>
+<td style="text-align:center">段（Segment）</td>
+</tr>
+<tr>
+<td style="text-align:center">网络层</td>
+<td style="text-align:center">包 / 分组（Packet）</td>
+</tr>
+<tr>
+<td style="text-align:center">数据链路层</td>
+<td style="text-align:center">帧（Frame）</td>
+</tr>
+<tr>
+<td style="text-align:center">物理层</td>
+<td style="text-align:center">比特（Bit）流</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>面试官常问：TCP 是什么数据单元？IP 是什么？帧属于哪一层？</p>
+</blockquote>
+<hr>
+<h1>三、逐层深度讲解</h1>
+<p>自上而下顺序讲解，每层包含：<strong>核心作用、工作原理、核心协议、关键字段、典型设备、高频面试题</strong>。</p>
+<hr>
+<h2 id="第一层：物理层（Physical-Layer）">第一层：物理层（Physical Layer）</h2>
+<h3 id="1-核心定位">1. 核心定位</h3>
+<p>整个网络的<strong>物理媒介层</strong>，只负责传输<strong>二进制比特流（0/1）</strong>，<strong>不理解数据含义</strong>。</p>
+<h3 id="2-核心作用">2. 核心作用</h3>
+<ol>
+<li>定义物理接口、线缆、电压、电平、传输速率、编码方式；</li>
+<li>在物理介质上透明传输 0 和 1 比特流；</li>
+<li>负责信号的发送与接收。</li>
+</ol>
+<h3 id="3-传输介质-典型设备">3. 传输介质 &amp; 典型设备</h3>
+<ul>
+<li>传输介质：双绞线、光纤、无线信号（WiFi / 蓝牙）、同轴电缆</li>
+<li>典型设备：<strong>集线器 HUB、网线、光纤、网卡（物理接口部分）</strong></li>
+</ul>
+<h3 id="4-关键特性-原理">4. 关键特性 &amp; 原理</h3>
+<ul>
+<li>无寻址、无差错校验、无协议逻辑，纯硬件信号传递；</li>
+<li>信号会衰减、受干扰，远距离传输需要中继器放大信号。</li>
+</ul>
+<h3 id="5-面试高频考点">5. 面试高频考点</h3>
+<ol>
+<li>
+<p>物理层作用？传输的数据单元是什么？</p>
+<blockquote>
+<p>答：负责传输比特流，定义硬件接口与电气标准；数据单元是比特。</p>
+</blockquote>
+</li>
+<li>
+<p>集线器 HUB 工作在哪一层？特点？</p>
+<blockquote>
+<p>工作在物理层；对所有端口广播数据，无隔离冲突域，所有端口共享带宽。</p>
+</blockquote>
+</li>
+<li>
+<p>网线不通、接口灯不亮，排查哪一层？</p>
+<blockquote>
+<p>优先排查物理层：网线、网口、供电、硬件故障。</p>
+</blockquote>
+</li>
+</ol>
+<hr>
+<h2 id="第二层：数据链路层（Data-Link-Layer）">第二层：数据链路层（Data Link Layer）</h2>
+<h3 id="1-核心定位-2">1. 核心定位</h3>
+<p><strong>相邻两个节点之间</strong>的数据传输（同一局域网内），在物理层比特流基础上，组织成「帧」。</p>
+<p>解决问题：<strong>如何在直连设备间可靠传递数据、区分设备、纠错、划分边界</strong>。</p>
+<h3 id="2-四大核心作用（必背）">2. 四大核心作用（必背）</h3>
+<ol>
+<li><strong>成帧</strong>：把上层数据包加上<strong>帧头、帧尾</strong>，标记一帧数据的开始和结束；</li>
+<li><strong>MAC 寻址</strong>：使用 <strong>MAC 地址</strong> 标识局域网内每一台主机 / 网卡；</li>
+<li><strong>差错检测</strong>：通过 CRC 校验，检查传输中是否出现比特错误（只检错，不纠错）；</li>
+<li><strong>访问控制 &amp; 冲突处理</strong>：同一链路多设备同时发数据产生冲突，使用 CSMA/CD 等机制规避。</li>
+</ol>
+<h3 id="3-核心协议">3. 核心协议</h3>
+<ol>
+<li><strong>以太网协议 Ethernet</strong>：局域网最主流帧协议（99% 内网使用）</li>
+<li><strong>ARP 协议</strong>（地址解析协议）：<strong>三层 IP 地址 → 二层 MAC 地址</strong> 映射（超级重点）</li>
+<li>RARP：反向解析（MAC → IP，现已淘汰）</li>
+</ol>
+<h3 id="4-关键地址：MAC-地址">4. 关键地址：MAC 地址</h3>
+<ul>
+<li>长度：48 位（6 字节），全球唯一，固化在网卡硬件中；</li>
+<li>作用：<strong>局域网内部寻址</strong>，同一个广播域内依靠 MAC 找到目标主机。</li>
+</ul>
+<h3 id="5-典型设备">5. 典型设备</h3>
+<ul>
+<li><strong>交换机 Switch</strong>（二层核心设备）：基于 MAC 地址转发帧，隔离<strong>冲突域</strong>；</li>
+<li>网卡（逻辑链路部分）、网桥。</li>
+</ul>
+<blockquote>
+<p>区分考点：HUB（一层，广播） vs 交换机（二层，基于 MAC 单播转发）</p>
+</blockquote>
+<h3 id="6-重点协议：ARP-协议（原理-面试高频）">6. 重点协议：ARP 协议（原理 + 面试高频）</h3>
+<h4 id="（1）作用">（1）作用</h4>
+<p>已知<strong>目标 IP 地址</strong>，获取对方<strong>MAC 地址</strong>。</p>
+<p>因为：三层通信靠 IP，二层转发靠 MAC，必须做地址转换。</p>
+<h4 id="（2）工作原理">（2）工作原理</h4>
+<ol>
+<li>主机先发 <strong>ARP 广播帧</strong>（广播 MAC：<code>FF:FF:FF:FF:FF:FF</code>），在整个局域网内询问：「这个 IP 对应的 MAC 是谁？」</li>
+<li>局域网内所有主机收到广播，对比自身 IP；</li>
+<li>目标主机回复 <strong>ARP 单播响应</strong>，把自己 MAC 发给请求方；</li>
+<li>主机本地维护 <strong>ARP 缓存表</strong>（IP ↔ MAC 映射），一段时间内复用，避免反复广播。</li>
+</ol>
+<h4 id="（3）面试深挖题">（3）面试深挖题</h4>
+<ol>
+<li>
+<p>ARP 广播范围？</p>
+<blockquote>
+<p>仅当前<strong>广播域 / 局域网</strong>，路由器会隔绝广播，ARP 广播无法跨网段。</p>
+</blockquote>
+</li>
+<li>
+<p>ARP 缓存作用？ARP 欺骗原理？</p>
+<blockquote>
+<p>ARP 缓存：缓存 IP-MAC 映射，提升效率；</p>
+<p>ARP 欺骗：伪造 ARP 响应包，篡改他人 ARP 缓存，劫持流量。</p>
+</blockquote>
+</li>
+<li>
+<p>跨网段通信，需要 ARP 吗？</p>
+<blockquote>
+<p>需要。目标不在本网段时，主机把数据发给<strong>网关路由器</strong>，先解析「网关 IP → 网关 MAC」。</p>
+</blockquote>
+</li>
+</ol>
+<h3 id="7-本层面试全集考点">7. 本层面试全集考点</h3>
+<ol>
+<li>数据链路层数据单元？帧（Frame）。</li>
+<li>MAC 地址作用？和 IP 地址区别？</li>
+<li>交换机工作在哪一层？和 HUB 区别？</li>
+<li>ARP 协议工作流程、广播特性、ARP 欺骗。</li>
+<li>帧的 CRC 校验：只检错，不重传纠错。</li>
+</ol>
+<hr>
+<h2 id="第三层：网络层（Network-Layer）【重中之重，IP-协议主场】">第三层：网络层（Network Layer）【重中之重，IP 协议主场】</h2>
+<h3 id="1-核心定位-3">1. 核心定位</h3>
+<p>实现<strong>跨网络、跨网段</strong>的主机通信。</p>
+<p>二层 MAC 只能局域网互通；<strong>网络层负责全球范围内不同网络之间的寻址与路由</strong>。</p>
+<p>解决核心问题：<strong>如何把数据包从源主机，经过多个路由器，送到跨网段的目标主机</strong>。</p>
+<h3 id="2-四大核心作用">2. 四大核心作用</h3>
+<ol>
+<li><strong>逻辑寻址</strong>：使用 <strong>IP 地址</strong> 做全球主机逻辑标识；</li>
+<li><strong>路由选择</strong>：选择从源到目标的<strong>最佳传输路径</strong>（路由器核心工作）；</li>
+<li><strong>分组转发</strong>：根据路由表，把数据包从一个网络转发到另一个网络；</li>
+<li><strong>分片与重组</strong>：不同链路 MTU（最大传输单元）不同，大数据包自动分片，到达目标再重组。</li>
+</ol>
+<h3 id="3-核心协议（按重要排序）">3. 核心协议（按重要排序）</h3>
+<ol>
+<li><strong>IP 协议</strong>（网际协议）：本层最核心，无连接、不可靠协议</li>
+<li><strong>ICMP 协议</strong>：互联网控制报文协议，网络探测、差错报告（ping 命令底层）</li>
+<li><strong>IGMP 协议</strong>：组播管理（了解即可）</li>
+</ol>
+<hr>
+<h2 id="3-1-核心：IP-协议（原理-字段-面试全覆盖）">3.1 核心：IP 协议（原理 + 字段 + 面试全覆盖）</h2>
+<h3 id="（1）IP-协议核心特性">（1）IP 协议核心特性</h3>
+<ul>
+<li><strong>无连接</strong>：通信前不用建立连接，直接发包；</li>
+<li><strong>不可靠</strong>：不保证包一定送达、不保证按序、不保证不重复；</li>
+<li>只负责「尽力交付」，可靠性交给上层 TCP 实现。</li>
+</ul>
+<h3 id="（2）IP-地址作用">（2）IP 地址作用</h3>
+<ul>
+<li><strong>全局逻辑地址</strong>，用来区分<strong>不同网段 + 网段内主机</strong>；</li>
+<li>MAC 是硬件地址（本地局域网），IP 是逻辑地址（全网路由）；</li>
+<li>一台主机网卡可以有多个 IP，但 MAC 网卡出厂唯一。</li>
+</ul>
+<h3 id="（3）IPv4-基础（面试主流考-IPv4，IPv6-了解即可）">（3）IPv4 基础（面试主流考 IPv4，IPv6 了解即可）</h3>
+<ul>
+<li>
+<p>长度：<strong>32 位</strong>，点分十进制表示 <code>A.B.C.D</code></p>
+</li>
+<li>
+<p>结构：</p>
+<p>网络号 + 主机号</p>
+<ul>
+<li>网络号：标识当前属于哪一个网段；</li>
+<li>主机号：标识网段内某一台主机。</li>
+</ul>
+</li>
+</ul>
+<h3 id="（4）IP-首部关键字段">（4）IP 首部关键字段</h3>
+<p>只讲<strong>面试常考关键字段</strong>（不用背全部，理解作用）：</p>
+<ol>
+<li>
+<p><strong>版本（Version）</strong>：IPv4 / IPv6</p>
+</li>
+<li>
+<p><strong>首部长度</strong>：IP 头长度，最小 20 字节</p>
+</li>
+<li>
+<p>TTL（生存时间）</p>
+<ul>
+<li>原理：每经过一台路由器，TTL <strong>-1</strong>；减到 0 时，数据包被丢弃，防止数据包在环路网络永久游荡。</li>
+<li>面试必考：<code>ping</code>、<code>traceroute</code> 底层依靠 TTL 实现路由追踪。</li>
+</ul>
+</li>
+<li>
+<p>协议（Protocol）</p>
+<p>：标识上层使用什么传输协议</p>
+<ul>
+<li><code>6</code> → TCP</li>
+<li><code>17</code> → UDP</li>
+<li><code>1</code> → ICMP</li>
+</ul>
+</li>
+<li>
+<p><strong>源 IP 地址、目的 IP 地址</strong>：路由转发的核心依据</p>
+</li>
+<li>
+<p><strong>标识、标志、片偏移</strong>：用于<strong>IP 分片</strong>（大包拆分传输）</p>
+</li>
+</ol>
+<h3 id="（5）IP-分片原理">（5）IP 分片原理</h3>
+<p>不同链路 MTU 不同（以太网默认 MTU=1500 字节）。</p>
+<ul>
+<li>当 IP 包大小 &gt; 链路 MTU，IP 层自动分片；</li>
+<li>分片在<strong>传输路径上的路由器</strong>完成；</li>
+<li>重组<strong>只在目标主机</strong>完成，中途路由器不重组。</li>
+</ul>
+<h3 id="（6）典型设备">（6）典型设备</h3>
+<p><strong>路由器 Router</strong>（三层核心设备）</p>
+<ul>
+<li>工作在网络层；</li>
+<li>根据 <strong>IP 地址 + 路由表</strong> 转发数据包；</li>
+<li><strong>隔离广播域</strong>（ARP、二层广播无法穿过路由器）；</li>
+<li>连接不同网段、不同网络。</li>
+</ul>
+<hr>
+<h2 id="3-2-配套协议：ICMP-协议">3.2 配套协议：ICMP 协议</h2>
+<h3 id="（1）作用-2">（1）作用</h3>
+<p>网络层<strong>控制 / 差错 / 探测协议</strong>，辅助 IP 工作，传递网络状态、错误信息、连通性探测。</p>
+<h3 id="（2）两大典型应用">（2）两大典型应用</h3>
+<ol>
+<li>
+<p>ping 命令</p>
+<p>原理：发送 ICMP 回显请求，对方回复回显应答，判断主机是否可达、延迟。</p>
+</li>
+<li>
+<p>traceroute / tracepath</p>
+<p>原理：利用</p>
+<p>TTL 超时</p>
+<p>特性：</p>
+<ul>
+<li>先发 TTL=1 的包，第一台路由器 TTL 归 0，返回 ICMP 超时报文；</li>
+<li>逐步增大 TTL，逐个拿到路径上所有路由器地址，追踪完整路由。</li>
+</ul>
+</li>
+</ol>
+<h3 id="（3）面试题">（3）面试题</h3>
+<ol>
+<li>
+<p>ping 基于什么协议？属于哪一层？</p>
+<blockquote>
+<p>ICMP 协议，工作在<strong>网络层</strong>。</p>
+</blockquote>
+</li>
+<li>
+<p>ping 不通有哪些原因？（综合排错题）</p>
+<blockquote>
+<p>物理不通、防火墙禁 ICMP、路由不可达、主机宕机、目标禁 ping。</p>
+</blockquote>
+</li>
+</ol>
+<hr>
+<h2 id="3-3-网络层整体面试考点汇总">3.3 网络层整体面试考点汇总</h2>
+<ol>
+<li>IP 协议特性：无连接、不可靠、尽力交付。</li>
+<li>IP 地址与 MAC 地址区别（寻址范围、层级、是否可修改、作用）。</li>
+<li>TTL 字段作用，traceroute 原理。</li>
+<li>IP 分片场景与规则。</li>
+<li>路由器工作层级、作用；路由器隔离广播域。</li>
+<li>ARP 与 IP 配合流程（跨网关通信完整流程）。</li>
+<li>ICMP 作用、ping 原理。</li>
+</ol>
+<hr>
+<h2 id="第四层：传输层（Transport-Layer）">第四层：传输层（Transport Layer）</h2>
+<blockquote>
+<p>先记定位：网络层负责「主机到主机」；<strong>传输层负责「进程到进程」</strong>。</p>
+<p>两台主机通信，最终是主机上的应用进程在收发数据，传输层实现端口寻址 + 传输控制。</p>
+</blockquote>
+<p>这一层后面你会细学 TCP/UDP，本框架只讲<strong>层级定位、通用作用、端口、整体逻辑</strong>。</p>
+<h3 id="1-核心作用">1. 核心作用</h3>
+<ol>
+<li>
+<p>端口寻址</p>
+<p>：通过</p>
+<p>端口号</p>
+<p>区分一台主机上不同的应用进程；</p>
+<ul>
+<li>IP 找到主机，端口找到主机内具体程序。</li>
+</ul>
+</li>
+<li>
+<p>端到端传输控制</p>
+<p>：提供两种传输模式：</p>
+<ul>
+<li>可靠传输（TCP）</li>
+<li>不可靠传输（UDP）</li>
+</ul>
+</li>
+<li>
+<p>流量控制、拥塞控制、差错重传（TCP 实现）。</p>
+</li>
+</ol>
+<h3 id="2-核心概念：端口（Port）">2. 核心概念：端口（Port）</h3>
+<ul>
+<li>端口号：16 位，范围 0~65535；</li>
+<li>知名端口（0~1023）：系统 / 标准服务占用（80=HTTP、443=HTTPS、22=SSH）；</li>
+<li>动态端口（1024~65535）：客户端临时使用。</li>
+</ul>
+<h3 id="3-核心协议-2">3. 核心协议</h3>
+<ul>
+<li>TCP：面向连接、可靠、字节流</li>
+<li>UDP：无连接、不可靠、数据报</li>
+</ul>
+<h3 id="4-典型设备">4. 典型设备</h3>
+<p>四层交换机、防火墙（可基于端口过滤）。</p>
+<h3 id="5-本层面试基础考点">5. 本层面试基础考点</h3>
+<ol>
+<li>
+<p>网络层和传输层区别？主机到主机 vs 进程到进程。</p>
+</li>
+<li>
+<p>端口作用？IP + 端口 组成什么？</p>
+<blockquote>
+<p>IP + 端口 = <strong>Socket 套接字</strong>，全网唯一标识一个通信进程。</p>
+</blockquote>
+</li>
+<li>
+<p>为什么需要端口？一台机器多个服务如何区分？</p>
+</li>
+</ol>
+<hr>
+<h2 id="第五层：应用层（Application-Layer）">第五层：应用层（Application Layer）</h2>
+<h3 id="1-核心定位-4">1. 核心定位</h3>
+<p>直接面向<strong>用户 / 应用程序</strong>，为应用软件提供网络服务，是分层模型的最顶层。</p>
+<p>下层所有能力（寻址、路由、传输）全部为应用层服务。</p>
+<h3 id="2-核心作用-2">2. 核心作用</h3>
+<p>定义应用之间交互的<strong>业务报文格式、交互规则</strong>。</p>
+<h3 id="3-常见核心协议（后端日常接触最多）">3. 常见核心协议（后端日常接触最多）</h3>
+<ul>
+<li>HTTP / HTTPS：网页、接口请求（接口开发、网关、反向代理）</li>
+<li>FTP / SFTP：文件传输</li>
+<li>DNS：域名解析（域名 → IP）</li>
+<li>SSH：远程登录</li>
+<li>SMTP/POP3：邮件</li>
+</ul>
+<h3 id="4-面试基础考点">4. 面试基础考点</h3>
+<ol>
+<li>DNS 工作在哪一层？HTTP 在哪一层？</li>
+<li>域名解析整体流程（结合五层模型串联）。</li>
+<li>应用层数据是如何逐层封装下发的？</li>
+</ol>
+<hr>
+<h1>四、完整串联：一次 HTTP 请求 = 五层模型全流程</h1>
+<p>场景：浏览器访问 <code>www.baidu.com</code>，从头到尾串所有层原理，面试官最爱追问。</p>
+<h2 id="步骤-1：应用层（DNS-HTTP）">步骤 1：应用层（DNS + HTTP）</h2>
+<ol>
+<li>浏览器先发起 <strong>DNS 请求</strong>（应用层），把域名解析为目标 IP；</li>
+<li>构造 HTTP 请求报文（应用层数据）。</li>
+</ol>
+<h2 id="步骤-2：传输层">步骤 2：传输层</h2>
+<p>HTTP 基于 TCP，添加 <strong>TCP 首部</strong>，带上「源端口、目标端口」，形成 TCP 段。</p>
+<h2 id="步骤-3：网络层">步骤 3：网络层</h2>
+<p>添加 <strong>IP 首部</strong>，带上「源 IP、目标 IP、TTL、协议号 (TCP=6)」，形成 IP 数据包；</p>
+<p>查询路由表，确定下一跳（网关 / 路由器）。</p>
+<h2 id="步骤-4：数据链路层">步骤 4：数据链路层</h2>
+<p>查询 ARP 缓存，拿到<strong>下一跳 MAC 地址</strong>；</p>
+<p>添加帧头（源 MAC、目的 MAC）+ CRC 校验，形成以太网帧。</p>
+<h2 id="步骤-5：物理层">步骤 5：物理层</h2>
+<p>帧转为 0/1 比特流，通过网线 / 光纤传输。</p>
+<h2 id="转发过程（跨网段）">转发过程（跨网段）</h2>
+<p>数据包经过多个<strong>路由器（三层设备）</strong>：</p>
+<ul>
+<li>每到一台路由器：二层帧解封装 → 取出 IP 包 → 查路由表 → 重新封装新二层帧转发；</li>
+<li>IP 包 TTL 不断减 1；</li>
+<li>路由器隔绝二层广播，只转发单播 IP 包。</li>
+</ul>
+<h2 id="到达目标服务器（逐层解封装）">到达目标服务器（逐层解封装）</h2>
+<p>物理层 → 链路层（拆帧）→ 网络层（拆 IP）→ 传输层（拆 TCP）→ 应用层（HTTP 服务接收请求）。</p>
+<hr>
+<h1>五、分层模型 高频面试问答</h1>
+<h2 id="1-为什么网络要分层？">1. 为什么网络要分层？</h2>
+<p>分层可以解耦、降低复杂度，每层职责单一；各层独立迭代，下层改动不影响上层；便于标准化、设备互通、故障逐层排查、功能复用。</p>
+<h2 id="2-TCP-IP-五层模型分别是哪五层？每层作用-数据单元？">2. TCP/IP 五层模型分别是哪五层？每层作用 + 数据单元？</h2>
+<ol>
+<li>物理层：传输比特流，硬件信号；单元：比特。</li>
+<li>数据链路层：局域网寻址 (MAC)、成帧、差错检测；单元：帧。</li>
+<li>网络层：跨网段寻址 (IP)、路由、分片；单元：分组 / 包；核心协议 IP、ICMP、ARP。</li>
+<li>传输层：进程间通信、端口寻址、可靠 / 不可靠传输；单元：段；协议 TCP/UDP。</li>
+<li>应用层：应用交互、业务协议；单元：报文；协议 HTTP/DNS 等。</li>
+</ol>
+<h2 id="3-MAC-地址-和-IP-地址区别？">3. MAC 地址 和 IP 地址区别？</h2>
+<ol>
+<li>层级：MAC 二层，IP 三层；</li>
+<li>作用：MAC 用于<strong>局域网内部寻址</strong>，IP 用于<strong>全网跨网段路由</strong>；</li>
+<li>性质：MAC 硬件固化、基本不变；IP 逻辑地址、可动态修改；</li>
+<li>长度：MAC 48 位，IPv4 32 位；</li>
+<li>广播域：MAC 广播被路由器隔离，IP 实现跨路由通信。</li>
+</ol>
+<h2 id="4-ARP-协议作用、工作流程？">4. ARP 协议作用、工作流程？</h2>
+<p>ARP 属于数据链路层辅助协议，功能是 <strong>IP 地址解析为 MAC 地址</strong>。</p>
+<p>主机发送 ARP 广播，询问目标 IP 对应的 MAC；目标主机单播回应；本地缓存 IP-MAC 映射。ARP 广播仅局限在当前局域网，无法穿越路由器。</p>
+<h2 id="5-路由器、交换机、集线器分别工作在哪一层？区别？">5. 路由器、交换机、集线器分别工作在哪一层？区别？</h2>
+<ul>
+<li>集线器 HUB：<strong>物理层</strong>，纯信号放大，所有端口广播，共享带宽，不隔离冲突域。</li>
+<li>交换机 Switch：<strong>数据链路层</strong>，基于 MAC 地址转发，隔离冲突域。</li>
+<li>路由器 Router：<strong>网络层</strong>，基于 IP + 路由表转发，隔离广播域，连接不同网段。</li>
+</ul>
+<h2 id="6-网络层-IP-协议特点？">6. 网络层 IP 协议特点？</h2>
+<p>无连接、不可靠、尽力交付；不保证送达、不保证有序、不保证无重复；可靠性由上层 TCP 实现。</p>
+<h2 id="7-TTL-作用？">7. TTL 作用？</h2>
+<p>IP 首部 TTL 生存时间，每经过一台路由器减一，为 0 则丢弃数据包；<strong>防止路由环路</strong>，同时是 traceroute 路由追踪的实现原理。</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="http://example.com">WF</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="http://example.com/2025/07/27/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">http://example.com/2025/07/27/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="http://example.com" target="_blank">WF的知识空间</a>！</span></div></div><div class="tag_share"><div class="post-share"><div class="social-share" data-image="/img/WF.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2025/07/27/%E9%80%86%E5%90%91%E5%AE%9E%E7%94%A8%E5%B7%A5%E5%85%B7%E6%96%87%E6%A1%A3/" title="逆向工具教程"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">逆向工具教程</div></div><div class="info-2"><div class="info-item-1">逆向实用工具教程 本文档覆盖 Windows 平台逆向分析全流程核心工具，包含查壳、脱壳、静态分析、动态调试四大模块，兼顾操作步骤与底层原理。 以下代码为逆向调试示例源码 123456789101112131415161718192021222324252627282930313233343536373839#include &lt;iostream&gt;#include &lt;string&gt;#include &lt;cstring&gt;#include &lt;stdbool.h&gt;// 核心验证函数bool CheckPassword(const char* input)&#123;    // 正确密码，方便字符串搜索定位    const char* rightPwd = &quot;reverse_2026&quot;;    // 字符串比较，适合下断点看参数    if (strcmp(input, rightPwd) == 0)    &#123;        return true;    &#125;    return false;&#12...</div></div></div></a><a class="pagination-related" href="/2025/07/27/TCP-UDP/" title="TCP-UDP详解"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">TCP-UDP详解</div></div><div class="info-2"><div class="info-item-1">TCP TCP头部  序列号：在建立连接时由计算机生成的随机数作为其初始值，通过 SYN 包传给接收端主机，每发送一 次数据，就「累加」一次该「数据字节数」的大小。用来解决网络包乱序问题。 **确认应答号：**指下一次「期望」收到的数据的序列号，发送端收到这个确认应答以后可以认为在这个序 号以前的数据都已经被正常接收。用来解决不丢包的问题 控制位： ACK：该位为 1 时，「确认应答」的字段变为有效，TCP 规定除了最初建立连接时的  包之外该位必须设置为 1 。 RST：该位为 1 时，表示 TCP 连接中出现异常必须强制断开连接。 SYN：该位为 1 时，表示希望建立连接，并在其「序列号」的字段进行序列号初始值的设定。 FIN：该位为 1 时，表示今后不会再有数据发送，希望断开连接 为什么需要TCP？ IP 层是「不可靠」的，它不保证网络包的交付、不保证网络包的按序交付、也不保证网络包中的数据 的完整性 因为 TCP 是一个工作在传输层的可靠数据传输的服务，它能确保接收端接收的网络包是无损坏、无间 隔、非冗余和按序的 什么是TCP 面向连接的，可靠的，流式服务 “TCP 是面...</div></div></div></a></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/WF.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">WF</div><div class="author-info-description"></div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">22</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">12</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/WF-git-code"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="//github.com/WF-git-code" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="/18628492787@163.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">一、前置核心：为什么网络要分层？</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E5%88%86%E5%B1%82%E8%AE%BE%E8%AE%A1%E7%9A%84%E6%9C%AC%E8%B4%A8%E6%80%9D%E6%83%B3"><span class="toc-number">1.1.</span> <span class="toc-text">1. 分层设计的本质思想</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E5%88%86%E5%B1%82%E7%9A%84%E4%BA%94%E5%A4%A7%E6%A0%B8%E5%BF%83%E7%9B%AE%E7%9A%84%EF%BC%88%E6%A0%87%E5%87%86%E7%AD%94%E6%A1%88-%E6%B7%B1%E5%BA%A6%E5%8E%9F%E7%90%86%EF%BC%89"><span class="toc-number">1.2.</span> <span class="toc-text">2. 分层的五大核心目的（标准答案 + 深度原理）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E4%B8%A4%E5%A4%A7%E4%B8%BB%E6%B5%81%E5%88%86%E5%B1%82%E6%A8%A1%E5%9E%8B%EF%BC%88%E9%9D%A2%E8%AF%95%E5%BF%85%E5%8C%BA%E5%88%86%EF%BC%89"><span class="toc-number">1.3.</span> <span class="toc-text">3. 两大主流分层模型（面试必区分）</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">2.</span> <span class="toc-text">二、整体数据流：封装 &amp; 解封装</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5"><span class="toc-number">2.1.</span> <span class="toc-text">1. 核心概念</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E5%AE%8C%E6%95%B4%E6%B5%81%E8%BD%AC%E6%B5%81%E7%A8%8B%EF%BC%88%E5%AE%A2%E6%88%B7%E7%AB%AF-%E2%86%92-%E6%9C%8D%E5%8A%A1%E5%99%A8%EF%BC%89"><span class="toc-number">2.2.</span> <span class="toc-text">2. 完整流转流程（客户端 → 服务器）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E6%AF%8F%E5%B1%82%E6%95%B0%E6%8D%AE%E5%8D%95%E5%85%83%E5%90%8D%E7%A7%B0%EF%BC%88%E9%9D%A2%E8%AF%95%E5%A1%AB%E7%A9%BA%E9%A2%98-%E5%8F%A3%E8%BF%B0%E8%80%83%E7%82%B9%EF%BC%89"><span class="toc-number">2.3.</span> <span class="toc-text">3. 每层数据单元名称（面试填空题 &#x2F; 口述考点）</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">3.</span> <span class="toc-text">三、逐层深度讲解</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%B8%80%E5%B1%82%EF%BC%9A%E7%89%A9%E7%90%86%E5%B1%82%EF%BC%88Physical-Layer%EF%BC%89"><span class="toc-number">3.1.</span> <span class="toc-text">第一层：物理层（Physical Layer）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E6%A0%B8%E5%BF%83%E5%AE%9A%E4%BD%8D"><span class="toc-number">3.1.1.</span> <span class="toc-text">1. 核心定位</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E6%A0%B8%E5%BF%83%E4%BD%9C%E7%94%A8"><span class="toc-number">3.1.2.</span> <span class="toc-text">2. 核心作用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E4%BC%A0%E8%BE%93%E4%BB%8B%E8%B4%A8-%E5%85%B8%E5%9E%8B%E8%AE%BE%E5%A4%87"><span class="toc-number">3.1.3.</span> <span class="toc-text">3. 传输介质 &amp; 典型设备</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-%E5%85%B3%E9%94%AE%E7%89%B9%E6%80%A7-%E5%8E%9F%E7%90%86"><span class="toc-number">3.1.4.</span> <span class="toc-text">4. 关键特性 &amp; 原理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-%E9%9D%A2%E8%AF%95%E9%AB%98%E9%A2%91%E8%80%83%E7%82%B9"><span class="toc-number">3.1.5.</span> <span class="toc-text">5. 面试高频考点</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%BA%8C%E5%B1%82%EF%BC%9A%E6%95%B0%E6%8D%AE%E9%93%BE%E8%B7%AF%E5%B1%82%EF%BC%88Data-Link-Layer%EF%BC%89"><span class="toc-number">3.2.</span> <span class="toc-text">第二层：数据链路层（Data Link Layer）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E6%A0%B8%E5%BF%83%E5%AE%9A%E4%BD%8D-2"><span class="toc-number">3.2.1.</span> <span class="toc-text">1. 核心定位</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E5%9B%9B%E5%A4%A7%E6%A0%B8%E5%BF%83%E4%BD%9C%E7%94%A8%EF%BC%88%E5%BF%85%E8%83%8C%EF%BC%89"><span class="toc-number">3.2.2.</span> <span class="toc-text">2. 四大核心作用（必背）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E6%A0%B8%E5%BF%83%E5%8D%8F%E8%AE%AE"><span class="toc-number">3.2.3.</span> <span class="toc-text">3. 核心协议</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-%E5%85%B3%E9%94%AE%E5%9C%B0%E5%9D%80%EF%BC%9AMAC-%E5%9C%B0%E5%9D%80"><span class="toc-number">3.2.4.</span> <span class="toc-text">4. 关键地址：MAC 地址</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-%E5%85%B8%E5%9E%8B%E8%AE%BE%E5%A4%87"><span class="toc-number">3.2.5.</span> <span class="toc-text">5. 典型设备</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-%E9%87%8D%E7%82%B9%E5%8D%8F%E8%AE%AE%EF%BC%9AARP-%E5%8D%8F%E8%AE%AE%EF%BC%88%E5%8E%9F%E7%90%86-%E9%9D%A2%E8%AF%95%E9%AB%98%E9%A2%91%EF%BC%89"><span class="toc-number">3.2.6.</span> <span class="toc-text">6. 重点协议：ARP 协议（原理 + 面试高频）</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%EF%BC%881%EF%BC%89%E4%BD%9C%E7%94%A8"><span class="toc-number">3.2.6.1.</span> <span class="toc-text">（1）作用</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%EF%BC%882%EF%BC%89%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86"><span class="toc-number">3.2.6.2.</span> <span class="toc-text">（2）工作原理</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%EF%BC%883%EF%BC%89%E9%9D%A2%E8%AF%95%E6%B7%B1%E6%8C%96%E9%A2%98"><span class="toc-number">3.2.6.3.</span> <span class="toc-text">（3）面试深挖题</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#7-%E6%9C%AC%E5%B1%82%E9%9D%A2%E8%AF%95%E5%85%A8%E9%9B%86%E8%80%83%E7%82%B9"><span class="toc-number">3.2.7.</span> <span class="toc-text">7. 本层面试全集考点</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%B8%89%E5%B1%82%EF%BC%9A%E7%BD%91%E7%BB%9C%E5%B1%82%EF%BC%88Network-Layer%EF%BC%89%E3%80%90%E9%87%8D%E4%B8%AD%E4%B9%8B%E9%87%8D%EF%BC%8CIP-%E5%8D%8F%E8%AE%AE%E4%B8%BB%E5%9C%BA%E3%80%91"><span class="toc-number">3.3.</span> <span class="toc-text">第三层：网络层（Network Layer）【重中之重，IP 协议主场】</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E6%A0%B8%E5%BF%83%E5%AE%9A%E4%BD%8D-3"><span class="toc-number">3.3.1.</span> <span class="toc-text">1. 核心定位</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E5%9B%9B%E5%A4%A7%E6%A0%B8%E5%BF%83%E4%BD%9C%E7%94%A8"><span class="toc-number">3.3.2.</span> <span class="toc-text">2. 四大核心作用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E6%A0%B8%E5%BF%83%E5%8D%8F%E8%AE%AE%EF%BC%88%E6%8C%89%E9%87%8D%E8%A6%81%E6%8E%92%E5%BA%8F%EF%BC%89"><span class="toc-number">3.3.3.</span> <span class="toc-text">3. 核心协议（按重要排序）</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-1-%E6%A0%B8%E5%BF%83%EF%BC%9AIP-%E5%8D%8F%E8%AE%AE%EF%BC%88%E5%8E%9F%E7%90%86-%E5%AD%97%E6%AE%B5-%E9%9D%A2%E8%AF%95%E5%85%A8%E8%A6%86%E7%9B%96%EF%BC%89"><span class="toc-number">3.4.</span> <span class="toc-text">3.1 核心：IP 协议（原理 + 字段 + 面试全覆盖）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%EF%BC%881%EF%BC%89IP-%E5%8D%8F%E8%AE%AE%E6%A0%B8%E5%BF%83%E7%89%B9%E6%80%A7"><span class="toc-number">3.4.1.</span> <span class="toc-text">（1）IP 协议核心特性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%EF%BC%882%EF%BC%89IP-%E5%9C%B0%E5%9D%80%E4%BD%9C%E7%94%A8"><span class="toc-number">3.4.2.</span> <span class="toc-text">（2）IP 地址作用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%EF%BC%883%EF%BC%89IPv4-%E5%9F%BA%E7%A1%80%EF%BC%88%E9%9D%A2%E8%AF%95%E4%B8%BB%E6%B5%81%E8%80%83-IPv4%EF%BC%8CIPv6-%E4%BA%86%E8%A7%A3%E5%8D%B3%E5%8F%AF%EF%BC%89"><span class="toc-number">3.4.3.</span> <span class="toc-text">（3）IPv4 基础（面试主流考 IPv4，IPv6 了解即可）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%EF%BC%884%EF%BC%89IP-%E9%A6%96%E9%83%A8%E5%85%B3%E9%94%AE%E5%AD%97%E6%AE%B5"><span class="toc-number">3.4.4.</span> <span class="toc-text">（4）IP 首部关键字段</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%EF%BC%885%EF%BC%89IP-%E5%88%86%E7%89%87%E5%8E%9F%E7%90%86"><span class="toc-number">3.4.5.</span> <span class="toc-text">（5）IP 分片原理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%EF%BC%886%EF%BC%89%E5%85%B8%E5%9E%8B%E8%AE%BE%E5%A4%87"><span class="toc-number">3.4.6.</span> <span class="toc-text">（6）典型设备</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-2-%E9%85%8D%E5%A5%97%E5%8D%8F%E8%AE%AE%EF%BC%9AICMP-%E5%8D%8F%E8%AE%AE"><span class="toc-number">3.5.</span> <span class="toc-text">3.2 配套协议：ICMP 协议</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%EF%BC%881%EF%BC%89%E4%BD%9C%E7%94%A8-2"><span class="toc-number">3.5.1.</span> <span class="toc-text">（1）作用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%EF%BC%882%EF%BC%89%E4%B8%A4%E5%A4%A7%E5%85%B8%E5%9E%8B%E5%BA%94%E7%94%A8"><span class="toc-number">3.5.2.</span> <span class="toc-text">（2）两大典型应用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%EF%BC%883%EF%BC%89%E9%9D%A2%E8%AF%95%E9%A2%98"><span class="toc-number">3.5.3.</span> <span class="toc-text">（3）面试题</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-3-%E7%BD%91%E7%BB%9C%E5%B1%82%E6%95%B4%E4%BD%93%E9%9D%A2%E8%AF%95%E8%80%83%E7%82%B9%E6%B1%87%E6%80%BB"><span class="toc-number">3.6.</span> <span class="toc-text">3.3 网络层整体面试考点汇总</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E5%9B%9B%E5%B1%82%EF%BC%9A%E4%BC%A0%E8%BE%93%E5%B1%82%EF%BC%88Transport-Layer%EF%BC%89"><span class="toc-number">3.7.</span> <span class="toc-text">第四层：传输层（Transport Layer）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E6%A0%B8%E5%BF%83%E4%BD%9C%E7%94%A8"><span class="toc-number">3.7.1.</span> <span class="toc-text">1. 核心作用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5%EF%BC%9A%E7%AB%AF%E5%8F%A3%EF%BC%88Port%EF%BC%89"><span class="toc-number">3.7.2.</span> <span class="toc-text">2. 核心概念：端口（Port）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E6%A0%B8%E5%BF%83%E5%8D%8F%E8%AE%AE-2"><span class="toc-number">3.7.3.</span> <span class="toc-text">3. 核心协议</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-%E5%85%B8%E5%9E%8B%E8%AE%BE%E5%A4%87"><span class="toc-number">3.7.4.</span> <span class="toc-text">4. 典型设备</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-%E6%9C%AC%E5%B1%82%E9%9D%A2%E8%AF%95%E5%9F%BA%E7%A1%80%E8%80%83%E7%82%B9"><span class="toc-number">3.7.5.</span> <span class="toc-text">5. 本层面试基础考点</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%BA%94%E5%B1%82%EF%BC%9A%E5%BA%94%E7%94%A8%E5%B1%82%EF%BC%88Application-Layer%EF%BC%89"><span class="toc-number">3.8.</span> <span class="toc-text">第五层：应用层（Application Layer）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E6%A0%B8%E5%BF%83%E5%AE%9A%E4%BD%8D-4"><span class="toc-number">3.8.1.</span> <span class="toc-text">1. 核心定位</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E6%A0%B8%E5%BF%83%E4%BD%9C%E7%94%A8-2"><span class="toc-number">3.8.2.</span> <span class="toc-text">2. 核心作用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E5%B8%B8%E8%A7%81%E6%A0%B8%E5%BF%83%E5%8D%8F%E8%AE%AE%EF%BC%88%E5%90%8E%E7%AB%AF%E6%97%A5%E5%B8%B8%E6%8E%A5%E8%A7%A6%E6%9C%80%E5%A4%9A%EF%BC%89"><span class="toc-number">3.8.3.</span> <span class="toc-text">3. 常见核心协议（后端日常接触最多）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-%E9%9D%A2%E8%AF%95%E5%9F%BA%E7%A1%80%E8%80%83%E7%82%B9"><span class="toc-number">3.8.4.</span> <span class="toc-text">4. 面试基础考点</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">4.</span> <span class="toc-text">四、完整串联：一次 HTTP 请求 &#x3D; 五层模型全流程</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%AD%A5%E9%AA%A4-1%EF%BC%9A%E5%BA%94%E7%94%A8%E5%B1%82%EF%BC%88DNS-HTTP%EF%BC%89"><span class="toc-number">4.1.</span> <span class="toc-text">步骤 1：应用层（DNS + HTTP）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%AD%A5%E9%AA%A4-2%EF%BC%9A%E4%BC%A0%E8%BE%93%E5%B1%82"><span class="toc-number">4.2.</span> <span class="toc-text">步骤 2：传输层</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%AD%A5%E9%AA%A4-3%EF%BC%9A%E7%BD%91%E7%BB%9C%E5%B1%82"><span class="toc-number">4.3.</span> <span class="toc-text">步骤 3：网络层</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%AD%A5%E9%AA%A4-4%EF%BC%9A%E6%95%B0%E6%8D%AE%E9%93%BE%E8%B7%AF%E5%B1%82"><span class="toc-number">4.4.</span> <span class="toc-text">步骤 4：数据链路层</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%AD%A5%E9%AA%A4-5%EF%BC%9A%E7%89%A9%E7%90%86%E5%B1%82"><span class="toc-number">4.5.</span> <span class="toc-text">步骤 5：物理层</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BD%AC%E5%8F%91%E8%BF%87%E7%A8%8B%EF%BC%88%E8%B7%A8%E7%BD%91%E6%AE%B5%EF%BC%89"><span class="toc-number">4.6.</span> <span class="toc-text">转发过程（跨网段）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%B0%E8%BE%BE%E7%9B%AE%E6%A0%87%E6%9C%8D%E5%8A%A1%E5%99%A8%EF%BC%88%E9%80%90%E5%B1%82%E8%A7%A3%E5%B0%81%E8%A3%85%EF%BC%89"><span class="toc-number">4.7.</span> <span class="toc-text">到达目标服务器（逐层解封装）</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">5.</span> <span class="toc-text">五、分层模型 高频面试问答</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E4%B8%BA%E4%BB%80%E4%B9%88%E7%BD%91%E7%BB%9C%E8%A6%81%E5%88%86%E5%B1%82%EF%BC%9F"><span class="toc-number">5.1.</span> <span class="toc-text">1. 为什么网络要分层？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-TCP-IP-%E4%BA%94%E5%B1%82%E6%A8%A1%E5%9E%8B%E5%88%86%E5%88%AB%E6%98%AF%E5%93%AA%E4%BA%94%E5%B1%82%EF%BC%9F%E6%AF%8F%E5%B1%82%E4%BD%9C%E7%94%A8-%E6%95%B0%E6%8D%AE%E5%8D%95%E5%85%83%EF%BC%9F"><span class="toc-number">5.2.</span> <span class="toc-text">2. TCP&#x2F;IP 五层模型分别是哪五层？每层作用 + 数据单元？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-MAC-%E5%9C%B0%E5%9D%80-%E5%92%8C-IP-%E5%9C%B0%E5%9D%80%E5%8C%BA%E5%88%AB%EF%BC%9F"><span class="toc-number">5.3.</span> <span class="toc-text">3. MAC 地址 和 IP 地址区别？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-ARP-%E5%8D%8F%E8%AE%AE%E4%BD%9C%E7%94%A8%E3%80%81%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B%EF%BC%9F"><span class="toc-number">5.4.</span> <span class="toc-text">4. ARP 协议作用、工作流程？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-%E8%B7%AF%E7%94%B1%E5%99%A8%E3%80%81%E4%BA%A4%E6%8D%A2%E6%9C%BA%E3%80%81%E9%9B%86%E7%BA%BF%E5%99%A8%E5%88%86%E5%88%AB%E5%B7%A5%E4%BD%9C%E5%9C%A8%E5%93%AA%E4%B8%80%E5%B1%82%EF%BC%9F%E5%8C%BA%E5%88%AB%EF%BC%9F"><span class="toc-number">5.5.</span> <span class="toc-text">5. 路由器、交换机、集线器分别工作在哪一层？区别？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-%E7%BD%91%E7%BB%9C%E5%B1%82-IP-%E5%8D%8F%E8%AE%AE%E7%89%B9%E7%82%B9%EF%BC%9F"><span class="toc-number">5.6.</span> <span class="toc-text">6. 网络层 IP 协议特点？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#7-TTL-%E4%BD%9C%E7%94%A8%EF%BC%9F"><span class="toc-number">5.7.</span> <span class="toc-text">7. TTL 作用？</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/06/12/%E6%B1%87%E7%BC%96%E5%AD%A6%E4%B9%A0/" title="汇编学习">汇编学习</a><time datetime="2026-06-12T00:52:57.000Z" title="发表于 2026-06-12 08:52:57">2026-06-12</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/12/14/c++/" title="C++">C++</a><time datetime="2025-12-14T00:52:50.000Z" title="发表于 2025-12-14 08:52:50">2025-12-14</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/08/16/libevent/" title="Libevent剖析">Libevent剖析</a><time datetime="2025-08-16T00:02:00.000Z" title="发表于 2025-08-16 08:02:00">2025-08-16</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/07/27/CMake/" title="CMake">CMake</a><time datetime="2025-07-27T00:52:57.000Z" title="发表于 2025-07-27 08:52:57">2025-07-27</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/07/27/Docker%E5%AE%B9%E5%99%A8/" title="Docker容器">Docker容器</a><time datetime="2025-07-27T00:52:57.000Z" title="发表于 2025-07-27 08:52:57">2025-07-27</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2025 - 2026 By WF</span><span class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.3.0</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.4.2</a></span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
