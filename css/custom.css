@@ -1,0 +1,27 @@
+.category-group {
+  margin-bottom: 2rem;
+}
+.category-group-title {
+  font-size: 1.4rem;
+  padding: 0.5rem 0 0.5rem 1rem;
+  margin-bottom: 1rem;
+  border-left: 4px solid var(--theme-color, #49b1f5);
+  color: var(--font-color, #4c4948);
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+.category-group-title i {
+  color: var(--theme-color, #49b1f5);
+}
+.category-group-count {
+  font-size: 0.8rem;
+  color: var(--theme-grey, #858585);
+  margin-left: 0.3rem;
+  font-weight: normal;
+}
+.category-divider {
+  border: none;
+  border-top: 1px dashed var(--hr-color, #ddd);
+  margin: 1.5rem 0;
+}
