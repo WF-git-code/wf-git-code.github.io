@@ -16,27 +16,27 @@
   function initSeed() {
     if (localStorage.getItem('blog_seeded')) return;
 
-    // 站点级 — 运行一段时间的技术博客
-    setStore('blog_site_stats', { pv: 13472, uv: 4836 });
+    // 站点级
+    setStore('blog_site_stats', { pv: 2618, uv: 1352 });
 
-    // 文章浏览量
+    // 文章浏览量（按热度递减）
     var pvMap = {};
     document.querySelectorAll('.recent-post-item .article-title').forEach(function(a, i) {
       var h = a.getAttribute('href');
       if (!h) return;
-      var vals = [1062, 873, 745, 691, 628, 564, 511, 467, 423, 389,
-                  352, 328, 301, 278, 255, 237, 218, 201, 186, 172,
-                  158, 143, 131, 117, 104, 89];
-      pvMap[h] = vals[i] || 80;
+      var vals = [386, 312, 278, 254, 235, 218, 203, 188, 174, 161,
+                  148, 136, 125, 114, 104, 95, 86, 78, 70, 63,
+                  56, 50, 44, 39, 34, 30];
+      pvMap[h] = vals[i] || 25;
     });
     var cur = window.location.pathname;
-    if (!pvMap[cur]) pvMap[cur] = 350;
+    if (!pvMap[cur]) pvMap[cur] = 150;
     setStore('blog_page_views', pvMap);
 
-    // 点赞数
+    // 点赞数（自然比例）
     var likeMap = {};
     Object.keys(pvMap).forEach(function(p, i) {
-      likeMap[p] = Math.min(Math.max(Math.round(pvMap[p] * 0.018), 6), 48);
+      likeMap[p] = Math.max(Math.round(pvMap[p] * 0.04), 2);
     });
     setStore('blog_likes', likeMap);
 
