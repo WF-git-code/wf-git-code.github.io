@@ -1,0 +1,592 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Docker容器 | WF的知识空间</title><meta name="author" content="WF"><meta name="copyright" content="WF"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="一、Docker 是什么？为什么需要它？ 想象一下，我们把开发好的应用程序及其所有依赖（比如代码、运行时、系统工具、库）全部打包到一个“集装箱”里。这个集装箱是标准化的，可以在任何支持 Docker 的机器上运行，无论这台机器是 Windows、macOS 还是 Linux，也无论它是什么版本。 这个“集装箱”，就是 Docker 容器 (Container)。 Docker 的核心价值： 环境隔">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Docker容器">
+<meta property="og:url" content="http://example.com/2025/07/27/Docker%E5%AE%B9%E5%99%A8/index.html">
+<meta property="og:site_name" content="WF的知识空间">
+<meta property="og:description" content="一、Docker 是什么？为什么需要它？ 想象一下，我们把开发好的应用程序及其所有依赖（比如代码、运行时、系统工具、库）全部打包到一个“集装箱”里。这个集装箱是标准化的，可以在任何支持 Docker 的机器上运行，无论这台机器是 Windows、macOS 还是 Linux，也无论它是什么版本。 这个“集装箱”，就是 Docker 容器 (Container)。 Docker 的核心价值： 环境隔">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/img/WF.png">
+<meta property="article:published_time" content="2025-07-27T00:52:57.000Z">
+<meta property="article:modified_time" content="2026-07-10T10:22:11.562Z">
+<meta property="article:author" content="WF">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/img/WF.png"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Docker容器",
+  "url": "http://example.com/2025/07/27/Docker%E5%AE%B9%E5%99%A8/",
+  "image": "http://example.com/img/WF.png",
+  "datePublished": "2025-07-27T00:52:57.000Z",
+  "dateModified": "2026-07-10T10:22:11.562Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "WF",
+      "url": "http://example.com"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://example.com/2025/07/27/Docker%E5%AE%B9%E5%99%A8/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":true},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Docker容器',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><link rel="stylesheet" href="/css/custom.css"><meta name="generator" content="Hexo 7.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/WF.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">27</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">16</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fa-folder-open"></i><span> 分类</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(/img/index-bg.jpg);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">WF的知识空间</span></a><a class="nav-page-title" href="/"><span class="site-name">Docker容器</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fa-folder-open"></i><span> 分类</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">Docker容器</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2025-07-27T00:52:57.000Z" title="发表于 2025-07-27 08:52:57">2025-07-27</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-07-10T10:22:11.562Z" title="更新于 2026-07-10 18:22:11">2026-07-10</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E5%AE%B9%E5%99%A8%E5%8C%96/">容器化</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h1>一、Docker 是什么？为什么需要它？</h1>
+<p>想象一下，我们把开发好的应用程序及其所有依赖（比如代码、运行时、系统工具、库）全部打包到一个“集装箱”里。这个集装箱是标准化的，可以在任何支持 Docker 的机器上运行，无论这台机器是 Windows、macOS 还是 Linux，也无论它是什么版本。</p>
+<p>这个“集装箱”，就是 Docker 容器 (Container)。</p>
+<h2 id="Docker-的核心价值：">Docker 的核心价值：</h2>
+<p><strong>环境隔离与一致性：</strong> 确保开发、测试、生产环境完全一致，告别环境问题。</p>
+<p><strong>快速部署与启动：</strong> 容器是秒级启动，远快于传统的虚拟机。</p>
+<p><strong>资源利用率高：</strong> Docker 容器直接运行在宿主机内核上，几乎没有性能损耗。一台物理机可以运行成百上千个容器。</p>
+<p><strong>简化运维：</strong> 便于迁移、扩展和管理。</p>
+<h2 id="DockerVS虚拟机">DockerVS虚拟机</h2>
+<table>
+<thead>
+<tr>
+<th>对比项</th>
+<th>虚拟机 (VMware/VirtualBox)</th>
+<th>Docker 容器</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>内核</td>
+<td>独立完整操作系统内核，占用极高资源</td>
+<td>共享宿主机内核，仅打包应用 + 依赖</td>
+</tr>
+<tr>
+<td>启动速度</td>
+<td>分钟级</td>
+<td>秒级启动</td>
+</tr>
+<tr>
+<td>资源占用</td>
+<td>每台虚拟机分配独立内存 CPU</td>
+<td>轻量，可同时跑上百个容器</td>
+</tr>
+<tr>
+<td>隔离程度</td>
+<td>硬件级强隔离</td>
+<td>进程级隔离，性能损耗极低</td>
+</tr>
+<tr>
+<td>打包体积</td>
+<td>GB 级别（完整系统）</td>
+<td>MB 级别（仅应用依赖）</td>
+</tr>
+</tbody>
+</table>
+<h2 id="Docker-C-S架构图">Docker C/S架构图</h2>
+<p><img src="https://gitee.com/WFWFWFWFG/image-bed/raw/master/img/20260623163102857.png" alt="image-20260623163102742"></p>
+<p>Client：<code>docker</code> 命令行，输入指令发送给守护进程</p>
+<p>Daemon (dockerd)：后台服务，管理镜像、容器、网络、存储</p>
+<p>Registry：远程镜像仓库（Docker Hub、阿里云镜像仓库）</p>
+<h2 id="核心原理">核心原理</h2>
+<h1>二、核心概念：镜像、容器、仓库</h1>
+<p>学习 Docker，必须理解这三个核心概念：</p>
+<h2 id="镜像-Image-：">镜像 (Image)：</h2>
+<p><strong>是什么：</strong> 镜像是一个只读的模板，它包含了运行应用程序所需的一切：代码、运行时、库、环境变量和配置文件。</p>
+<p><strong>类比：</strong> 你可以把镜像想象成一个面向对象编程中的“类”。</p>
+<p>**分层特性：**每层只读，可复用，构建时缓存加速</p>
+<p>**关键：**镜像不能修改，运行时自动生成一层可读写层</p>
+<h2 id="容器-Container-：">容器 (Container)：</h2>
+<p><strong>是什么</strong>： 容器是镜像的运行实例。镜像是静态的，而容器是动态的。我们对容器的任何修改（如创建、启动、停止、删除）都不会影响到镜像本身。容器删除后，容器内读写层数据默认全部丢失（需数据卷持久化）</p>
+<p><strong>类比：</strong> 如果镜像是“类”，那么容器就是这个“类”的一个“实例对象”。</p>
+<h2 id="仓库-Repository-：">仓库 (Repository)：</h2>
+<p><strong>是什么：</strong> 仓库是集中存放镜像文件的地方。</p>
+<p><strong>类比：</strong> 你可以把它理解成代码界的 GitHub，只不过它存放的是镜像而不是代码。最著名的公共仓库是 Docker Hub。</p>
+<p>公共仓库：Docker Hub（官方）、阿里云镜像加速</p>
+<p>私有仓库：企业自建 Harbor，存放内部业务镜像</p>
+<p><strong>三者关系： 我们从 仓库 pull (拉取) 镜像到本地，然后以这个镜像为模板，run (运行) 起一个或多个容器。</strong></p>
+<h1>三、什么时候用Docker？</h1>
+<ol>
+<li>
+<p>多人协作开发</p>
+<p>每个人电脑系统、软件版本不一样，有人 Windows、有人 Ubuntu，本地项目环境五花八门，代码拉下来各种依赖报错。统一用 Docker 镜像，所有人环境完全一致。</p>
+</li>
+<li>
+<p>本地搭建中间件</p>
+<p>需要临时跑 MySQL、Redis、Nginx、MQ，不想本机安装一堆软件、卸载不干净污染系统，容器用完直接删除，不留残留。</p>
+</li>
+<li>
+<p>项目部署上线</p>
+<p>本地能跑，放到云服务器、测试机大概率环境出错；Docker 打包整套环境，服务器只装 Docker，一条命令启动项目。</p>
+</li>
+<li>
+<p>多版本软件共存</p>
+<p>比如同时需要 Python3.8、Python3.11，本地安装会冲突，容器分开隔离，互不影响。</p>
+</li>
+<li>
+<p>CI/CD 自动化流水线</p>
+<p>Git 提交代码后，自动构建 Docker 镜像、自动部署到测试 / 生产服务器。</p>
+</li>
+<li>
+<p>临时测试、演示项目</p>
+<p>给别人演示程序，不用对方安装环境，只需要给镜像，一键运行。</p>
+</li>
+</ol>
+<p><strong>不适合</strong>：需要独占硬件显卡、深度修改系统内核、桌面 GUI 大型图形程序。</p>
+<h1>四、基本操作</h1>
+<h3 id="镜像操作">镜像操作</h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">docker images                # 查看本地镜像</span><br><span class="line">docker pull xxx              # 拉取远程镜像</span><br><span class="line">docker rmi 镜像ID            # 删除镜像</span><br><span class="line">docker build -t 名字 .       # 打包本地项目为镜像</span><br></pre></td></tr></table></figure>
+<h3 id="容器操作">容器操作</h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">docker run 镜像名            # 创建并启动容器</span><br><span class="line">docker ps                    # 查看正在运行容器</span><br><span class="line">docker ps -a                 # 查看所有容器（含已停止）</span><br><span class="line">docker stop/start/restart 容器ID # 启停容器</span><br><span class="line">docker rm 容器ID             # 删除容器</span><br><span class="line">docker exec -it 容器ID bash  # 进入容器内部</span><br></pre></td></tr></table></figure>
+<hr>
+<h2 id="3-安装-Docker-环境">3. 安装 Docker 环境</h2>
+<p>以 Ubuntu 22.04 为例：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"># 卸载旧版本</span><br><span class="line">sudo apt-get remove docker docker-engine docker.io containerd runc</span><br><span class="line"></span><br><span class="line"># 设置仓库</span><br><span class="line">sudo apt-get update</span><br><span class="line">sudo apt-get install ca-certificates curl gnupg lsb-release</span><br><span class="line">sudo mkdir -p /etc/apt/keyrings</span><br><span class="line">curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg</span><br><span class="line">echo &quot;deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable&quot; | sudo tee /etc/apt/sources.list.d/docker.list &gt; /dev/null</span><br><span class="line"></span><br><span class="line"># 安装 Docker Engine</span><br><span class="line">sudo apt-get update</span><br><span class="line">sudo apt-get install docker-ce docker-ce-cli containerd.io docker-compose-plugin</span><br><span class="line"></span><br><span class="line"># 验证</span><br><span class="line">sudo docker run hello-world</span><br></pre></td></tr></table></figure>
+<p>将当前用户加入 docker 组，免 sudo：</p>
+<p>bash</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo usermod -aG docker $USER</span><br><span class="line">newgrp docker</span><br></pre></td></tr></table></figure>
+<hr>
+<h2 id="4-基础命令实战">4. 基础命令实战</h2>
+<h3 id="镜像操作-2">镜像操作</h3>
+<p>bash</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"># 拉取镜像</span><br><span class="line">docker pull nginx:1.25</span><br><span class="line"></span><br><span class="line"># 查看本地镜像</span><br><span class="line">docker images</span><br><span class="line"></span><br><span class="line"># 删除镜像</span><br><span class="line">docker rmi nginx:1.25</span><br><span class="line"></span><br><span class="line"># 给镜像打标签</span><br><span class="line">docker tag nginx:1.25 myrepo/nginx:v1</span><br></pre></td></tr></table></figure>
+<h3 id="容器生命周期">容器生命周期</h3>
+<p>bash</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"># 运行容器（后台运行，映射端口，命名）</span><br><span class="line">docker run -d --name mynginx -p 8080:80 nginx:1.25</span><br><span class="line"></span><br><span class="line"># 查看运行中的容器</span><br><span class="line">docker ps</span><br><span class="line"></span><br><span class="line"># 查看所有容器（包括停止的）</span><br><span class="line">docker ps -a</span><br><span class="line"></span><br><span class="line"># 停止、启动、重启</span><br><span class="line">docker stop mynginx</span><br><span class="line">docker start mynginx</span><br><span class="line">docker restart mynginx</span><br><span class="line"></span><br><span class="line"># 删除容器（强制）</span><br><span class="line">docker rm -f mynginx</span><br><span class="line"></span><br><span class="line"># 查看日志</span><br><span class="line">docker logs -f mynginx</span><br><span class="line"></span><br><span class="line"># 进入容器执行命令</span><br><span class="line">docker exec -it mynginx /bin/bash</span><br><span class="line"></span><br><span class="line"># 从容器拷贝文件到宿主机</span><br><span class="line">docker cp mynginx:/etc/nginx/nginx.conf ./</span><br></pre></td></tr></table></figure>
+<h3 id="实战：运行一个-C-程序容器">实战：运行一个 C++ 程序容器</h3>
+<p>先用官方 Ubuntu 镜像测试：</p>
+<p>bash</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">docker run -it --rm ubuntu:22.04 /bin/bash</span><br><span class="line"># 在容器内</span><br><span class="line">apt update &amp;&amp; apt install -y g++</span><br><span class="line">echo &#x27;int main()&#123;&#125;&#x27; &gt; test.cpp &amp;&amp; g++ test.cpp -o test &amp;&amp; ./test</span><br><span class="line"># 退出并自动删除容器</span><br></pre></td></tr></table></figure>
+<hr>
+<h2 id="5-Dockerfile-完全指南">5. Dockerfile 完全指南</h2>
+<p>Dockerfile 是构建镜像的脚本，每条指令创建一个新的镜像层。</p>
+<h3 id="常用指令详解">常用指令详解</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">指令</th>
+<th style="text-align:left">说明</th>
+<th style="text-align:left">注意事项</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><code>FROM</code></td>
+<td style="text-align:left">指定基础镜像</td>
+<td style="text-align:left">推荐官方镜像，如 <code>ubuntu:22.04</code>，<code>alpine:3.18</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>RUN</code></td>
+<td style="text-align:left">执行命令并提交新层</td>
+<td style="text-align:left">多条命令用 <code>&amp;&amp;</code> 串联减少层数；安装包后清理缓存</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>COPY</code></td>
+<td style="text-align:left">从构建上下文复制文件到镜像</td>
+<td style="text-align:left">推荐替代 <code>ADD</code>，更透明</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>ADD</code></td>
+<td style="text-align:left">类似 COPY，但支持 URL 和自动解压 tar</td>
+<td style="text-align:left">谨慎使用，可能导致意外行为</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>CMD</code></td>
+<td style="text-align:left">容器启动时的默认命令</td>
+<td style="text-align:left">可被 <code>docker run ...</code> 覆盖；使用 exec 形式 <code>[&quot;executable&quot;,&quot;param1&quot;]</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>ENTRYPOINT</code></td>
+<td style="text-align:left">容器入口点，不易被覆盖</td>
+<td style="text-align:left">与 <code>CMD</code> 配合可构建“可执行镜像”</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>ENV</code></td>
+<td style="text-align:left">设置环境变量</td>
+<td style="text-align:left">敏感信息勿用，会被 <code>docker inspect</code> 看到</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>WORKDIR</code></td>
+<td style="text-align:left">设置工作目录</td>
+<td style="text-align:left">推荐用绝对路径，避免 <code>RUN cd</code> 导致的当前目录混乱</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>EXPOSE</code></td>
+<td style="text-align:left">声明容器监听的端口</td>
+<td style="text-align:left">仅文档化，实际映射需 <code>-p</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>VOLUME</code></td>
+<td style="text-align:left">创建挂载点</td>
+<td style="text-align:left">用于数据持久化，但无法指定宿主机路径，运行时用 <code>-v</code> 更好</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>USER</code></td>
+<td style="text-align:left">指定运行用户</td>
+<td style="text-align:left">安全最佳实践：不要用 root</td>
+</tr>
+</tbody>
+</table>
+<h3 id="多阶段构建（Multi-stage-Build）">多阶段构建（Multi-stage Build）</h3>
+<p>分离构建和运行环境，最终镜像只包含运行时必需的二进制和库，体积极小。</p>
+<p><strong>示例：C++ 应用</strong><br>
+假设有一个简单的 main.cpp：</p>
+<p>cpp</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;iostream&gt;</span><br><span class="line">int main() &#123;</span><br><span class="line">    std::cout &lt;&lt; &quot;Hello Docker!&quot; &lt;&lt; std::endl;</span><br><span class="line">    return 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>Dockerfile：</p>
+<p>dockerfile</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"># 构建阶段，命名为 builder</span><br><span class="line">FROM ubuntu:22.04 AS builder</span><br><span class="line">RUN apt-get update &amp;&amp; apt-get install -y g++</span><br><span class="line">WORKDIR /app</span><br><span class="line">COPY main.cpp .</span><br><span class="line">RUN g++ -std=c++17 -o hello main.cpp</span><br><span class="line"></span><br><span class="line"># 运行阶段</span><br><span class="line">FROM ubuntu:22.04</span><br><span class="line">COPY --from=builder /app/hello /usr/local/bin/</span><br><span class="line">CMD [&quot;hello&quot;]</span><br></pre></td></tr></table></figure>
+<p>构建并运行：</p>
+<p>bash</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">docker build -t hello-cpp .</span><br><span class="line">docker run --rm hello-cpp</span><br></pre></td></tr></table></figure>
+<h3 id="最佳实践">最佳实践</h3>
+<ul>
+<li><strong>合并 RUN</strong>：<code>RUN apt-get update &amp;&amp; apt-get install -y pkg1 pkg2 &amp;&amp; rm -rf /var/lib/apt/lists/*</code></li>
+<li><strong>利用缓存</strong>：将不易变化的指令（如安装依赖）放在前面，COPY 源码放在最后。</li>
+<li><strong>.dockerignore</strong>：排除 <code>.git</code>、<code>build/</code>、<code>*.o</code> 等，减小构建上下文。</li>
+<li><strong>选择轻量基础镜像</strong>：如 <code>alpine</code>（~5MB），但注意 C++ 程序可能依赖 glibc，alpine 用 musl libc，需要重新编译或使用 glibc 版本。稳妥选择 <code>ubuntu:22.04</code> 或 <code>debian:slim</code>。</li>
+</ul>
+<hr>
+<h2 id="6-网络与存储深入">6. 网络与存储深入</h2>
+<h3 id="网络模式">网络模式</h3>
+<ul>
+<li><strong>bridge（默认）</strong>：容器连接虚拟网桥 <code>docker0</code>，通过 NAT 与外界通信。<br>
+端口映射 <code>-p 宿主机端口:容器端口</code> 可将服务暴露。</li>
+<li><strong>host</strong>：容器直接使用宿主机网络栈，性能最高，但无隔离，端口冲突风险。</li>
+<li><strong>none</strong>：无网络。</li>
+<li><strong>自定义桥接网络</strong>：容器间可通过<strong>容器名</strong>互相访问，因为内置 DNS。</li>
+</ul>
+<p>bash</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"># 创建自定义网络</span><br><span class="line">docker network create mynet</span><br><span class="line"></span><br><span class="line"># 运行两个容器在同一网络</span><br><span class="line">docker run -d --net mynet --name web nginx</span><br><span class="line">docker run -d --net mynet --name app myapp</span><br><span class="line"></span><br><span class="line"># app 容器内可以直接 ping web</span><br><span class="line">docker exec -it app ping web</span><br></pre></td></tr></table></figure>
+<h3 id="数据持久化">数据持久化</h3>
+<ul>
+<li>
+<p><strong>卷（Volume）</strong>：由 Docker 管理，<code>/var/lib/docker/volumes/</code>，是推荐方式。</p>
+<p>bash</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">docker volume create mydata</span><br><span class="line">docker run -v mydata:/app/data myapp</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p><strong>绑定挂载（Bind Mount）</strong>：挂载宿主机指定路径。</p>
+<p>bash</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -v /home/user/app:/app myapp</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p><strong>tmpfs</strong>：内存文件系统，容器停止即丢失。</p>
+</li>
+</ul>
+<p><strong>选择建议</strong>：生产环境用 Volume，开发环境可用 Bind Mount 同步代码。</p>
+<hr>
+<h2 id="7-Docker-Compose-编排">7. Docker Compose 编排</h2>
+<p>Compose 使用 YAML 文件定义多个容器服务，一键启动。</p>
+<p><strong>docker-compose.yml 示例</strong>：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">version: &#x27;3.8&#x27;</span><br><span class="line">services:</span><br><span class="line">  web:</span><br><span class="line">    build: ./web</span><br><span class="line">    ports:</span><br><span class="line">      - &quot;8080:80&quot;</span><br><span class="line">    networks:</span><br><span class="line">      - frontend</span><br><span class="line">    depends_on:</span><br><span class="line">      - api</span><br><span class="line">  api:</span><br><span class="line">    build: ./api</span><br><span class="line">    networks:</span><br><span class="line">      - frontend</span><br><span class="line">      - backend</span><br><span class="line">    environment:</span><br><span class="line">      DB_HOST: db</span><br><span class="line">  db:</span><br><span class="line">    image: postgres:15-alpine</span><br><span class="line">    networks:</span><br><span class="line">      - backend</span><br><span class="line">    volumes:</span><br><span class="line">      - pgdata:/var/lib/postgresql/data</span><br><span class="line">    environment:</span><br><span class="line">      POSTGRES_PASSWORD: secret</span><br><span class="line"></span><br><span class="line">networks:</span><br><span class="line">  frontend:</span><br><span class="line">  backend:</span><br><span class="line"></span><br><span class="line">volumes:</span><br><span class="line">  pgdata:</span><br></pre></td></tr></table></figure>
+<p>常用命令：</p>
+<p>bash</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"># 启动所有服务（后台）</span><br><span class="line">docker compose up -d</span><br><span class="line"></span><br><span class="line"># 查看状态</span><br><span class="line">docker compose ps</span><br><span class="line"></span><br><span class="line"># 查看日志</span><br><span class="line">docker compose logs -f</span><br><span class="line"></span><br><span class="line"># 停止并删除所有资源</span><br><span class="line">docker compose down -v</span><br></pre></td></tr></table></figure>
+<hr>
+<h2 id="8-实战：C-Muduo-Echo-服务器容器化">8. 实战：C++ Muduo Echo 服务器容器化</h2>
+<p>我们将使用 muduo 网络库编写一个简单的 Echo 服务器，并完全容器化。</p>
+<h3 id="8-1-编写-Echo-服务器源码">8.1 编写 Echo 服务器源码</h3>
+<p><strong>echo_<a target="_blank" rel="noopener" href="https://server.cc/">server.cc</a></strong>：</p>
+<p>cpp</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;muduo/net/TcpServer.h&gt;</span><br><span class="line">#include &lt;muduo/net/EventLoop.h&gt;</span><br><span class="line">#include &lt;muduo/base/Logging.h&gt;</span><br><span class="line">#include &lt;string&gt;</span><br><span class="line"></span><br><span class="line">using namespace muduo;</span><br><span class="line">using namespace muduo::net;</span><br><span class="line"></span><br><span class="line">// 新连接回调</span><br><span class="line">void onConnection(const TcpConnectionPtr&amp; conn) &#123;</span><br><span class="line">    if (conn-&gt;connected()) &#123;</span><br><span class="line">        LOG_INFO &lt;&lt; &quot;New connection from &quot; &lt;&lt; conn-&gt;peerAddress().toIpPort();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// 消息回调：接收到数据后原样返回</span><br><span class="line">void onMessage(const TcpConnectionPtr&amp; conn, Buffer* buf, Timestamp time) &#123;</span><br><span class="line">    std::string msg(buf-&gt;retrieveAllAsString());</span><br><span class="line">    LOG_INFO &lt;&lt; &quot;Received &quot; &lt;&lt; msg.size() &lt;&lt; &quot; bytes, echo back.&quot;;</span><br><span class="line">    conn-&gt;send(msg);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">int main() &#123;</span><br><span class="line">    LOG_INFO &lt;&lt; &quot;Echo server starting...&quot;;</span><br><span class="line">    EventLoop loop;</span><br><span class="line">    InetAddress listenAddr(8888);</span><br><span class="line">    TcpServer server(&amp;loop, listenAddr, &quot;EchoServer&quot;);</span><br><span class="line">    server.setConnectionCallback(onConnection);</span><br><span class="line">    server.setMessageCallback(onMessage);</span><br><span class="line">    server.start();</span><br><span class="line">    loop.loop();</span><br><span class="line">    return 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="8-2-编写-Dockerfile（多阶段构建）">8.2 编写 Dockerfile（多阶段构建）</h3>
+<p>我们需要先编译 muduo 库，再编译我们的程序。最终镜像只保留可执行文件和必要动态库。</p>
+<p>dockerfile</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"># 构建阶段</span><br><span class="line">FROM ubuntu:22.04 AS builder</span><br><span class="line"></span><br><span class="line"># 安装编译工具和依赖</span><br><span class="line">RUN apt-get update &amp;&amp; apt-get install -y \</span><br><span class="line">    g++ cmake make git \</span><br><span class="line">    libboost-dev \</span><br><span class="line">    &amp;&amp; rm -rf /var/lib/apt/lists/*</span><br><span class="line"></span><br><span class="line"># 下载并编译 muduo 库（使用最新 release 分支）</span><br><span class="line">WORKDIR /opt</span><br><span class="line">RUN git clone --branch master https://github.com/chenshuo/muduo.git</span><br><span class="line">WORKDIR /opt/muduo</span><br><span class="line">RUN cmake -B build -DCMAKE_BUILD_TYPE=Release &amp;&amp; \</span><br><span class="line">    cmake --build build -- -j$(nproc) &amp;&amp; \</span><br><span class="line">    cmake --install build</span><br><span class="line"></span><br><span class="line"># 编译 Echo 服务器</span><br><span class="line">WORKDIR /app</span><br><span class="line">COPY echo_server.cc .</span><br><span class="line">RUN g++ -std=c++11 -O2 -o echo_server echo_server.cc \</span><br><span class="line">    -lmuduo_net -lmuduo_base -lpthread</span><br><span class="line"></span><br><span class="line"># 运行阶段</span><br><span class="line">FROM ubuntu:22.04</span><br><span class="line"></span><br><span class="line"># 安装运行时依赖（boost 动态库）</span><br><span class="line">RUN apt-get update &amp;&amp; apt-get install -y libboost-all-dev &amp;&amp; \</span><br><span class="line">    rm -rf /var/lib/apt/lists/*</span><br><span class="line"></span><br><span class="line"># 拷贝 muduo 动态库</span><br><span class="line">COPY --from=builder /usr/local/lib/libmuduo_*.so* /usr/local/lib/</span><br><span class="line"># 拷贝可执行文件</span><br><span class="line">COPY --from=builder /app/echo_server /usr/local/bin/</span><br><span class="line"></span><br><span class="line"># 更新动态库缓存</span><br><span class="line">RUN ldconfig</span><br><span class="line"></span><br><span class="line"># 声明端口</span><br><span class="line">EXPOSE 8888</span><br><span class="line"></span><br><span class="line"># 以非 root 用户运行（安全）</span><br><span class="line">RUN useradd -m appuser</span><br><span class="line">USER appuser</span><br><span class="line"></span><br><span class="line">CMD [&quot;echo_server&quot;]</span><br></pre></td></tr></table></figure>
+<p><strong>说明</strong>：</p>
+<ul>
+<li>构建阶段编译 muduo 和 echo_server。</li>
+<li>运行阶段只安装运行时依赖和拷贝构建产物，减小镜像体积。</li>
+<li>使用非 root 用户增强安全性。</li>
+</ul>
+<h3 id="8-3-构建镜像与运行容器">8.3 构建镜像与运行容器</h3>
+<p>bash</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"># 构建镜像</span><br><span class="line">docker build -t echo-server:1.0 .</span><br><span class="line"></span><br><span class="line"># 运行容器</span><br><span class="line">docker run -d --name echo1 -p 8888:8888 echo-server:1.0</span><br><span class="line"></span><br><span class="line"># 测试：使用 telnet 或 nc</span><br><span class="line">telnet localhost 8888</span><br><span class="line"># 或者</span><br><span class="line">echo &quot;hello&quot; | nc localhost 8888</span><br><span class="line"></span><br><span class="line"># 查看日志</span><br><span class="line">docker logs -f echo1</span><br></pre></td></tr></table></figure>
+<h3 id="8-4-使用-Compose-部署多个服务">8.4 使用 Compose 部署多个服务</h3>
+<p>假设我们需要一个 Redis 记录连接次数，并运行多个 Echo 实例。</p>
+<p><strong>docker-compose.yml</strong>：</p>
+<p>yaml</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">version: &#x27;3.8&#x27;</span><br><span class="line"></span><br><span class="line">services:</span><br><span class="line">  echo-server:</span><br><span class="line">    image: echo-server:1.0</span><br><span class="line">    deploy:</span><br><span class="line">      replicas: 2          # 仅 swarm 模式支持，单机可忽略，或用 scale</span><br><span class="line">    ports:</span><br><span class="line">      - &quot;8888-8889:8888&quot;   # 每个实例随机映射到 8888-8889</span><br><span class="line">    networks:</span><br><span class="line">      - app-net</span><br><span class="line">    restart: unless-stopped</span><br><span class="line"></span><br><span class="line">  redis:</span><br><span class="line">    image: redis:7-alpine</span><br><span class="line">    networks:</span><br><span class="line">      - app-net</span><br><span class="line">    volumes:</span><br><span class="line">      - redis-data:/data</span><br><span class="line"></span><br><span class="line">networks:</span><br><span class="line">  app-net:</span><br><span class="line">    driver: bridge</span><br><span class="line"></span><br><span class="line">volumes:</span><br><span class="line">  redis-data:</span><br></pre></td></tr></table></figure>
+<p>单机多实例可使用 <code>docker compose up --scale echo-server=3</code>（需版本3.4+）。然后通过 nginx 做 TCP 负载均衡，后文容灾部分详述。</p>
+<hr>
+<h2 id="9-底层实现原理">9. 底层实现原理</h2>
+<h3 id="Namespace-隔离">Namespace 隔离</h3>
+<p>Linux Namespace 让容器认为自己是独立的系统。</p>
+<ul>
+<li><strong>PID namespace</strong>：容器内进程 PID 从 1 开始，看不到宿主机进程。</li>
+<li><strong>NET namespace</strong>：拥有自己的网卡、IP、路由表。</li>
+<li><strong>IPC namespace</strong>：隔离信号量、消息队列。</li>
+<li><strong>MNT namespace</strong>：隔离文件系统挂载点。</li>
+<li><strong>UTS namespace</strong>：隔离主机名。</li>
+<li><strong>USER namespace</strong>：隔离用户和组 ID。</li>
+</ul>
+<h3 id="Cgroups-资源限制">Cgroups 资源限制</h3>
+<p>Control Groups 限制和监控资源使用。</p>
+<ul>
+<li><strong>CPU</strong>：<code>--cpus=2</code>（使用 2 个核心），<code>--cpu-shares</code> 相对权重。</li>
+<li><strong>内存</strong>：<code>--memory=512m</code>，超过限制会触发 OOM Killer。</li>
+<li><strong>块 IO</strong>：<code>--blkio-weight</code>。<br>
+可在 <code>/sys/fs/cgroup/</code> 查看配置。</li>
+</ul>
+<h3 id="联合文件系统与-Overlay2">联合文件系统与 Overlay2</h3>
+<p>Docker 镜像分层存储依赖 Overlay2 存储驱动。</p>
+<ul>
+<li><strong>lowerdir</strong>：只读镜像层。</li>
+<li><strong>upperdir</strong>：容器可写层。</li>
+<li><strong>merged</strong>：统一视图，包含所有层的叠加。</li>
+<li><strong>写时复制</strong>：修改文件时，从 lowerdir 拷贝到 upperdir 再修改，确保镜像层不变。</li>
+</ul>
+<p><code>docker image inspect</code> 可查看各层信息。</p>
+<hr>
+<h2 id="10-容灾设计与高可用">10. 容灾设计与高可用</h2>
+<h3 id="重启策略">重启策略</h3>
+<p><code>docker run --restart=always</code> 或 <code>--restart=unless-stopped</code>，保证容器退出后自动重启。</p>
+<p>bash</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -d --restart=unless-stopped --name echo1 -p 8888:8888 echo-server:1.0</span><br></pre></td></tr></table></figure>
+<h3 id="健康检查">健康检查</h3>
+<p>在 Dockerfile 中添加 <code>HEALTHCHECK</code> 指令：</p>
+<p>dockerfile</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">HEALTHCHECK --interval=30s --timeout=3s --retries=3 \</span><br><span class="line">  CMD nc -z localhost 8888 || exit 1</span><br></pre></td></tr></table></figure>
+<p>如果服务不健康，Docker 会标记为 <code>unhealthy</code>，可配合编排工具自动重启。</p>
+<h3 id="资源限制">资源限制</h3>
+<p>防止单个容器耗尽宿主机资源。</p>
+<p>bash</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -d --cpus=2 --memory=512m --memory-swap=1g echo-server:1.0</span><br></pre></td></tr></table></figure>
+<p>在 Compose 中：</p>
+<p>yaml</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">services:</span><br><span class="line">  echo-server:</span><br><span class="line">    image: echo-server:1.0</span><br><span class="line">    deploy:</span><br><span class="line">      resources:</span><br><span class="line">        limits:</span><br><span class="line">          cpus: &#x27;2&#x27;</span><br><span class="line">          memory: 512M</span><br><span class="line">        reservations:</span><br><span class="line">          cpus: &#x27;1&#x27;</span><br><span class="line">          memory: 256M</span><br></pre></td></tr></table></figure>
+<h3 id="日志管理">日志管理</h3>
+<p>默认使用 json-file 驱动，需配置轮转避免磁盘爆满。</p>
+<p>bash</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run --log-opt max-size=10m --log-opt max-file=3 echo-server</span><br></pre></td></tr></table></figure>
+<p>Compose 中：</p>
+<p>yaml</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">services:</span><br><span class="line">  echo-server:</span><br><span class="line">    logging:</span><br><span class="line">      driver: &quot;json-file&quot;</span><br><span class="line">      options:</span><br><span class="line">        max-size: &quot;10m&quot;</span><br><span class="line">        max-file: &quot;3&quot;</span><br></pre></td></tr></table></figure>
+<h3 id="数据备份与恢复">数据备份与恢复</h3>
+<p>对卷进行备份：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"># 备份</span><br><span class="line">docker run --rm -v myvolume:/data -v $(pwd):/backup ubuntu tar cvf /backup/backup.tar /data</span><br><span class="line"></span><br><span class="line"># 恢复</span><br><span class="line">docker run --rm -v myvolume:/data -v $(pwd):/backup ubuntu tar xvf /backup/backup.tar -C /</span><br></pre></td></tr></table></figure>
+<h3 id="多实例负载均衡">多实例负载均衡</h3>
+<p>单机可以运行多个 Echo 容器，前面架设 nginx 做 TCP 负载均衡。</p>
+<p><strong>nginx.conf</strong>：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">stream &#123;</span><br><span class="line">    upstream echo_cluster &#123;</span><br><span class="line">        server echo1:8888;</span><br><span class="line">        server echo2:8888;</span><br><span class="line">    &#125;</span><br><span class="line">    server &#123;</span><br><span class="line">        listen 8888;</span><br><span class="line">        proxy_pass echo_cluster;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>用 Compose 编排：</p>
+<p>yaml</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">services:</span><br><span class="line">  echo1:</span><br><span class="line">    image: echo-server:1.0</span><br><span class="line">    networks:</span><br><span class="line">      - internal</span><br><span class="line">  echo2:</span><br><span class="line">    image: echo-server:1.0</span><br><span class="line">    networks:</span><br><span class="line">      - internal</span><br><span class="line">  lb:</span><br><span class="line">    image: nginx:alpine</span><br><span class="line">    ports:</span><br><span class="line">      - &quot;8888:8888&quot;</span><br><span class="line">    volumes:</span><br><span class="line">      - ./nginx.conf:/etc/nginx/nginx.conf:ro</span><br><span class="line">    networks:</span><br><span class="line">      - internal</span><br></pre></td></tr></table></figure>
+<hr>
+<h2 id="11-异常排查与常见问题">11. 异常排查与常见问题</h2>
+<h3 id="容器意外退出">容器意外退出</h3>
+<p><strong>现象</strong>：<code>docker ps -a</code> 显示 <code>Exited (1)</code> 或 <code>Exited (137)</code>。</p>
+<ul>
+<li>退出码 <code>1</code>：应用自身错误，检查日志 <code>docker logs &lt;container&gt;</code>。</li>
+<li>退出码 <code>137</code>：容器被 SIGKILL 杀死，通常因内存 OOM 或 <code>docker stop</code> 超时。<br>
+解决：增加内存限制，或检查应用内存泄漏。</li>
+</ul>
+<h3 id="OOM-Killed">OOM Killed</h3>
+<p>日志中出现 <code>Killed</code> 且状态码 137。</p>
+<p>bash</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker inspect --format=&#x27;&#123;&#123;.State.OOMKilled&#125;&#125;&#x27; container_name</span><br></pre></td></tr></table></figure>
+<p>如果为 true，调高 <code>--memory</code> 限制或优化程序。</p>
+<h3 id="网络不通">网络不通</h3>
+<ul>
+<li>检查容器是否在同一网络：<code>docker network inspect &lt;network&gt;</code>。</li>
+<li>使用自定义网络确保容器名解析。</li>
+<li>防火墙规则：<code>sudo iptables -L -n</code>，Docker 会自动添加规则，但可能被其他工具覆盖。</li>
+</ul>
+<h3 id="文件权限错误">文件权限错误</h3>
+<p>挂载宿主机目录时，容器内用户 UID 与宿主机文件属主不匹配导致 <code>Permission denied</code>。</p>
+<ul>
+<li>运行时指定用户：<code>docker run -u $(id -u):$(id -g) ...</code></li>
+<li>在 Dockerfile 中创建与宿主机相同 UID 的用户。</li>
+</ul>
+<h3 id="动态库缺失">动态库缺失</h3>
+<p><code>docker logs</code> 显示 <code>error while loading shared libraries: libxxx.so</code>.</p>
+<ul>
+<li>进入容器检查：<code>ldd /usr/local/bin/echo_server</code></li>
+<li>将缺失的库 COPY 到镜像并 <code>ldconfig</code>。</li>
+</ul>
+<h3 id="Core-Dump-调试">Core Dump 调试</h3>
+<p>容器内程序段错误但无 core 文件。</p>
+<ul>
+<li>运行容器时允许 core dump 并设置 core 模式：</li>
+</ul>
+<p>bash</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">docker run --ulimit core=-1 --security-opt seccomp=unconfined -v /tmp/cores:/cores \</span><br><span class="line">  -e CORE_PATH=/cores echo-server</span><br></pre></td></tr></table></figure>
+<p>或在宿主机配置：<code>echo '/tmp/cores/core.%e.%p' | sudo tee /proc/sys/kernel/core_pattern</code>，但注意 Docker 默认会隐藏宿主机的 core_pattern。可挂载 <code>/proc/sys/kernel/core_pattern</code> 只读或使用特权容器。<br>
+推荐方案：在容器内启用 core dump 并将 core 文件保存到挂载的卷。</p>
+<hr>
+<h2 id="12-安全最佳实践">12. 安全最佳实践</h2>
+<ol>
+<li><strong>使用非 root 用户</strong>：<code>USER 1000</code> 或在 Dockerfile 最后切换。</li>
+<li><strong>最小权限</strong>：<code>--cap-drop ALL --cap-add NET_BIND_SERVICE</code> 移除不需要的内核能力。</li>
+<li><strong>只读根文件系统</strong>：<code>--read-only</code>，结合 tmpfs 挂载临时目录。</li>
+<li><strong>镜像漏洞扫描</strong>：使用 <code>docker scan</code> 或 Trivy。</li>
+<li><strong>不硬编码密钥</strong>：用环境变量、Docker secrets（Swarm）或外部密钥管理。</li>
+<li><strong>保持基础镜像更新</strong>：定期重建镜像获取安全补丁。</li>
+<li><strong>限制资源</strong>：防止 DoS 攻击。</li>
+</ol>
+<hr>
+<h2 id="13-大厂面试官深挖问题集">13. 大厂面试官深挖问题集</h2>
+<h3 id="Q1-Docker-和虚拟机的区别是什么？">Q1: Docker 和虚拟机的区别是什么？</h3>
+<p><strong>答</strong>：</p>
+<ul>
+<li>虚拟机虚拟化硬件，运行完整 Guest OS，隔离强但资源开销大。</li>
+<li>Docker 与宿主机共享内核，通过 Namespace 隔离进程、网络等，Cgroups 限制资源，轻量快速，镜像分层存储节省空间。</li>
+</ul>
+<h3 id="Q2-如何优化-Docker-镜像大小？">Q2: 如何优化 Docker 镜像大小？</h3>
+<p><strong>答</strong>：</p>
+<ul>
+<li>使用轻量基础镜像（alpine, debian:slim）。</li>
+<li>多阶段构建，仅保留运行所需的二进制和库。</li>
+<li>合并 RUN 指令，清理缓存（<code>rm -rf /var/lib/apt/lists/*</code>）。</li>
+<li>使用 .dockerignore 排除不需要的文件。</li>
+<li>避免安装调试工具。</li>
+</ul>
+<h3 id="Q3-Overlay2-文件系统的工作原理？">Q3: Overlay2 文件系统的工作原理？</h3>
+<p><strong>答</strong>：<br>
+Overlay2 通过多个目录组成联合挂载：lowerdir（只读镜像层）、upperdir（容器可写层）、merged（统一视图）。写时复制：修改文件时，从 lowerdir 复制到 upperdir 再修改。</p>
+<h3 id="Q4-如何保证容器的高可用？">Q4: 如何保证容器的高可用？</h3>
+<p><strong>答</strong>：</p>
+<ul>
+<li>重启策略 <code>--restart=always</code>。</li>
+<li>健康检查，自动检测并重启异常容器。</li>
+<li>多实例负载均衡（nginx / HAProxy）。</li>
+<li>资源限制防止 OOM。</li>
+<li>日志集中收集与监控（ELK, Prometheus）。</li>
+<li>编排工具（Swarm, K8s）实现自动扩缩容和故障恢复。</li>
+</ul>
+<h3 id="Q5-容器内应用收不到-SIGTERM-信号怎么办？">Q5: 容器内应用收不到 SIGTERM 信号怎么办？</h3>
+<p><strong>答</strong>：<br>
+确保 CMD/ENTRYPOINT 使用 exec 形式（<code>[&quot;executable&quot;,&quot;param1&quot;]</code>），因为 shell 形式（<code>CMD command</code>）不会转发信号给子进程。也可使用 <code>STOPSIGNAL</code> 指定信号。</p>
+<h3 id="Q6-如何排查容器内网络不通？">Q6: 如何排查容器内网络不通？</h3>
+<p><strong>答</strong>：</p>
+<ul>
+<li><code>docker network inspect</code> 确认网络配置。</li>
+<li><code>docker exec</code> 进入容器 <code>ping</code> 目标，检查 DNS 解析。</li>
+<li>检查宿主机 iptables 规则。</li>
+<li>使用自定义网络而不是默认 bridge，以利用内置 DNS。</li>
+</ul>
+<h3 id="Q7-你如何实现-C-应用的容器化？请描述完整流程。">Q7: 你如何实现 C++ 应用的容器化？请描述完整流程。</h3>
+<p><strong>答</strong>：<br>
+（根据本文实战部分回答）编写 Dockerfile，使用多阶段构建：第一阶段安装 g++、依赖库，编译源码；第二阶段仅拷贝可执行文件和运行时依赖，设置非 root 用户、健康检查，最后通过 Compose 定义服务并部署。</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="http://example.com">WF</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="http://example.com/2025/07/27/Docker%E5%AE%B9%E5%99%A8/">http://example.com/2025/07/27/Docker%E5%AE%B9%E5%99%A8/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="http://example.com" target="_blank">WF的知识空间</a>！</span></div></div><div class="tag_share"><div class="post-share"><div class="social-share" data-image="/img/WF.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2025/07/27/CMake/" title="CMake"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">CMake</div></div><div class="info-2"><div class="info-item-1">CMake 完整教程 本文档为开箱即用的 CMake 全流程参考手册，所有章节均配套可直接运行的示例与操作步骤，配置项目时直接对照查阅即可。  一、基础认知与安装 1.1 什么是 CMake CMake 是跨平台的构建系统生成工具，它不直接编译源代码，而是根据 CMakeLists.txt 配置文件，生成对应平台的原生构建脚本：  Linux/macOS：生成 Makefile Windows：生成 Visual Studio 工程 / MinGW Makefile macOS：也可生成 Xcode 项目  最终由原生构建工具（make、msbuild 等）完成代码的编译与链接。 1.2 核心优势  一套配置适配全平台，无需为每个系统单独写构建脚本 语法比原生 Makefile 更简洁易维护，支持大型工程模块化管理 内置海量第三方库查找模块，自动处理依赖路径 主流 C/C++ 开源项目的标准构建方案，生态完善  1.3 安装方法 Windows   前往 CMake 官网 下载安装包   安装时勾选 Add CMake to the system PATH，将命令加入环境变量  ...</div></div></div></a><a class="pagination-related" href="/2025/07/27/%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/" title="Linux内存管理"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">Linux内存管理</div></div><div class="info-2"><div class="info-item-1">计算机的五大组成部分：控制器、运算器、存储器、输入设备、输出设备 存储系统 存储器：用来存放数据和程序记忆的部件，它的基本功能是指定的地址写入/读出信息。 内存：速度快价格贵，断电即失      处理器可以直接访问内存 硬盘：速度慢，相对便宜，数据持久化   处理器不能直接访问硬盘，需要I/O，内存和外存交换也需要相应I/O设备，如Linux  SWAP交换分区 存储器层次结构  Linux内存管理 操作系统会提供一种机制，将不同进程的虚拟地址和不同内存的物理地址映射起来  程序所使用的内存地址叫做虚拟内存地址（Virtual Memory Address） 实际存在硬件里面的空间地址叫物理内存地址（Physical Memory Address）。   物理内存  **寄存器：**具有与处理机相同的速度与CPU协调工作，故对寄存器的访问速度最快，但价格却十分昂贵，因此容量不可能做得很大。用于加速存储器的访问速度，如用寄存器存放操作数，或用作地址寄存器加快地址转换速度等。 高速缓存: 根据程序执行的局部性原理将主存中一些经常访问的信息存放在高速缓存中，减少访问主存储器的次数，可大...</div></div></div></a></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/WF.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">WF</div><div class="author-info-description"></div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">27</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">16</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/WF-git-code"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="//github.com/WF-git-code" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="/18628492787@163.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">一、Docker 是什么？为什么需要它？</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Docker-%E7%9A%84%E6%A0%B8%E5%BF%83%E4%BB%B7%E5%80%BC%EF%BC%9A"><span class="toc-number">1.1.</span> <span class="toc-text">Docker 的核心价值：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#DockerVS%E8%99%9A%E6%8B%9F%E6%9C%BA"><span class="toc-number">1.2.</span> <span class="toc-text">DockerVS虚拟机</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Docker-C-S%E6%9E%B6%E6%9E%84%E5%9B%BE"><span class="toc-number">1.3.</span> <span class="toc-text">Docker C&#x2F;S架构图</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A0%B8%E5%BF%83%E5%8E%9F%E7%90%86"><span class="toc-number">1.4.</span> <span class="toc-text">核心原理</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">2.</span> <span class="toc-text">二、核心概念：镜像、容器、仓库</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%95%9C%E5%83%8F-Image-%EF%BC%9A"><span class="toc-number">2.1.</span> <span class="toc-text">镜像 (Image)：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%B9%E5%99%A8-Container-%EF%BC%9A"><span class="toc-number">2.2.</span> <span class="toc-text">容器 (Container)：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%93%E5%BA%93-Repository-%EF%BC%9A"><span class="toc-number">2.3.</span> <span class="toc-text">仓库 (Repository)：</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">3.</span> <span class="toc-text">三、什么时候用Docker？</span></a></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">4.</span> <span class="toc-text">四、基本操作</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%95%9C%E5%83%8F%E6%93%8D%E4%BD%9C"><span class="toc-number">4.0.1.</span> <span class="toc-text">镜像操作</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%B9%E5%99%A8%E6%93%8D%E4%BD%9C"><span class="toc-number">4.0.2.</span> <span class="toc-text">容器操作</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E5%AE%89%E8%A3%85-Docker-%E7%8E%AF%E5%A2%83"><span class="toc-number">4.1.</span> <span class="toc-text">3. 安装 Docker 环境</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-%E5%9F%BA%E7%A1%80%E5%91%BD%E4%BB%A4%E5%AE%9E%E6%88%98"><span class="toc-number">4.2.</span> <span class="toc-text">4. 基础命令实战</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%95%9C%E5%83%8F%E6%93%8D%E4%BD%9C-2"><span class="toc-number">4.2.1.</span> <span class="toc-text">镜像操作</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%B9%E5%99%A8%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F"><span class="toc-number">4.2.2.</span> <span class="toc-text">容器生命周期</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%9E%E6%88%98%EF%BC%9A%E8%BF%90%E8%A1%8C%E4%B8%80%E4%B8%AA-C-%E7%A8%8B%E5%BA%8F%E5%AE%B9%E5%99%A8"><span class="toc-number">4.2.3.</span> <span class="toc-text">实战：运行一个 C++ 程序容器</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-Dockerfile-%E5%AE%8C%E5%85%A8%E6%8C%87%E5%8D%97"><span class="toc-number">4.3.</span> <span class="toc-text">5. Dockerfile 完全指南</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B8%B8%E7%94%A8%E6%8C%87%E4%BB%A4%E8%AF%A6%E8%A7%A3"><span class="toc-number">4.3.1.</span> <span class="toc-text">常用指令详解</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A4%9A%E9%98%B6%E6%AE%B5%E6%9E%84%E5%BB%BA%EF%BC%88Multi-stage-Build%EF%BC%89"><span class="toc-number">4.3.2.</span> <span class="toc-text">多阶段构建（Multi-stage Build）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5"><span class="toc-number">4.3.3.</span> <span class="toc-text">最佳实践</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-%E7%BD%91%E7%BB%9C%E4%B8%8E%E5%AD%98%E5%82%A8%E6%B7%B1%E5%85%A5"><span class="toc-number">4.4.</span> <span class="toc-text">6. 网络与存储深入</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BD%91%E7%BB%9C%E6%A8%A1%E5%BC%8F"><span class="toc-number">4.4.1.</span> <span class="toc-text">网络模式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E6%8C%81%E4%B9%85%E5%8C%96"><span class="toc-number">4.4.2.</span> <span class="toc-text">数据持久化</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#7-Docker-Compose-%E7%BC%96%E6%8E%92"><span class="toc-number">4.5.</span> <span class="toc-text">7. Docker Compose 编排</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#8-%E5%AE%9E%E6%88%98%EF%BC%9AC-Muduo-Echo-%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%AE%B9%E5%99%A8%E5%8C%96"><span class="toc-number">4.6.</span> <span class="toc-text">8. 实战：C++ Muduo Echo 服务器容器化</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#8-1-%E7%BC%96%E5%86%99-Echo-%E6%9C%8D%E5%8A%A1%E5%99%A8%E6%BA%90%E7%A0%81"><span class="toc-number">4.6.1.</span> <span class="toc-text">8.1 编写 Echo 服务器源码</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#8-2-%E7%BC%96%E5%86%99-Dockerfile%EF%BC%88%E5%A4%9A%E9%98%B6%E6%AE%B5%E6%9E%84%E5%BB%BA%EF%BC%89"><span class="toc-number">4.6.2.</span> <span class="toc-text">8.2 编写 Dockerfile（多阶段构建）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#8-3-%E6%9E%84%E5%BB%BA%E9%95%9C%E5%83%8F%E4%B8%8E%E8%BF%90%E8%A1%8C%E5%AE%B9%E5%99%A8"><span class="toc-number">4.6.3.</span> <span class="toc-text">8.3 构建镜像与运行容器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#8-4-%E4%BD%BF%E7%94%A8-Compose-%E9%83%A8%E7%BD%B2%E5%A4%9A%E4%B8%AA%E6%9C%8D%E5%8A%A1"><span class="toc-number">4.6.4.</span> <span class="toc-text">8.4 使用 Compose 部署多个服务</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#9-%E5%BA%95%E5%B1%82%E5%AE%9E%E7%8E%B0%E5%8E%9F%E7%90%86"><span class="toc-number">4.7.</span> <span class="toc-text">9. 底层实现原理</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Namespace-%E9%9A%94%E7%A6%BB"><span class="toc-number">4.7.1.</span> <span class="toc-text">Namespace 隔离</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Cgroups-%E8%B5%84%E6%BA%90%E9%99%90%E5%88%B6"><span class="toc-number">4.7.2.</span> <span class="toc-text">Cgroups 资源限制</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%81%94%E5%90%88%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F%E4%B8%8E-Overlay2"><span class="toc-number">4.7.3.</span> <span class="toc-text">联合文件系统与 Overlay2</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#10-%E5%AE%B9%E7%81%BE%E8%AE%BE%E8%AE%A1%E4%B8%8E%E9%AB%98%E5%8F%AF%E7%94%A8"><span class="toc-number">4.8.</span> <span class="toc-text">10. 容灾设计与高可用</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%87%8D%E5%90%AF%E7%AD%96%E7%95%A5"><span class="toc-number">4.8.1.</span> <span class="toc-text">重启策略</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%81%A5%E5%BA%B7%E6%A3%80%E6%9F%A5"><span class="toc-number">4.8.2.</span> <span class="toc-text">健康检查</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%B5%84%E6%BA%90%E9%99%90%E5%88%B6"><span class="toc-number">4.8.3.</span> <span class="toc-text">资源限制</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%97%A5%E5%BF%97%E7%AE%A1%E7%90%86"><span class="toc-number">4.8.4.</span> <span class="toc-text">日志管理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E5%A4%87%E4%BB%BD%E4%B8%8E%E6%81%A2%E5%A4%8D"><span class="toc-number">4.8.5.</span> <span class="toc-text">数据备份与恢复</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A4%9A%E5%AE%9E%E4%BE%8B%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1"><span class="toc-number">4.8.6.</span> <span class="toc-text">多实例负载均衡</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#11-%E5%BC%82%E5%B8%B8%E6%8E%92%E6%9F%A5%E4%B8%8E%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98"><span class="toc-number">4.9.</span> <span class="toc-text">11. 异常排查与常见问题</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%B9%E5%99%A8%E6%84%8F%E5%A4%96%E9%80%80%E5%87%BA"><span class="toc-number">4.9.1.</span> <span class="toc-text">容器意外退出</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#OOM-Killed"><span class="toc-number">4.9.2.</span> <span class="toc-text">OOM Killed</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BD%91%E7%BB%9C%E4%B8%8D%E9%80%9A"><span class="toc-number">4.9.3.</span> <span class="toc-text">网络不通</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%96%87%E4%BB%B6%E6%9D%83%E9%99%90%E9%94%99%E8%AF%AF"><span class="toc-number">4.9.4.</span> <span class="toc-text">文件权限错误</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8A%A8%E6%80%81%E5%BA%93%E7%BC%BA%E5%A4%B1"><span class="toc-number">4.9.5.</span> <span class="toc-text">动态库缺失</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Core-Dump-%E8%B0%83%E8%AF%95"><span class="toc-number">4.9.6.</span> <span class="toc-text">Core Dump 调试</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#12-%E5%AE%89%E5%85%A8%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5"><span class="toc-number">4.10.</span> <span class="toc-text">12. 安全最佳实践</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#13-%E5%A4%A7%E5%8E%82%E9%9D%A2%E8%AF%95%E5%AE%98%E6%B7%B1%E6%8C%96%E9%97%AE%E9%A2%98%E9%9B%86"><span class="toc-number">4.11.</span> <span class="toc-text">13. 大厂面试官深挖问题集</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Q1-Docker-%E5%92%8C%E8%99%9A%E6%8B%9F%E6%9C%BA%E7%9A%84%E5%8C%BA%E5%88%AB%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="toc-number">4.11.1.</span> <span class="toc-text">Q1: Docker 和虚拟机的区别是什么？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Q2-%E5%A6%82%E4%BD%95%E4%BC%98%E5%8C%96-Docker-%E9%95%9C%E5%83%8F%E5%A4%A7%E5%B0%8F%EF%BC%9F"><span class="toc-number">4.11.2.</span> <span class="toc-text">Q2: 如何优化 Docker 镜像大小？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Q3-Overlay2-%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F%E7%9A%84%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86%EF%BC%9F"><span class="toc-number">4.11.3.</span> <span class="toc-text">Q3: Overlay2 文件系统的工作原理？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Q4-%E5%A6%82%E4%BD%95%E4%BF%9D%E8%AF%81%E5%AE%B9%E5%99%A8%E7%9A%84%E9%AB%98%E5%8F%AF%E7%94%A8%EF%BC%9F"><span class="toc-number">4.11.4.</span> <span class="toc-text">Q4: 如何保证容器的高可用？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Q5-%E5%AE%B9%E5%99%A8%E5%86%85%E5%BA%94%E7%94%A8%E6%94%B6%E4%B8%8D%E5%88%B0-SIGTERM-%E4%BF%A1%E5%8F%B7%E6%80%8E%E4%B9%88%E5%8A%9E%EF%BC%9F"><span class="toc-number">4.11.5.</span> <span class="toc-text">Q5: 容器内应用收不到 SIGTERM 信号怎么办？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Q6-%E5%A6%82%E4%BD%95%E6%8E%92%E6%9F%A5%E5%AE%B9%E5%99%A8%E5%86%85%E7%BD%91%E7%BB%9C%E4%B8%8D%E9%80%9A%EF%BC%9F"><span class="toc-number">4.11.6.</span> <span class="toc-text">Q6: 如何排查容器内网络不通？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Q7-%E4%BD%A0%E5%A6%82%E4%BD%95%E5%AE%9E%E7%8E%B0-C-%E5%BA%94%E7%94%A8%E7%9A%84%E5%AE%B9%E5%99%A8%E5%8C%96%EF%BC%9F%E8%AF%B7%E6%8F%8F%E8%BF%B0%E5%AE%8C%E6%95%B4%E6%B5%81%E7%A8%8B%E3%80%82"><span class="toc-number">4.11.7.</span> <span class="toc-text">Q7: 你如何实现 C++ 应用的容器化？请描述完整流程。</span></a></li></ol></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/07/10/Kafka/" title="Kafka">Kafka</a><time datetime="2026-07-10T09:57:35.000Z" title="发表于 2026-07-10 17:57:35">2026-07-10</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/07/10/Protobuf/" title="Protobuf">Protobuf</a><time datetime="2026-07-10T09:41:31.000Z" title="发表于 2026-07-10 17:41:31">2026-07-10</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/07/03/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" title="设计模式">设计模式</a><time datetime="2026-07-03T00:48:09.000Z" title="发表于 2026-07-03 08:48:09">2026-07-03</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/07/03/python/" title="python">python</a><time datetime="2026-07-03T00:29:53.000Z" title="发表于 2026-07-03 08:29:53">2026-07-03</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/06/16/PE%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84/" title="PE文件结构">PE文件结构</a><time datetime="2026-06-16T07:03:34.000Z" title="发表于 2026-06-16 15:03:34">2026-06-16</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2025 - 2026 By WF</span><span class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.3.0</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.4.2</a></span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"></div><script src="/js/custom.js"></script><script async data-pjax src="data:text/javascript,"></script></div></body></html>

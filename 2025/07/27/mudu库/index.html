@@ -1,0 +1,506 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>muduo库学习 | WF的知识空间</title><meta name="author" content="WF"><meta name="copyright" content="WF"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="1. 设计哲学与核心思想 muduo 是陈硕开发的基于 Reactor 模式的 C++ 网络库，其设计根植于现代 Linux 多线程服务端编程的最佳实践。 核心信条：  One loop per thread：每个线程最多有一个 EventLoop，EventLoop 是线程的唯一主人。 非阻塞 IO + LT（水平触发） epoll：采用非阻塞 IO，与 epoll LT 模式结合，编程更简单，">
+<meta property="og:type" content="article">
+<meta property="og:title" content="muduo库学习">
+<meta property="og:url" content="http://example.com/2025/07/27/mudu%E5%BA%93/index.html">
+<meta property="og:site_name" content="WF的知识空间">
+<meta property="og:description" content="1. 设计哲学与核心思想 muduo 是陈硕开发的基于 Reactor 模式的 C++ 网络库，其设计根植于现代 Linux 多线程服务端编程的最佳实践。 核心信条：  One loop per thread：每个线程最多有一个 EventLoop，EventLoop 是线程的唯一主人。 非阻塞 IO + LT（水平触发） epoll：采用非阻塞 IO，与 epoll LT 模式结合，编程更简单，">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/img/WF.png">
+<meta property="article:published_time" content="2025-07-27T00:52:57.000Z">
+<meta property="article:modified_time" content="2026-07-11T00:20:38.402Z">
+<meta property="article:author" content="WF">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/img/WF.png"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "muduo库学习",
+  "url": "http://example.com/2025/07/27/mudu%E5%BA%93/",
+  "image": "http://example.com/img/WF.png",
+  "datePublished": "2025-07-27T00:52:57.000Z",
+  "dateModified": "2026-07-11T00:20:38.402Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "WF",
+      "url": "http://example.com"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://example.com/2025/07/27/mudu%E5%BA%93/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":true},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'muduo库学习',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><link rel="stylesheet" href="/css/custom.css"><meta name="generator" content="Hexo 7.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/WF.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">27</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">16</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fa-folder-open"></i><span> 分类</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(/img/index-bg.jpg);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">WF的知识空间</span></a><a class="nav-page-title" href="/"><span class="site-name">muduo库学习</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fa-folder-open"></i><span> 分类</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">muduo库学习</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2025-07-27T00:52:57.000Z" title="发表于 2025-07-27 08:52:57">2025-07-27</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-07-11T00:20:38.402Z" title="更新于 2026-07-11 08:20:38">2026-07-11</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/">网络编程</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h2 id="1-设计哲学与核心思想">1. 设计哲学与核心思想</h2>
+<p>muduo 是陈硕开发的基于 Reactor 模式的 C++ 网络库，其设计根植于现代 Linux 多线程服务端编程的最佳实践。</p>
+<p><strong>核心信条</strong>：</p>
+<ul>
+<li><strong>One loop per thread</strong>：每个线程最多有一个 EventLoop，EventLoop 是线程的唯一主人。</li>
+<li><strong>非阻塞 IO + LT（水平触发） epoll</strong>：采用非阻塞 IO，与 epoll LT 模式结合，编程更简单，不易漏事件。</li>
+<li><strong>RAII 与智能指针管理对象生命周期</strong>：通过 <code>shared_ptr</code> 和 <code>weak_ptr</code> 避免悬垂指针，尤其是在多线程回调中。</li>
+<li><strong>事件驱动与回调机制</strong>：所有 IO 事件、定时器事件、跨线程调用都通过回调完成，用户只需设置回调即可。</li>
+<li><strong>线程安全由 EventLoop 保证</strong>：对某个 TCP 连接的读写操作都在其所属 IO 线程进行，无需额外加锁。</li>
+<li><strong>库的边界清晰</strong>：网络库只管网络，不侵入业务逻辑，不强制线程池与业务线程模型。</li>
+</ul>
+<h2 id="2-总体架构">2. 总体架构</h2>
+<p>muduo 的主要类及其关系可概括为：</p>
+<p>text</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">TcpServer</span><br><span class="line">  ├── Acceptor (监听套接字)</span><br><span class="line">  └── N个 TcpConnection (已连接套接字)</span><br><span class="line">        └── 每个连接绑定一个 EventLoop</span><br><span class="line"></span><br><span class="line">EventLoop (每个线程一个)</span><br><span class="line">  ├── Poller (封装 epoll)</span><br><span class="line">  ├── TimerQueue (定时器管理)</span><br><span class="line">  └── 多个 Channel (注册到 epoll 的文件描述符及事件回调)</span><br><span class="line"></span><br><span class="line">线程模型：主 EventLoop 线程处理监听和连接建立，每个工作 EventLoop 线程处理连接读写。</span><br></pre></td></tr></table></figure>
+<p><strong>组件交互流程</strong>：</p>
+<ol>
+<li>用户创建 <code>TcpServer</code>，设置回调（连接建立、消息到达、消息发送完成、连接关闭）。</li>
+<li><code>TcpServer</code> 启动监听，将 Acceptor 的 Channel 注册到主 EventLoop 中。</li>
+<li>新连接到来，Acceptor 接受连接，轮询选择一个子 EventLoop，创建 <code>TcpConnection</code> 对象并分发过去。</li>
+<li><code>TcpConnection</code> 将自身的 socket Channel 注册到子 EventLoop 中，开始监听读写事件。</li>
+<li>数据到达时，Poller 返回就绪事件，EventLoop 调用对应 Channel 的回调，最终触发 <code>TcpConnection::handleRead</code>，读取数据并调用用户的 <code>messageCallback</code>。</li>
+<li>用户可主动调用 <code>TcpConnection::send</code> 发送数据，若无法一次性发送完毕，则注册写事件，等待可写时继续发送（由 Buffer 输出缓冲区管理）。</li>
+</ol>
+<h2 id="3-核心组件详解">3. 核心组件详解</h2>
+<h3 id="Channel">Channel</h3>
+<p><strong>定位</strong>：负责将一个文件描述符（fd）及其关心的事件（读、写、错误等）与相应的回调函数绑定，并注册到 EventLoop 的 Poller 中。它是 Reactor 模式中“事件处理器”的抽象。</p>
+<p><strong>关键成员</strong>：</p>
+<ul>
+<li><code>int fd_</code>：监听的描述符。</li>
+<li><code>int events_</code>：用户关心的事件（EPOLLIN/EPOLLOUT 等）。</li>
+<li><code>int revents_</code>：Poller 返回的就绪事件。</li>
+<li><code>EventLoop* loop_</code>：所属的 EventLoop。</li>
+<li>回调函数：<code>readCallback_</code>、<code>writeCallback_</code>、<code>closeCallback_</code>、<code>errorCallback_</code>。</li>
+<li><code>int index_</code>：用于 Poller 快速判断 Channel 是否已在 epoll 监听队列中（-1 未添加，1 已添加，2 已添加但后来被删除）。</li>
+</ul>
+<p><strong>职责</strong>：</p>
+<ul>
+<li><code>enableReading()</code> / <code>enableWriting()</code>：更新关心的事件，并调用 <code>EventLoop::updateChannel</code> 使 epoll 监听生效。</li>
+<li><code>handleEvent(Timestamp receiveTime)</code>：根据 <code>revents_</code> 分派到具体的回调。</li>
+<li><code>remove()</code>：从 EventLoop 中移除自身，与 fd 解绑。</li>
+</ul>
+<p><strong>设计要点</strong>：</p>
+<ul>
+<li>Channel 并不拥有 fd，它只是一个包装器，fd 的真正关闭由 <code>Socket</code> 或 <code>TcpConnection</code> 负责。</li>
+<li>一个 fd 只能对应一个 Channel，Channel 也不能跨 EventLoop 使用。</li>
+</ul>
+<h3 id="Poller-EPollPoller">Poller / EPollPoller</h3>
+<p><strong>定位</strong>：封装 IO 多路复用系统调用（epoll_wait），EventLoop 通过 Poller 获取就绪事件列表。</p>
+<p><strong>核心接口</strong>：</p>
+<ul>
+<li><code>Timestamp poll(int timeoutMs, ChannelList* activeChannels)</code>：执行 epoll_wait，将就绪的 Channel 填入 activeChannels。</li>
+<li><code>void updateChannel(Channel* channel)</code>：添加或更新 Channel 在 epoll 中的监听事件。</li>
+<li><code>void removeChannel(Channel* channel)</code>：从 epoll 中移除 Channel。</li>
+</ul>
+<p><strong>实现细节</strong>：</p>
+<ul>
+<li><code>EPollPoller</code> 使用 <code>epoll_create1(EPOLL_CLOEXEC)</code> 创建 epoll 实例。</li>
+<li>内部维护 <code>std::map&lt;int, Channel*&gt; channels_</code>，以 fd 为键快速查找 Channel，便于 <code>updateChannel</code> 时判断是新增（EPOLL_CTL_ADD）还是修改（EPOLL_CTL_MOD）。</li>
+<li>使用 LT 模式，无需担心事件丢失，但需要自行处理事件循环的效率和缓冲区大小。</li>
+</ul>
+<h3 id="EventLoop">EventLoop</h3>
+<p><strong>定位</strong>：事件循环的核心，整个 muduo 的“发动机”。每个线程至多拥有一个 EventLoop。</p>
+<p><strong>关键功能</strong>：</p>
+<ol>
+<li><strong>循环驱动</strong>：<code>loop()</code> 函数不断调用 <code>poller_-&gt;poll</code> 获取活跃 Channel，然后执行其回调。</li>
+<li><strong>跨线程任务调度</strong>：<code>runInLoop(Functor)</code> 和 <code>queueInLoop(Functor)</code> 可将任务安全地放入特定 IO 线程执行，避免锁竞争。</li>
+<li><strong>定时器集成</strong>：持有 <code>TimerQueue</code>，支持 <code>runAt</code>、<code>runAfter</code>、<code>runEvery</code> 等方法。</li>
+<li><strong>生命周期管理</strong>：通过 <code>eventfd</code> 实现唤醒机制，当其他线程向当前 EventLoop 投递任务时，需要唤醒 epoll_wait。</li>
+</ol>
+<p><strong>关键成员</strong>：</p>
+<ul>
+<li><code>std::unique_ptr&lt;Poller&gt; poller_</code>：实际 poll 实现。</li>
+<li><code>std::unique_ptr&lt;TimerQueue&gt; timerQueue_</code>：定时器队列。</li>
+<li><code>int wakeupFd_</code>：<code>eventfd</code> 创建的描述符，用于线程唤醒。</li>
+<li><code>std::unique_ptr&lt;Channel&gt; wakeupChannel_</code>：监视 <code>wakeupFd_</code> 的 Channel。</li>
+<li><code>bool looping_</code>、<code>bool quit_</code>：控制循环状态。</li>
+<li><code>MutexLock mutex_</code> 和 <code>std::vector&lt;Functor&gt; pendingFunctors_</code>：线程安全的待执行回调队列。</li>
+<li><code>const pid_t threadId_</code>：记录 EventLoop 所属线程 ID，用于断言检查。</li>
+</ul>
+<p><strong>执行逻辑</strong>（简化）：</p>
+<p>c++</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">void EventLoop::loop() &#123;</span><br><span class="line">    while (!quit_) &#123;</span><br><span class="line">        activeChannels_.clear();</span><br><span class="line">        pollReturnTime_ = poller_-&gt;poll(kPollTimeMs, &amp;activeChannels_);</span><br><span class="line">        for (Channel* channel : activeChannels_) &#123;</span><br><span class="line">            channel-&gt;handleEvent(pollReturnTime_);</span><br><span class="line">        &#125;</span><br><span class="line">        doPendingFunctors();  // 执行跨线程任务</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>跨线程执行保证</strong>：</p>
+<ul>
+<li>如果调用者就是 EventLoop 所属线程，则直接执行回调。</li>
+<li>否则，将回调加入 <code>pendingFunctors_</code> 队列，并 <code>wakeup()</code> 唤醒 epoll_wait。唤醒后，在 <code>doPendingFunctors</code> 中取出并执行。</li>
+</ul>
+<h3 id="TimerQueue">TimerQueue</h3>
+<p><strong>定位</strong>：基于 <code>timerfd</code> 和 <code>std::set</code> 实现的定时器管理，将所有定时器集成到 EventLoop 的 IO 复用中。</p>
+<p><strong>设计</strong>：</p>
+<ul>
+<li>使用 <code>timerfd_create</code> 获取一个定时器专用 fd，通过 <code>timerfd_settime</code> 设置超时时间。</li>
+<li>当 <code>timerfd</code> 可读时，说明有定时器到期，<code>TimerQueue</code> 处理到期事件并调用用户的 <code>TimerCallback</code>。</li>
+<li>内部用 <code>std::set&lt;std::pair&lt;Timestamp, Timer*&gt;&gt;</code> 按到期时间排序，每次取出最早到期的一批定时器。</li>
+<li>支持一次性定时器 <code>runAt/runAfter</code> 和重复定时器 <code>runEvery</code>，重复定时器在处理后重新计算时间并插入集合。</li>
+</ul>
+<p><strong>优点</strong>：</p>
+<ul>
+<li>将定时器事件与 IO 事件统一，完全由同一个 EventLoop 线程处理，无需额外线程。</li>
+<li>精度由内核 <code>timerfd</code> 保证，没有传统定时器的轮询开销。</li>
+</ul>
+<h3 id="TcpConnection">TcpConnection</h3>
+<p><strong>定位</strong>：代表一个已建立的 TCP 连接，是用户使用最多的接口类。管理连接上的数据收发、缓冲区、状态、生命周期。</p>
+<p><strong>重要成员</strong>：</p>
+<ul>
+<li><code>EventLoop* loop_</code>：所属 IO 线程。</li>
+<li><code>std::unique_ptr&lt;Socket&gt; socket_</code>：包装 socket fd。</li>
+<li><code>std::unique_ptr&lt;Channel&gt; channel_</code>：注册到 loop 的 Channel。</li>
+<li><code>Buffer inputBuffer_</code>：应用层输入缓冲区。</li>
+<li><code>Buffer outputBuffer_</code>：应用层输出缓冲区。</li>
+<li><code>State state_</code>：连接状态（kConnecting, kConnected, kDisconnecting, kDisconnected）。</li>
+<li>回调：<code>connectionCallback_</code>、<code>messageCallback_</code>、<code>writeCompleteCallback_</code>、<code>closeCallback_</code> 等。</li>
+<li><code>std::any context_</code>：用户可绑定任意上下文数据（如每个连接的业务对象）。</li>
+</ul>
+<p><strong>核心流程</strong>：</p>
+<ol>
+<li><strong>建立连接</strong>：构造函数中创建 <code>Socket</code> 和 <code>Channel</code>，设置回调，但 Channel 尚未注册到 Loop。由 <code>TcpServer</code> 调用 <code>connectEstablished()</code> 时，开启读监听，并调用 <code>connectionCallback_</code> 通知用户。</li>
+<li><strong>读取数据</strong>：<code>handleRead()</code> -&gt; <code>socket_.readv</code> 到 <code>inputBuffer_</code>，然后触发 <code>messageCallback_</code>，传递 <code>Buffer* buf</code> 和 <code>Timestamp</code>。</li>
+<li><strong>发送数据</strong>：<code>send(const StringPiece&amp;)</code> 将数据追加到 <code>outputBuffer_</code>，若直接 write 未完全发送，则注册写事件，由 <code>handleWrite()</code> 继续发送剩余部分。所有发送完毕后，可触发 <code>writeCompleteCallback_</code>。</li>
+<li><strong>关闭连接</strong>：被动关闭时（read 返回 0），调用 <code>handleClose()</code>，改变状态，最终调用 <code>closeCallback_</code> 通知 <code>TcpServer</code> 移除连接。主动关闭通过 <code>shutdown()</code> 实现半关闭，通过 <code>forceClose()</code> 直接关闭。</li>
+</ol>
+<p><strong>生命周期管理</strong>：</p>
+<ul>
+<li>使用 <code>shared_ptr</code> 管理 <code>TcpConnection</code>，用户、Server、Channel 回调都可能持有。只有所有引用释放后，连接才真正析构。</li>
+<li>Channel 的回调中若需要延长对象生命，可 <code>shared_from_this()</code> 保护。</li>
+</ul>
+<h3 id="TcpServer">TcpServer</h3>
+<p><strong>定位</strong>：用于创建和管理监听套接字以及接受新连接，并分发给多个 IO 线程。</p>
+<p><strong>主要组件</strong>：</p>
+<ul>
+<li><code>Acceptor</code>：封装监听 socket 和 accept，运行在主 Loop。</li>
+<li><code>EventLoop* loop_</code>：主 Loop（acceptor loop）。</li>
+<li><code>EventLoopThreadPool</code>：工作线程池，每个线程内有一个 EventLoop，通过 round-robin 分配连接。</li>
+<li><code>ConnectionMap connections_</code>：保存所有活跃的 <code>TcpConnection</code> 的 <code>shared_ptr</code>，用于管理生命周期、方便外部主动访问。</li>
+</ul>
+<p><strong>工作流程</strong>：</p>
+<ol>
+<li>用户调用 <code>start()</code>，主 Loop 线程中 <code>Acceptor::listen()</code> 将监听套接字注册到 epoll。</li>
+<li>新连接到达，<code>Acceptor::handleRead()</code> 获得 <code>connfd</code>，从线程池获取下一个 Loop，创建 <code>TcpConnection</code> 对象，然后调用 <code>newConnection</code> 将该连接“安家”到对应 Loop。</li>
+<li><code>TcpServer</code> 持有 <code>connections_</code> 防止连接过早销毁；当连接断开时，通过 <code>removeConnection</code> 把连接移除。</li>
+</ol>
+<p><strong>关键特性</strong>：</p>
+<ul>
+<li>线程安全：对所有连接的访问必须通过 IO 线程或加锁保护。TcpServer 的 <code>getLoop()</code> 等接口设计清晰。</li>
+<li>可设置线程初始化回调：<code>setThreadInitCallback</code>，用于工作线程内部的资源初始化（如登录日志、数据库连接）。</li>
+</ul>
+<h3 id="Buffer">Buffer</h3>
+<p>muduo 的 <code>Buffer</code> 是模仿 <code>muduo</code> 库中 <code>Buffer</code> 设计的网络应用层缓冲区，非阻塞 IO 必备。</p>
+<p><strong>设计特点</strong>：</p>
+<ul>
+<li>
+<p>底层是一块连续内存（<code>std::vector&lt;char&gt;</code>），采用<strong>分散-聚集读写</strong>。</p>
+</li>
+<li>
+<p>使用<strong>读写下标</strong>维护数据区域：</p>
+<p>text</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">+-------------------+------------------+------------------+</span><br><span class="line">| prependable bytes |  readable bytes  |  writable bytes  |</span><br><span class="line">+-------------------+------------------+------------------+</span><br><span class="line">0                  readerIndex_      writerIndex_        capacity</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p><code>prependable</code> 空间使得在数据前添加包头变得极其高效（无需移动数据），只需预留 8 字节（通常用于长度字段）。</p>
+</li>
+<li>
+<p>自动增长策略：当写空间不足时，先尝试将已读空间回收（挪动数据到头部），若仍不足再 <code>resize</code> 扩大。</p>
+</li>
+</ul>
+<p><strong>核心接口</strong>：</p>
+<ul>
+<li><code>readFd(int fd, int* savedErrno)</code>：使用 <code>readv</code> 配合栈上额外缓冲区，尽可能一次性读走所有数据，减少系统调用。</li>
+<li><code>retrieve(size_t len)</code>：移动 <code>readerIndex_</code>，丢弃已读数据。</li>
+<li><code>retrieveAllAsString()</code>：取出所有数据作为 string。</li>
+<li><code>peek() / peekInt8/16/32/64</code>：查看可读数据而不取走。</li>
+<li><code>append(const StringPiece&amp; str)</code>：追加数据到写区域。</li>
+<li><code>prepend(const void* data, size_t len)</code>：在前面插入数据（通常用于封包时加长度头）。</li>
+<li><code>ensureWritableBytes(size_t len)</code>：确保可写空间足够。</li>
+<li><code>swap(Buffer&amp; rhs)</code>：高效交换两个 Buffer 的内容。</li>
+</ul>
+<p><strong>零拷贝与高性能</strong>：</p>
+<ul>
+<li><code>readFd</code> 使用 <code>readv</code> 和栈空间，避免一次 <code>read</code> 不够又需要再次读取的系统调用。</li>
+<li>与 <code>TcpConnection</code> 的输出缓冲区配合，发送时通过 <code>writev</code> 结合 header 和 buffer 内容，减少拷贝。</li>
+</ul>
+<h2 id="4-线程模型与并发模型">4. 线程模型与并发模型</h2>
+<p>muduo 采用 <strong>主从 Reactor + 线程池</strong> 模式：</p>
+<ul>
+<li><strong>主 Reactor 线程</strong>：仅负责监听新的连接，建立连接后立即分发给工作线程。主 Reactor 通常只有一个。</li>
+<li><strong>工作 Reactor 线程</strong>：由 <code>EventLoopThreadPool</code> 管理，数量可配置。每个线程独立运行自己的 EventLoop，负责处理分配的连接的所有 IO 事件和定时器任务。</li>
+</ul>
+<p><strong>One loop per thread 的好处</strong>：</p>
+<ul>
+<li>同一连接的所有 IO 都在一个线程内，无需为连接内数据竞争加锁。</li>
+<li>用户编写的 <code>messageCallback</code> 总是在固定的 IO 线程调用，可安全访问该线程内部资源。</li>
+<li>代码逻辑清晰，避免复杂的线程同步问题。</li>
+</ul>
+<p><strong>线程间通信</strong>：</p>
+<ul>
+<li>通过 <code>EventLoop::runInLoop</code> 或 <code>queueInLoop</code> 将任务推送到目标 IO 线程执行。典型场景：A 线程需要向某个连接发送数据，但不拥有该连接的 Loop，则通过 <code>conn-&gt;getLoop()-&gt;runInLoop</code> 安全调用 <code>conn-&gt;send</code>。</li>
+<li><code>EventLoop</code> 内部使用 <code>eventfd</code> 实现异步唤醒。当其他线程向 <code>pendingFunctors_</code> 添加任务时，写入 <code>wakeupFd_</code> 以唤醒可能阻塞在 epoll_wait 的 Loop。</li>
+</ul>
+<p><strong>互斥锁使用</strong>：</p>
+<ul>
+<li>每个 <code>EventLoop</code> 有自己的 <code>mutex_</code> 保护 <code>pendingFunctors_</code>，避免多个线程同时添加任务产生竞争。</li>
+<li><code>TcpServer</code> 的 <code>connections_</code> 容器只在主线程修改（插入/删除），但读取可能在其他线程，因此需要原子操作或通过 Loop 安全调度。</li>
+</ul>
+<h2 id="5-关键数据结构">5. 关键数据结构</h2>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">数据结构</th>
+<th style="text-align:left">用途</th>
+<th style="text-align:left">关键实现</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><code>std::map&lt;int, Channel*&gt; channels_</code></td>
+<td style="text-align:left">Poller 中 fd 到 Channel 的映射，快速查找。</td>
+<td style="text-align:left"><code>EPollPoller</code> 维护</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>std::set&lt;std::pair&lt;Timestamp, Timer*&gt;&gt;</code></td>
+<td style="text-align:left">TimerQueue 中按过期时间排序的定时器集合，快速取出到期定时器。</td>
+<td style="text-align:left">底层红黑树</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>std::vector&lt;char&gt;</code> buffer_</td>
+<td style="text-align:left">Buffer 存储数据的连续内存块。</td>
+<td style="text-align:left">自动增长</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>std::unordered_map&lt;string, TcpConnectionPtr&gt; connections_</code></td>
+<td style="text-align:left">TcpServer 管理所有活跃连接，方便查找和日志。</td>
+<td style="text-align:left">仅主线程修改</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>std::vector&lt;Functor&gt; pendingFunctors_</code></td>
+<td style="text-align:left">EventLoop 跨线程任务队列。</td>
+<td style="text-align:left">使用 <code>swap</code> 减少锁持有时间</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>int wakeupFd_</code> (eventfd)</td>
+<td style="text-align:left">用于唤醒 EventLoop 的事件描述符。</td>
+<td style="text-align:left">非阻塞 eventfd</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>std::unique_ptr&lt;EventLoopThread&gt;</code> 的 vector</td>
+<td style="text-align:left">EventLoopThreadPool 管理线程对象。</td>
+<td style="text-align:left">每个线程拥有独立循环</td>
+</tr>
+</tbody>
+</table>
+<h2 id="6-常用接口与使用范例">6. 常用接口与使用范例</h2>
+<p><strong>TcpServer 基本用法</strong>：</p>
+<p>c++</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">EventLoop loop;</span><br><span class="line">TcpServer server(&amp;loop, InetAddress(8080), &quot;MyServer&quot;);</span><br><span class="line">server.setConnectionCallback(onConnection);</span><br><span class="line">server.setMessageCallback(onMessage);</span><br><span class="line">server.setThreadNum(4);  // 4 个工作线程</span><br><span class="line">server.start();</span><br><span class="line">loop.loop();</span><br></pre></td></tr></table></figure>
+<ul>
+<li><code>onConnection(const TcpConnectionPtr&amp; conn)</code>：连接建立/断开时调用，可设置 <code>conn-&gt;setContext()</code> 绑定业务会话。</li>
+<li><code>onMessage(const TcpConnectionPtr&amp; conn, Buffer* buf, Timestamp time)</code>：消息到达回调，需从 <code>buf</code> 中读取完整数据包并处理。</li>
+</ul>
+<p><strong>发送数据</strong>：</p>
+<p>c++</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">conn-&gt;send(&quot;Hello&quot;); // 线程安全，当前连接所属 IO 线程直接发送</span><br><span class="line">// 跨线程发送：</span><br><span class="line">conn-&gt;getLoop()-&gt;runInLoop([conn] &#123; conn-&gt;send(&quot;Hello from another thread&quot;); &#125;);</span><br></pre></td></tr></table></figure>
+<ul>
+<li><code>send</code> 会先尝试直接 write，若不完整则缓存到 outputBuffer 并注册写事件。</li>
+<li>高水位回调：<code>setHighWaterMarkCallback</code> 可监控输出缓冲堆积。</li>
+</ul>
+<p><strong>定时器</strong>：</p>
+<p>c++</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">loop.runAfter(5.0, []&#123; ... &#125;);          // 5秒后执行一次</span><br><span class="line">loop.runEvery(3.0, []&#123; ... &#125;);          // 每3秒执行</span><br><span class="line">loop.runAt(sometime, []&#123; ... &#125;);        // 在特定时间点执行</span><br></pre></td></tr></table></figure>
+<p>所有定时器在 EventLoop 线程中执行，不许执行耗时任务阻塞循环。</p>
+<p><strong>关闭连接</strong>：</p>
+<ul>
+<li><code>conn-&gt;shutdown()</code>：半关闭写入端，仍可接收数据（等待对方关闭）。</li>
+<li><code>conn-&gt;forceClose()</code>：立即关闭（相当于 close fd）。</li>
+<li>被动关闭时库自动调用 close callback。</li>
+</ul>
+<h2 id="7-性能优化设计">7. 性能优化设计</h2>
+<ul>
+<li><strong>LT 模式 + 非阻塞 IO</strong>：避免边沿触发带来的饥饿和编程复杂度，配合合理的 Buffer 可以高效处理数据流。</li>
+<li><strong>一次性读取</strong>：<code>Buffer::readFd</code> 使用 <code>readv</code> 结合栈上 65536 字节额外空间，尽量一次将 socket 接收缓冲区读空，减少 epoll 触发次数。</li>
+<li><strong>发送时 writev</strong>：如果输出缓冲非空，<code>sendInLoop</code> 会尝试使用 <code>writev</code> 将主数据头与 Buffer 内容聚集写出，减少系统调用次数。</li>
+<li><strong>零拷贝与对象复用</strong>：使用 <code>std::vector&lt;char&gt;</code> 作为存储，配合 <code>swap</code> 可以高效地移交数据。<code>TcpConnection</code> 中的 <code>context_</code> 类型为 <code>std::any</code>，方便绑定各种用户数据。</li>
+<li><strong>减少锁竞争</strong>：
+<ul>
+<li><code>EventLoop</code> 的 <code>doPendingFunctors</code> 使用了 <code>swap</code> 技巧：在锁内将任务队列交换到局部变量，然后释放锁再逐一执行，大大减小临界区。</li>
+<li>连接的生命周期管理通过 <code>shared_ptr</code> 和 <code>weak_ptr</code>，在回调中安全地延长对象生命，而不是用互斥锁防止销毁。</li>
+</ul>
+</li>
+<li><strong>线程本地存储</strong>：<code>EventLoop</code> 通过 <code>thread_local</code> 或 <code>__thread</code> 保存本线程的 Loop 指针，方便在任何地方通过 <code>CurrentThread::loop()</code> 获取。</li>
+</ul>
+<h2 id="8-常见坑点与避坑指南">8. 常见坑点与避坑指南</h2>
+<ol>
+<li><strong>线程安全误区</strong>
+<ul>
+<li><strong>错误示例</strong>：在工作线程外直接调用 <code>conn-&gt;send</code>，如果当前线程不是该连接的 IO 线程，可能导致数据竞争。</li>
+<li><strong>正确做法</strong>：始终通过 <code>conn-&gt;getLoop()-&gt;runInLoop()</code> 将发送任务交给正确线程，或使用 <code>conn-&gt;send</code> 本身在内部判断线程（muduo 的 <code>send</code> 实际上已经做了这个判断，如果不在自己的 loop 中则转发，开发者不必担心，但理解原理很重要）。</li>
+</ul>
+</li>
+<li><strong>回调中的生命周期管理</strong>
+<ul>
+<li><strong>问题</strong>：在 <code>messageCallback</code> 中直接 <code>conn-&gt;forceClose()</code>，可能会让 <code>TcpConnection</code> 对象在本次回调中析构，如果后续代码还使用 <code>conn</code> 则发生未定义行为。</li>
+<li><strong>解决</strong>：muduo 使用 <code>shared_ptr</code> 管理连接，回调中常通过 <code>shared_from_this()</code> 延长生命。如果确实需要断开，应借助 <code>queueInLoop</code> 延迟关闭，或让库本身的 <code>forceClose</code> 实现保障安全。实际上 muduo 的 <code>handleClose</code> 会在当前事件处理完后才移除连接，并保证多次调用安全。</li>
+</ul>
+</li>
+<li><strong>Buffer 粘包与拆包</strong>
+<ul>
+<li>muduo 只提供字节流，用户必须自己处理消息边界。常见方法：定长、分隔符、长度前缀。如果没处理好，<code>messageCallback</code> 可能收到不完整包，导致业务逻辑错误。建议在 <code>onMessage</code> 中使用 <code>while</code> 循环提取完整包，未完整的数据保留在 Buffer 中，待下次数据到达再处理。</li>
+</ul>
+</li>
+<li><strong>阻塞 EventLoop</strong>
+<ul>
+<li>在 IO 线程的回调（如 <code>messageCallback</code>、<code>connectionCallback</code>、定时器回调）中执行耗时操作（计算密集、同步磁盘 IO 等）会阻塞整个 Loop，导致该线程的其他连接无法及时响应。解决方案：将耗时任务交给独立工作线程池，通过回调返回结果。</li>
+</ul>
+</li>
+<li><strong>连接对象泄漏</strong>
+<ul>
+<li>如果用户没有正确管理 <code>TcpConnection</code> 的 shared_ptr，或者 <code>closeCallback</code> 未将连接从 Server 的 <code>connections_</code> 中移除（但 muduo 已经自动处理），可能导致连接泄漏。开发人员需注意不要在回调外长期持有 <code>TcpConnectionPtr</code> 导致连接无法正常关闭。</li>
+</ul>
+</li>
+<li><strong>多线程操作同一连接</strong>
+<ul>
+<li>原则上不允许两个线程同时操作一个 <code>TcpConnection</code>，虽然 <code>send</code> 内部保证线程安全，但业务侧访问 <code>context_</code> 时若没有同步则会出现数据竞争。确保业务数据只在连接所在的 IO 线程访问。</li>
+</ul>
+</li>
+<li><strong>高水位回调与内存控制</strong>
+<ul>
+<li>如果对端接收慢而本端发送快，<code>outputBuffer_</code> 可能堆积大量数据，占用内存。应设置 <code>HighWaterMarkCallback</code> 来暂停发送或应用限流，否则可能导致服务器 OOM。</li>
+</ul>
+</li>
+<li><strong>定时器失效问题</strong>
+<ul>
+<li>定时器回调中如果捕获了 <code>shared_ptr&lt;TcpConnection&gt;</code>，可能导致连接无法释放。定时器应在连接断开时及时取消：muduo 的 TimerQueue 持有 <code>TimerId</code>，可以调用 <code>loop-&gt;cancel(timerId)</code>。通常将定时器 ID 保存在连接上下文，在连接关闭回调中取消。</li>
+</ul>
+</li>
+<li><strong>eventfd 唤醒的惊群？</strong>
+<ul>
+<li>每个 EventLoop 有自己的 <code>wakeupFd_</code>，不存在多个 Loop 共享一个 eventfd 的情况，所以没有惊群问题。</li>
+</ul>
+</li>
+<li><strong>代码中使用 boost 依赖</strong>
+<ul>
+<li>muduo 重度依赖 boost（<code>function</code>、<code>bind</code>、<code>shared_ptr</code>、<code>any</code> 等），C++11 时代可以使用标准库替代，但源码依然依赖 boost。若项目不能引入 boost，需自行改造。</li>
+</ul>
+</li>
+</ol>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="http://example.com">WF</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="http://example.com/2025/07/27/mudu%E5%BA%93/">http://example.com/2025/07/27/mudu%E5%BA%93/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="http://example.com" target="_blank">WF的知识空间</a>！</span></div></div><div class="tag_share"><div class="post-share"><div class="social-share" data-image="/img/WF.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2025/07/27/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" title="计算机网络框架"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">计算机网络框架</div></div><div class="info-2"><div class="info-item-1">一、前置核心：为什么网络要分层？ 1. 分层设计的本质思想 计算机网络采用协议栈分层架构，和软件设计里「模块化、解耦、单一职责」思想完全一致。 2. 分层的五大核心目的（标准答案 + 深度原理）   解耦、降低复杂度 网络通信逻辑极复杂（寻址、差错、路由、传输、应用交互等），拆分成多层后， 每层只做一件事 ，不用一次性处理所有逻辑。   独立演进、互不影响 下层协议改动，上层无需修改；上层换应用，下层传输逻辑不变。 例：手机用 Wi‑Fi、电脑用以太网（二层 / 一层不同），但上层 TCP/IP、HTTP 完全不用改。   标准化、互通性 全球设备遵循同一套分层标准，不同厂商、不同系统的设备可以正常通信。   便于排错、定位问题 网络故障可以逐层排查：物理层不通 → 二层帧异常 → 三层路由问题 → 四层端口问题 → 应用层协议错误。   复用性 底层通信能力被所有上层应用共享，不用每个应用单独实现寻址、差错校验、重传等逻辑。   3. 两大主流分层模型（面试必区分） 业界两套标准，面试必考对比：OSI 七层模型、TCP/IP 五层（四层）模型 后端 / 开发 / 运维 主流使用...</div></div></div></a><a class="pagination-related" href="/2025/07/27/TCP-UDP/" title="TCP-UDP详解"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">TCP-UDP详解</div></div><div class="info-2"><div class="info-item-1">TCP TCP头部  序列号：在建立连接时由计算机生成的随机数作为其初始值，通过 SYN 包传给接收端主机，每发送一 次数据，就「累加」一次该「数据字节数」的大小。用来解决网络包乱序问题。 **确认应答号：**指下一次「期望」收到的数据的序列号，发送端收到这个确认应答以后可以认为在这个序 号以前的数据都已经被正常接收。用来解决不丢包的问题 控制位： ACK：该位为 1 时，「确认应答」的字段变为有效，TCP 规定除了最初建立连接时的  包之外该位必须设置为 1 。 RST：该位为 1 时，表示 TCP 连接中出现异常必须强制断开连接。 SYN：该位为 1 时，表示希望建立连接，并在其「序列号」的字段进行序列号初始值的设定。 FIN：该位为 1 时，表示今后不会再有数据发送，希望断开连接 为什么需要TCP？ IP 层是「不可靠」的，它不保证网络包的交付、不保证网络包的按序交付、也不保证网络包中的数据 的完整性 因为 TCP 是一个工作在传输层的可靠数据传输的服务，它能确保接收端接收的网络包是无损坏、无间 隔、非冗余和按序的 什么是TCP 面向连接的，可靠的，流式服务 “TCP 是面...</div></div></div></a></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/WF.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">WF</div><div class="author-info-description"></div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">27</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">16</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/WF-git-code"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="//github.com/WF-git-code" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="/18628492787@163.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E8%AE%BE%E8%AE%A1%E5%93%B2%E5%AD%A6%E4%B8%8E%E6%A0%B8%E5%BF%83%E6%80%9D%E6%83%B3"><span class="toc-number">1.</span> <span class="toc-text">1. 设计哲学与核心思想</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E6%80%BB%E4%BD%93%E6%9E%B6%E6%9E%84"><span class="toc-number">2.</span> <span class="toc-text">2. 总体架构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E6%A0%B8%E5%BF%83%E7%BB%84%E4%BB%B6%E8%AF%A6%E8%A7%A3"><span class="toc-number">3.</span> <span class="toc-text">3. 核心组件详解</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Channel"><span class="toc-number">3.1.</span> <span class="toc-text">Channel</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Poller-EPollPoller"><span class="toc-number">3.2.</span> <span class="toc-text">Poller &#x2F; EPollPoller</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#EventLoop"><span class="toc-number">3.3.</span> <span class="toc-text">EventLoop</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#TimerQueue"><span class="toc-number">3.4.</span> <span class="toc-text">TimerQueue</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#TcpConnection"><span class="toc-number">3.5.</span> <span class="toc-text">TcpConnection</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#TcpServer"><span class="toc-number">3.6.</span> <span class="toc-text">TcpServer</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Buffer"><span class="toc-number">3.7.</span> <span class="toc-text">Buffer</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-%E7%BA%BF%E7%A8%8B%E6%A8%A1%E5%9E%8B%E4%B8%8E%E5%B9%B6%E5%8F%91%E6%A8%A1%E5%9E%8B"><span class="toc-number">4.</span> <span class="toc-text">4. 线程模型与并发模型</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-%E5%85%B3%E9%94%AE%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84"><span class="toc-number">5.</span> <span class="toc-text">5. 关键数据结构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-%E5%B8%B8%E7%94%A8%E6%8E%A5%E5%8F%A3%E4%B8%8E%E4%BD%BF%E7%94%A8%E8%8C%83%E4%BE%8B"><span class="toc-number">6.</span> <span class="toc-text">6. 常用接口与使用范例</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#7-%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E8%AE%BE%E8%AE%A1"><span class="toc-number">7.</span> <span class="toc-text">7. 性能优化设计</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#8-%E5%B8%B8%E8%A7%81%E5%9D%91%E7%82%B9%E4%B8%8E%E9%81%BF%E5%9D%91%E6%8C%87%E5%8D%97"><span class="toc-number">8.</span> <span class="toc-text">8. 常见坑点与避坑指南</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/07/10/Kafka/" title="Kafka">Kafka</a><time datetime="2026-07-10T09:57:35.000Z" title="发表于 2026-07-10 17:57:35">2026-07-10</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/07/10/Protobuf/" title="Protobuf">Protobuf</a><time datetime="2026-07-10T09:41:31.000Z" title="发表于 2026-07-10 17:41:31">2026-07-10</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/07/03/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" title="设计模式">设计模式</a><time datetime="2026-07-03T00:48:09.000Z" title="发表于 2026-07-03 08:48:09">2026-07-03</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/07/03/python/" title="python">python</a><time datetime="2026-07-03T00:29:53.000Z" title="发表于 2026-07-03 08:29:53">2026-07-03</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/06/16/PE%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84/" title="PE文件结构">PE文件结构</a><time datetime="2026-06-16T07:03:34.000Z" title="发表于 2026-06-16 15:03:34">2026-06-16</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2025 - 2026 By WF</span><span class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.3.0</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.4.2</a></span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"></div><script src="/js/custom.js"></script><script async data-pjax src="data:text/javascript,"></script></div></body></html>
